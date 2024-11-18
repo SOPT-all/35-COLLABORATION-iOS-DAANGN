@@ -33,7 +33,9 @@ enum FontName {
         switch self {
         case .title_md_23:
             return 23
-        case .title_md_19_038, .title_md_18_036:
+        case .title_md_19_038:
+            return 19
+        case .title_md_18_036:
             return 18
         case .title_sb_17, .body_bla_17:
             return 17
