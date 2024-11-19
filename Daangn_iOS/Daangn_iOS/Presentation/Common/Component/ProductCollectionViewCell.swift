@@ -21,6 +21,7 @@ final class ProductCollectionViewCell: UICollectionViewCell {
     private let priceLabel = UILabel()
     private let chatAndLikeHStackView = UIStackView()
     private let menuIconImageView = UIImageView()
+    private let separatorView = UIView()
     
     private lazy var chatButton = UIButton()
         .then {
@@ -51,6 +52,8 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         .then {
             chatAndLikeHStackView.addArrangeSubViews($0)
         }
+    
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -99,6 +102,11 @@ final class ProductCollectionViewCell: UICollectionViewCell {
             $0.image = .icMenuKebabGray
             $0.contentMode = .scaleAspectFit
         }
+        
+        separatorView.do {
+            $0.backgroundColor = .gray2
+            $0.isHidden = false
+        }
     }
     
     private func setUI() {
@@ -107,7 +115,9 @@ final class ProductCollectionViewCell: UICollectionViewCell {
                                 infoHStackView,
                                 chatAndLikeHStackView,
                                 priceLabel,
-                                menuIconImageView)
+                                menuIconImageView,
+                                separatorView
+        )
     }
     
     private func setLayout() {
@@ -124,7 +134,7 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         
         menuIconImageView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.top)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.trailing.equalToSuperview().inset(16)
             $0.width.height.equalTo(24)
         }
         
@@ -140,8 +150,14 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         
         chatAndLikeHStackView.snp.makeConstraints {
             $0.top.equalTo(priceLabel.snp.bottom).offset(14)
-            $0.bottom.equalToSuperview().offset(-16)
-            $0.trailing.equalToSuperview().offset(-21)
+            $0.trailing.equalToSuperview().inset(25)
+        }
+        
+        separatorView.snp.makeConstraints {
+            $0.top.equalTo(chatAndLikeHStackView.snp.bottom).offset(16)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(1)
+            $0.bottom.equalToSuperview()
         }
         
     }
