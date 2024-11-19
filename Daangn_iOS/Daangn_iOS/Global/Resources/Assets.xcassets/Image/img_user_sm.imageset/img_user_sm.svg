@@ -1,0 +1,8 @@
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="25" cy="25" r="24.5" fill="#DDE0E5" stroke="#ADB1BA"/>
+<circle cx="25" cy="25" r="13" fill="#EEEEF0"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M9.59818 43.4068C12.2508 37.844 17.9265 34 24.5 34C31.3034 34 37.1451 38.1176 39.6689 43.9968C35.6127 47.1335 30.5243 49 25 49C19.1376 49 13.7662 46.8981 9.59818 43.4068Z" fill="#EEEEF0"/>
+<line x1="21.5" y1="22.5" x2="21.5" y2="24.5" stroke="#DDE0E5" stroke-linecap="round"/>
+<line x1="28.5" y1="22.5" x2="28.5" y2="24.5" stroke="#DDE0E5" stroke-linecap="round"/>
+<path d="M21 27V27C22.4443 30.6108 27.5557 30.6108 29 27V27" stroke="#DDE0E5" stroke-width="0.8" stroke-linecap="round"/>
+</svg>
