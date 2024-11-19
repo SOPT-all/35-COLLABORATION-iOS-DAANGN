@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_bottombar_map.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
