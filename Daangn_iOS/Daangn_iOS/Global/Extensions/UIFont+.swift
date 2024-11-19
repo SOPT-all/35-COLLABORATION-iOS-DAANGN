@@ -62,4 +62,35 @@ extension UIFont {
     static func sfPro(_ style: FontName) -> UIFont {
         return UIFont.systemFont(ofSize: style.size, weight: style.weight)
     }
+    
+    static func sfProAttributedString(
+        text: String,
+        style: FontName,
+        color: UIColor,
+        letterSpacing: CGFloat? = nil,
+        lineHeight: CGFloat? = nil,
+        isUnderlined: Bool = false
+    ) -> NSAttributedString {
+        let font = UIFont.sfPro(style)
+        var attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: color,
+            .font: font
+        ]
+        
+        if let letterSpacing = letterSpacing {
+            attributes.updateValue(letterSpacing, forKey: .kern)
+        }
+        if let lineHeight = lineHeight {
+            let style = NSMutableParagraphStyle()
+            style.maximumLineHeight = lineHeight
+            style.minimumLineHeight = lineHeight
+            
+            attributes.updateValue(style, forKey: .paragraphStyle)
+            attributes.updateValue((lineHeight - font.lineHeight) / 2, forKey: .baselineOffset)
+        }
+        if isUnderlined { attributes.updateValue(NSUnderlineStyle.single.rawValue, forKey: .underlineStyle)
+        }
+        
+        return NSAttributedString(string: text, attributes: attributes)
+    }
 }
