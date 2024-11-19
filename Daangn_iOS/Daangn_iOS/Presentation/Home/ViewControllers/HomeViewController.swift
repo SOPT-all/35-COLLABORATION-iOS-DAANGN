@@ -23,7 +23,7 @@ class HomeViewController: UIViewController {
     private func setupCollectionView() {
         let layout = createCompositionalLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(ProductCardViewCell.self, forCellWithReuseIdentifier: "ProductCardViewCell")
+        collectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: "ProductCardViewCell")
         collectionView.dataSource = self
         collectionView.delegate = self
 
@@ -61,7 +61,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductCardViewCell", for: indexPath) as? ProductCardViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductCardViewCell", for: indexPath) as? ProductCollectionViewCell else {
             return UICollectionViewCell()
         }
 
