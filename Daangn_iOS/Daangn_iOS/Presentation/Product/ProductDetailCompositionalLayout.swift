@@ -38,14 +38,14 @@ struct ProductDetailCompositionalLayout {
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .fractionalHeight(1)
+                        heightDimension: .absolute(0)
                     )
                 )
                 
                 let group = NSCollectionLayoutGroup.horizontal(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(80)
+                        heightDimension: .absolute(0)
                     ),
                     subitems: [item]
                 )
@@ -55,23 +55,24 @@ struct ProductDetailCompositionalLayout {
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .fractionalHeight(1)
+                        heightDimension: .absolute(0)
                     )
                 )
                 
                 let group = NSCollectionLayoutGroup.horizontal(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(364)
+                        heightDimension: .absolute(0)
                     ),
                     subitems: [item]
                 )
                 
                 section = NSCollectionLayoutSection(group: group)
             } else {
+                let width = (UIScreen.main.bounds.width - 48) / 2
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
+                        widthDimension: .absolute(width),
                         heightDimension: .fractionalHeight(1)
                     )
                 )
@@ -85,6 +86,8 @@ struct ProductDetailCompositionalLayout {
                 )
                 
                 section = NSCollectionLayoutSection(group: group)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 17, bottom: 0, trailing: 17)
+
                 
                 let headerSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
@@ -95,8 +98,8 @@ struct ProductDetailCompositionalLayout {
                     elementKind: UICollectionView.elementKindSectionHeader,
                     alignment: .top
                 )
-
-                section.boundarySupplementaryItems = [header]
+//
+//                section.boundarySupplementaryItems = [header]
             }
             return section
         }

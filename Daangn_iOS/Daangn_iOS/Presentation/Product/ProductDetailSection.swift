@@ -17,7 +17,7 @@ enum ProductDetailSection: Int, CaseIterable {
     
     var numberOfItemsInSection: Int {
         switch self {
-        case .detailImage:
+        case .detailImage, .sellerProduct, .relatedArticle:
             return 4
         default:
             return 1
