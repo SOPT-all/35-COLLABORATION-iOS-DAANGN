@@ -60,14 +60,26 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             fatalError()
         }
         
-        let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: ProductRelatedCollectionViewCell.className,
-            for: indexPath
-        ) as! ProductRelatedCollectionViewCell
-        let model = sellerProducts[indexPath.row]
-        cell.configure(with: model)
-        
-        return cell
+        switch section {
+        case .relatedArticle:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ProductRelatedCollectionViewCell.className,
+                for: indexPath
+            ) as! ProductRelatedCollectionViewCell
+            let model = relatedProducts[indexPath.row]
+            cell.configure(with: model)
+            
+            return cell
+        default:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ProductRelatedCollectionViewCell.className,
+                for: indexPath
+            ) as! ProductRelatedCollectionViewCell
+            let model = sellerProducts[indexPath.row]
+            cell.configure(with: model)
+            
+            return cell
+        }
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {

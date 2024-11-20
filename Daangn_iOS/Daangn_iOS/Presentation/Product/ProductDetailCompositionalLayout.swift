@@ -34,45 +34,11 @@ struct ProductDetailCompositionalLayout {
                 section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .paging
                 
-            } else if sectionNumber == 1 || sectionNumber == 4 {
+            } else if sectionNumber == 1 {
+                
                 let item = NSCollectionLayoutItem(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(0)
-                    )
-                )
-                
-                let group = NSCollectionLayoutGroup.horizontal(
-                    layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(0)
-                    ),
-                    subitems: [item]
-                )
-                
-                section = NSCollectionLayoutSection(group: group)
-            } else if sectionNumber == 2 {
-                let item = NSCollectionLayoutItem(
-                    layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(0)
-                    )
-                )
-                
-                let group = NSCollectionLayoutGroup.horizontal(
-                    layoutSize: .init(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(0)
-                    ),
-                    subitems: [item]
-                )
-                
-                section = NSCollectionLayoutSection(group: group)
-            } else {
-                let width = (UIScreen.main.bounds.width - 48) / 2
-                let item = NSCollectionLayoutItem(
-                    layoutSize: .init(
-                        widthDimension: .absolute(width),
                         heightDimension: .fractionalHeight(1)
                     )
                 )
@@ -80,15 +46,80 @@ struct ProductDetailCompositionalLayout {
                 let group = NSCollectionLayoutGroup.horizontal(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(362)
+                        heightDimension: .absolute(80)
                     ),
                     subitems: [item]
                 )
                 
                 section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 17, bottom: 0, trailing: 17)
-
+            } else if sectionNumber == 2 {
                 
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .fractionalHeight(1)
+                    )
+                )
+                
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .absolute(364)
+                    ),
+                    subitems: [item]
+                )
+                
+                section = NSCollectionLayoutSection(group: group)
+            } else if sectionNumber == 4 {
+                
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .fractionalHeight(1)
+                    )
+                )
+                
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .absolute(83)
+                    ),
+                    subitems: [item]
+                )
+                
+                section = NSCollectionLayoutSection(group: group)
+            } else {
+                
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(0.5),
+                        heightDimension: .fractionalHeight(1)
+                    )
+                )
+                
+                item.contentInsets = NSDirectionalEdgeInsets(
+                    top: 12,
+                    leading: 8,
+                    bottom: 12,
+                    trailing: 8
+                )
+                
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .estimated(169)
+                    ),
+                    subitems: [item]
+                )
+                
+                section = NSCollectionLayoutSection(group: group)
+                section.contentInsets = NSDirectionalEdgeInsets(
+                    top: 0,
+                    leading: 8,
+                    bottom: 0,
+                    trailing: 7
+                )
+
                 let headerSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
                     heightDimension: .estimated(50)
@@ -98,9 +129,10 @@ struct ProductDetailCompositionalLayout {
                     elementKind: UICollectionView.elementKindSectionHeader,
                     alignment: .top
                 )
-//
-//                section.boundarySupplementaryItems = [header]
+
+                section.boundarySupplementaryItems = [header]
             }
+            
             return section
         }
     }

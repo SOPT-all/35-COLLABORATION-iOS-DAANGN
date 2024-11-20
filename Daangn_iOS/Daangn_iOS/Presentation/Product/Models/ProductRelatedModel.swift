@@ -24,8 +24,8 @@ extension RelatedProduct {
     
     static let sampleRelatedArticle: [RelatedProduct] = [
         RelatedProduct(id: 5, detailImage: "img_details_reco_1", title: "썸미니 라쿤 네이비", price: "80,000"),
-        RelatedProduct(id: 6, detailImage: "img_details_reco_2", title: "Cerric Pleats Layered Pants", price: "128,000"),
-        RelatedProduct(id: 7, detailImage: "img_details_reco_3", title: "(실착 1회) 니티드 깡 스타일 니트", price: "55,000"),
+        RelatedProduct(id: 6, detailImage: "img_details_reco_2", title: "Cerric Pleats Layered Pants set", price: "128,000"),
+        RelatedProduct(id: 7, detailImage: "img_details_reco_3", title: "(실착 1회) 니티드 깡 스타일 니트집업", price: "55,000"),
         RelatedProduct(id: 8, detailImage: "img_details_reco_4", title: "LMC 레드 라벨 브라운 빅 맨투맨", price: "36,000")
     ]
 }
