@@ -8,16 +8,16 @@
 import Foundation
 
 enum ProductDetailSection: Int, CaseIterable {
-    case detailImage = 0
-    case userInfo
-    case productInfo
+    case productImage = 0
+    case sellerInfo
+    case productDetailInfo
     case sellerProduct
     case keywordNotify
     case relatedArticle
     
     var numberOfItemsInSection: Int {
         switch self {
-        case .detailImage, .sellerProduct, .relatedArticle:
+        case .productImage, .sellerProduct, .relatedArticle:
             return 4
         default:
             return 1

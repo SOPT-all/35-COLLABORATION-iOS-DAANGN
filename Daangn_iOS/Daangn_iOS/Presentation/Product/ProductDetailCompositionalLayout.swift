@@ -26,7 +26,7 @@ struct ProductDetailCompositionalLayout {
                 let group = NSCollectionLayoutGroup.horizontal(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .fractionalHeight(1)
+                        heightDimension: .estimated(375)
                     ),
                     subitems: [item]
                 )
@@ -70,6 +70,44 @@ struct ProductDetailCompositionalLayout {
                 )
                 
                 section = NSCollectionLayoutSection(group: group)
+            } else if sectionNumber == 3 {
+                
+                let item = NSCollectionLayoutItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(0.5),
+                        heightDimension: .fractionalHeight(1)
+                    )
+                )
+                
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .estimated(169)
+                    ),
+                    subitems: [item]
+                )
+                
+                group.interItemSpacing = NSCollectionLayoutSpacing.fixed(15)
+                
+                section = NSCollectionLayoutSection(group: group)
+                section.contentInsets = NSDirectionalEdgeInsets(
+                    top: 0,
+                    leading: 16,
+                    bottom: 20,
+                    trailing: 16
+                )
+                section.interGroupSpacing = 24
+
+                let header = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .estimated(60)
+                    ),
+                    elementKind: UICollectionView.elementKindSectionHeader,
+                    alignment: .top
+                )
+
+                section.boundarySupplementaryItems = [header]
             } else if sectionNumber == 4 {
                 
                 let item = NSCollectionLayoutItem(
@@ -97,13 +135,6 @@ struct ProductDetailCompositionalLayout {
                     )
                 )
                 
-                item.contentInsets = NSDirectionalEdgeInsets(
-                    top: 12,
-                    leading: 8,
-                    bottom: 12,
-                    trailing: 8
-                )
-                
                 let group = NSCollectionLayoutGroup.horizontal(
                     layoutSize: .init(
                         widthDimension: .fractionalWidth(1),
@@ -112,20 +143,22 @@ struct ProductDetailCompositionalLayout {
                     subitems: [item]
                 )
                 
+                group.interItemSpacing = NSCollectionLayoutSpacing.fixed(15)
+                
                 section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = NSDirectionalEdgeInsets(
                     top: 0,
-                    leading: 8,
+                    leading: 16,
                     bottom: 0,
-                    trailing: 7
+                    trailing: 16
                 )
+                section.interGroupSpacing = 24
 
-                let headerSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1),
-                    heightDimension: .estimated(50)
-                )
                 let header = NSCollectionLayoutBoundarySupplementaryItem(
-                    layoutSize: headerSize,
+                    layoutSize: .init(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .absolute(50)
+                    ),
                     elementKind: UICollectionView.elementKindSectionHeader,
                     alignment: .top
                 )

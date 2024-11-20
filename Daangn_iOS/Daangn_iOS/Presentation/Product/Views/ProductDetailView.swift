@@ -12,9 +12,12 @@ import Then
 
 class ProductDetailView: UIView {
 
+    // MARK: - Properties
+    
     private let layout = ProductDetailCompositionalLayout.createLayout()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     
+    // MARK: - View Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -29,17 +32,19 @@ class ProductDetailView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setStyle() {
+    // MARK: - UI&Layout
+    
+    private func setStyle() {
         collectionView.do {
             $0.backgroundColor = .clear
         }
     }
     
-    func setUI() {
+    private func setUI() {
         addSubview(collectionView)
     }
     
-    func setLayout() {
+    private func setLayout() {
         collectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }

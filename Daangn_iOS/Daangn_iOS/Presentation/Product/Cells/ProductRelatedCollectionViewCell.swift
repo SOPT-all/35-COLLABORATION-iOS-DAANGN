@@ -15,6 +15,7 @@ class ProductRelatedCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
     
     private let relatedSalesImageView = UIImageView()
+    private let relatedSalesLabelStackView = UIStackView()
     private let relatedSalesTitleLabel = UILabel()
     private let relatedSalesPriceLabel = UILabel()
     
@@ -32,7 +33,7 @@ class ProductRelatedCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Method
+    // MARK: - UI&Layout
     
     private func setStyle() {
         relatedSalesImageView.do {
@@ -40,21 +41,31 @@ class ProductRelatedCollectionViewCell: UICollectionViewCell {
             $0.makeCornerRound(radius: 6)
         }
         
+        relatedSalesLabelStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 4
+            $0.alignment = .leading
+        }
+        
         relatedSalesTitleLabel.do {
-            $0.textColor = .black
+            $0.textColor = .gray9
             $0.font = .sfPro(.body_md_13)
             $0.numberOfLines = 1
         }
         
         relatedSalesPriceLabel.do {
-            $0.textColor = .black
+            $0.textColor = .gray9
             $0.font = .sfPro(.body_hv_14)
         }
     }
     
     private func setHierarchy() {
+        relatedSalesLabelStackView.addArrangeSubViews(
+            relatedSalesTitleLabel, relatedSalesPriceLabel
+        )
+        
         contentView.addSubviews(
-            relatedSalesImageView, relatedSalesTitleLabel, relatedSalesPriceLabel
+            relatedSalesImageView, relatedSalesLabelStackView
         )
     }
     
@@ -62,16 +73,15 @@ class ProductRelatedCollectionViewCell: UICollectionViewCell {
         relatedSalesImageView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview()
         }
-        relatedSalesTitleLabel.snp.makeConstraints {
+        
+        relatedSalesLabelStackView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview()
             $0.top.equalTo(relatedSalesImageView.snp.bottom).offset(8)
         }
-        relatedSalesPriceLabel.snp.makeConstraints {
-            $0.leading.bottom.equalToSuperview()
-            $0.top.equalTo(relatedSalesTitleLabel.snp.bottom).offset(4)
-        }
     }
 }
+
+// MARK: - Configure
 
 extension ProductRelatedCollectionViewCell {
     

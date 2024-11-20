@@ -9,10 +9,16 @@ import UIKit
 
 class ProductDetailViewController: UIViewController {
 
+    // MARK: - Properties
+    
     private var sellerProducts = RelatedProduct.sampleSellerProducts
     private var relatedProducts = RelatedProduct.sampleRelatedArticle
     
+    // MARK: - UI Component
+    
     private let rootView = ProductDetailView()
+    
+    // MARK: - View Life Cycle
     
     override func loadView() {
         view = rootView
@@ -31,12 +37,41 @@ class ProductDetailViewController: UIViewController {
     }
     
     private func setRegister() {
+        
+        rootView.collectionView.register(
+            ProductImageCollectionViewCell.self,
+            forCellWithReuseIdentifier: ProductImageCollectionViewCell.className
+        )
+        
+        rootView.collectionView.register(
+            SellerInfoCollectionViewCell.self,
+            forCellWithReuseIdentifier: SellerInfoCollectionViewCell.className
+        )
+        
+        rootView.collectionView.register(
+            ProductDetailInfoCollectionViewCell.self,
+            forCellWithReuseIdentifier: ProductDetailInfoCollectionViewCell.className
+        )
+        
         rootView.collectionView.register(
             ProductRelatedCollectionViewCell.self,
             forCellWithReuseIdentifier: ProductRelatedCollectionViewCell.className
         )
+        
+        rootView.collectionView.register(
+            KeywordNotifyCollectionViewCell.self,
+            forCellWithReuseIdentifier: KeywordNotifyCollectionViewCell.className
+        )
+        
+        rootView.collectionView.register(
+            ProductRelatedHeaderCell.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: ProductRelatedHeaderCell.className
+        )
     }
 }
+
+// MARK: - UICollectionViewDataSource
 
 extension ProductDetailViewController: UICollectionViewDataSource {
     func collectionView(
@@ -55,12 +90,50 @@ extension ProductDetailViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
+        
         guard let section = ProductDetailSection(rawValue: indexPath.section)
         else {
             fatalError()
         }
         
         switch section {
+        case .productImage:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ProductImageCollectionViewCell.className,
+                for: indexPath
+            ) as! ProductImageCollectionViewCell
+            
+            return cell
+        case .sellerInfo:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: SellerInfoCollectionViewCell.className,
+                for: indexPath
+            ) as! SellerInfoCollectionViewCell
+            
+            return cell
+        case .productDetailInfo:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ProductDetailInfoCollectionViewCell.className,
+                for: indexPath
+            ) as! ProductDetailInfoCollectionViewCell
+            
+            return cell
+        case .sellerProduct:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ProductRelatedCollectionViewCell.className,
+                for: indexPath
+            ) as! ProductRelatedCollectionViewCell
+            let model = sellerProducts[indexPath.row]
+            cell.configure(with: model)
+            
+            return cell
+        case .keywordNotify:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: KeywordNotifyCollectionViewCell.className,
+                for: indexPath
+            ) as! KeywordNotifyCollectionViewCell
+            
+            return cell
         case .relatedArticle:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ProductRelatedCollectionViewCell.className,
@@ -70,16 +143,39 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             cell.configure(with: model)
             
             return cell
-        default:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: ProductRelatedCollectionViewCell.className,
-                for: indexPath
-            ) as! ProductRelatedCollectionViewCell
-            let model = sellerProducts[indexPath.row]
-            cell.configure(with: model)
-            
-            return cell
         }
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+        
+        if kind == UICollectionView.elementKindSectionHeader {
+            guard let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: ProductRelatedHeaderCell.className,
+                for: indexPath
+            ) as? ProductRelatedHeaderCell,
+                  let section = ProductDetailSection(rawValue: indexPath.section)
+            else {
+                return UICollectionReusableView()
+            }
+            
+            switch section {
+            case .sellerProduct:
+                header.configure(title: "헿헿님의 판매 물품")
+            case .relatedArticle:
+                header.configure(title: "이 글과 함께 봤어요")
+            default:
+                header.configure(title: "")
+            }
+            
+            return header
+        }
+        
+        return UICollectionReusableView()
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -87,6 +183,8 @@ extension ProductDetailViewController: UICollectionViewDataSource {
     }
     
 }
+
+// MARK: - UICollectionViewDelegate
 
 extension ProductDetailViewController: UICollectionViewDelegate {
     
