@@ -13,6 +13,8 @@ import Then
 
 final class ProductCollectionViewCell: UICollectionViewCell {
     
+    static let identifier = "ProductCollectionViewCell"
+    
     // MARK: - UI Components
     
     private let thumnailImageView = UIImageView()
@@ -233,7 +235,7 @@ final class ProductCollectionViewCell: UICollectionViewCell {
 }
 
 extension ProductCollectionViewCell {
-    func configureUI(with product: Product) {
+    func configureUI(product: ProductResponseDTO) {
         thumnailImageView.image = UIImage(named: product.thumbnailImageName)
         titleLabel.text = product.title
         priceLabel.text = product.price
