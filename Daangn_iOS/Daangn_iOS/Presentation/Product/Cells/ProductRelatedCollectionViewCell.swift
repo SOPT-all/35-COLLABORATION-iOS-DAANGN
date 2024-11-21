@@ -71,7 +71,7 @@ class ProductRelatedCollectionViewCell: UICollectionViewCell {
     
     private func setLayout() {
         relatedSalesImageView.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview()
+            $0.top.horizontalEdges.equalToSuperview()
         }
         
         relatedSalesLabelStackView.snp.makeConstraints {

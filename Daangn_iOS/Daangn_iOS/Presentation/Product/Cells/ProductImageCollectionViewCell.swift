@@ -48,7 +48,7 @@ class ProductImageCollectionViewCell: UICollectionViewCell {
     
     private func setLayout() {
         detailImageView.snp.makeConstraints {
-            $0.size.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
     }
 }

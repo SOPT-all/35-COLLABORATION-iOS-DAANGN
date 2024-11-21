@@ -46,7 +46,7 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
     
     private func setLayout() {
         sampleView.snp.makeConstraints {
-            $0.size.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
     }
 }
