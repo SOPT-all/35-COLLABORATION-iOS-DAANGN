@@ -170,6 +170,7 @@ final class DaangnNavigationBar: UIView {
     init(type: NavigationBarType) {
         self.type = type
         super.init(frame: .zero)
+        backgroundColor = .white
         
         switch type {
         case .home:

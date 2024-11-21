@@ -34,9 +34,6 @@
 				Presentation/Profile/ViewControllers/.gitkeep,
 				Presentation/Profile/Views/.gitkeep,
 				Presentation/Search/Cells/.gitkeep,
-				Presentation/Search/Models/.gitkeep,
-				Presentation/Search/ViewControllers/.gitkeep,
-				Presentation/Search/Views/.gitkeep,
 			);
 			target = 95C49C132CE868F8007F8160 /* Daangn_iOS */;
 		};

@@ -58,6 +58,7 @@ final class TopTabbar: UIView {
         }
         
         tabbarCollectionView.do {
+            $0.contentInset = .init(top: 0, left: 16, bottom: 0, right: 16)
             $0.backgroundColor = .clear
             $0.showsHorizontalScrollIndicator = false
         }
@@ -77,7 +78,13 @@ final class TopTabbar: UIView {
     
     func setLayout() {
         tabbarCollectionView.snp.makeConstraints {
-            $0.height.equalTo(42)
+            guard let type = type else { return }
+            switch type {
+            case .filter:
+                $0.height.equalTo(44)
+            case .search:
+                $0.height.equalTo(42)
+            }
             $0.top.horizontalEdges.equalToSuperview()
         }
         
