@@ -21,8 +21,6 @@ class ProductDetailView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .white
-        
         setStyle()
         setUI()
         setLayout()
@@ -35,6 +33,8 @@ class ProductDetailView: UIView {
     // MARK: - UI&Layout
     
     private func setStyle() {
+        backgroundColor = .white
+        
         collectionView.do {
             $0.backgroundColor = .clear
         }

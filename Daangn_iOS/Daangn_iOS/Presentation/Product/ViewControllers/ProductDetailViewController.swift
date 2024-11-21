@@ -21,6 +21,8 @@ class ProductDetailViewController: UIViewController {
     // MARK: - View Life Cycle
     
     override func loadView() {
+        super.loadView()
+        
         view = rootView
     }
     
@@ -79,9 +81,7 @@ extension ProductDetailViewController: UICollectionViewDataSource {
         numberOfItemsInSection section: Int
     ) -> Int {
         guard let section = ProductDetailSection(rawValue: section)
-        else {
-            return 0
-        }
+        else { return 0 }
         
         return section.numberOfItemsInSection
     }
@@ -92,53 +92,59 @@ extension ProductDetailViewController: UICollectionViewDataSource {
     ) -> UICollectionViewCell {
         
         guard let section = ProductDetailSection(rawValue: indexPath.section)
-        else {
-            fatalError()
-        }
+        else { fatalError() }
         
         switch section {
         case .productImage:
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ProductImageCollectionViewCell.className,
                 for: indexPath
-            ) as! ProductImageCollectionViewCell
+            ) as? ProductImageCollectionViewCell
+            else { return UICollectionViewCell() }
             
             return cell
         case .sellerInfo:
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: SellerInfoCollectionViewCell.className,
                 for: indexPath
-            ) as! SellerInfoCollectionViewCell
+            ) as? SellerInfoCollectionViewCell
+            else { return UICollectionViewCell() }
             
             return cell
         case .productDetailInfo:
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ProductDetailInfoCollectionViewCell.className,
                 for: indexPath
-            ) as! ProductDetailInfoCollectionViewCell
+            ) as? ProductDetailInfoCollectionViewCell
+            else { return UICollectionViewCell() }
             
             return cell
         case .sellerProduct:
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ProductRelatedCollectionViewCell.className,
                 for: indexPath
-            ) as! ProductRelatedCollectionViewCell
+            ) as? ProductRelatedCollectionViewCell
+            else { return UICollectionViewCell() }
+            
             let model = sellerProducts[indexPath.row]
             cell.configure(with: model)
             
             return cell
         case .keywordNotify:
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: KeywordNotifyCollectionViewCell.className,
                 for: indexPath
-            ) as! KeywordNotifyCollectionViewCell
+            ) as? KeywordNotifyCollectionViewCell
+            else { return UICollectionViewCell() }
             
             return cell
         case .relatedArticle:
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ProductRelatedCollectionViewCell.className,
                 for: indexPath
-            ) as! ProductRelatedCollectionViewCell
+            ) as? ProductRelatedCollectionViewCell
+            else { return UICollectionViewCell() }
+            
             let model = relatedProducts[indexPath.row]
             cell.configure(with: model)
             
@@ -159,9 +165,7 @@ extension ProductDetailViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as? ProductRelatedHeaderCell,
                   let section = ProductDetailSection(rawValue: indexPath.section)
-            else {
-                return UICollectionReusableView()
-            }
+            else { return UICollectionReusableView() }
             
             switch section {
             case .sellerProduct:
