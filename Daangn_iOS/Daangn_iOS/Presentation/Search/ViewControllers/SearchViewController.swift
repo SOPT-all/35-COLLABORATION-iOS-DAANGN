@@ -19,14 +19,13 @@ final class SearchViewController: UIViewController {
     
     private let tabbarData = TopTabbarModel.searchTopTabbarData()
     private var viewControllers: [UIViewController] = []
-    private let indicatorBarHorizontalPadding: CGFloat = 6
     private let tabbarCellHorizontalPadding: CGFloat = 13 * 2
-    private var currentMenuIndex: Int = 0 {
+    private var currentTabbarIndex: Int = 1 {
         didSet {
-            moveIndicatorbar(to: currentMenuIndex)
+            moveIndicatorbar(to: currentTabbarIndex)
         }
     }
-    private var currentPageIndex = 0 {
+    private var currentPageIndex = 1 {
         didSet {
             setPageVC(from: oldValue, to: currentPageIndex)
         }
@@ -76,10 +75,9 @@ final class SearchViewController: UIViewController {
     
     private func setPageViewController() {
         addViewControllersData()
-        guard let firstVC = viewControllers.first else { return }
-        pageViewController.setViewControllers([firstVC], direction: .forward, animated: true)
+        let secondVC = viewControllers[1]
+        pageViewController.setViewControllers([secondVC], direction: .forward, animated: true)
     }
-    
     
     private func setNavigationBar() {
         navigationController?.navigationBar.isHidden = true
@@ -91,7 +89,7 @@ final class SearchViewController: UIViewController {
 private extension SearchViewController {
     
     func addViewControllersData() {
-        for _ in 0 ..< tabbarData.count - 1 {
+        for _ in 0 ..< tabbarData.count {
             let vc = UIViewController()
             vc.view.backgroundColor = .gray1
             viewControllers.append(vc)
@@ -99,7 +97,7 @@ private extension SearchViewController {
     }
     
     func setIndicatorBarIndex(to newIndex: Int) {
-        self.currentMenuIndex = newIndex
+        self.currentTabbarIndex = newIndex
     }
     
     func setPageIndex(to newIndex: Int) {
@@ -112,7 +110,7 @@ private extension SearchViewController {
         guard let cell = tabbarCollectionView.cellForItem(at: indexPath) as? TopTabbarCollectionViewCell else { return }
         
         rootView.tabbar.indicatorBar.snp.remakeConstraints {
-            $0.width.equalTo(cell.frame.width)
+            $0.width.equalTo(cell.contentView.bounds.width)
             $0.height.equalTo(2)
             $0.bottom.equalTo(tabbarCollectionView.snp.bottom)
             $0.centerX.equalTo(cell)
@@ -131,7 +129,7 @@ private extension SearchViewController {
     }
     
     func checkIfBarAndPageAreInSameIndex(for currentIndex: Int) -> Bool {
-        return currentMenuIndex == currentIndex
+        return currentTabbarIndex == currentIndex
     }
 }
 
@@ -139,7 +137,7 @@ extension SearchViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let newIndex = indexPath.item
-        self.currentMenuIndex = newIndex
+        self.currentTabbarIndex = newIndex
         setPageIndex(to: newIndex)
     }
 }
