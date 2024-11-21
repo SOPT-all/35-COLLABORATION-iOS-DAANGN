@@ -85,7 +85,8 @@ extension HeaderCollectionReusableView {
     ) {
         titleLabel.do {
             $0.text = title
-            $0.font = UIFont.sfPro(.title_bla_15)
+            $0.font = UIFont.sfPro(.title_bla_15_22)
+            $0.setAttributedText(lineHeight: 22)
         }
         self.type = type
         if isMoreButtonIncluded {
