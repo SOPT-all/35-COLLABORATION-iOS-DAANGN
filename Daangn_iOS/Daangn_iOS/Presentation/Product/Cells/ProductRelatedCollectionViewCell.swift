@@ -15,7 +15,6 @@ class ProductRelatedCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
     
     private let relatedSalesImageView = UIImageView()
-    private let relatedSalesLabelStackView = UIStackView()
     private let relatedSalesTitleLabel = UILabel()
     private let relatedSalesPriceLabel = UILabel()
     
@@ -41,12 +40,6 @@ class ProductRelatedCollectionViewCell: UICollectionViewCell {
             $0.makeCornerRound(radius: 6)
         }
         
-        relatedSalesLabelStackView.do {
-            $0.axis = .vertical
-            $0.spacing = 4
-            $0.alignment = .leading
-        }
-        
         relatedSalesTitleLabel.do {
             $0.textColor = .gray9
             $0.font = .sfPro(.body_md_13)
@@ -60,13 +53,7 @@ class ProductRelatedCollectionViewCell: UICollectionViewCell {
     }
     
     private func setHierarchy() {
-        relatedSalesLabelStackView.addArrangeSubViews(
-            relatedSalesTitleLabel, relatedSalesPriceLabel
-        )
-        
-        contentView.addSubviews(
-            relatedSalesImageView, relatedSalesLabelStackView
-        )
+        contentView.addSubviews(relatedSalesImageView, relatedSalesTitleLabel, relatedSalesPriceLabel)
     }
     
     private func setLayout() {
@@ -74,9 +61,14 @@ class ProductRelatedCollectionViewCell: UICollectionViewCell {
             $0.top.horizontalEdges.equalToSuperview()
         }
         
-        relatedSalesLabelStackView.snp.makeConstraints {
+        relatedSalesTitleLabel.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview()
             $0.top.equalTo(relatedSalesImageView.snp.bottom).offset(8)
+        }
+        
+        relatedSalesPriceLabel.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview()
+            $0.top.equalTo(relatedSalesTitleLabel.snp.bottom).offset(4)
         }
     }
 }
