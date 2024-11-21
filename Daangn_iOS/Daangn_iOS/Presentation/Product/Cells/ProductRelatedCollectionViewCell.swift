@@ -67,7 +67,7 @@ class ProductRelatedCollectionViewCell: UICollectionViewCell {
         }
         
         relatedSalesPriceLabel.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview()
+            $0.horizontalEdges.bottom.equalToSuperview()
             $0.top.equalTo(relatedSalesTitleLabel.snp.bottom).offset(4)
         }
     }
@@ -83,3 +83,7 @@ extension ProductRelatedCollectionViewCell {
         relatedSalesPriceLabel.text = "\(product.price)원"
     }
 }
+
+// MARK: - ClassNameProtocol
+
+extension ProductRelatedCollectionViewCell: ClassNameProtocol { }

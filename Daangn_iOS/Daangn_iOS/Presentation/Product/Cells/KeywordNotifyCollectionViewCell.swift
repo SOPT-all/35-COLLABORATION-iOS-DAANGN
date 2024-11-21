@@ -50,3 +50,7 @@ class KeywordNotifyCollectionViewCell: UICollectionViewCell {
         }
     }
 }
+
+// MARK: - ClassNameProtocol
+
+extension KeywordNotifyCollectionViewCell: ClassNameProtocol { }

@@ -50,3 +50,7 @@ class ProductDetailInfoCollectionViewCell: UICollectionViewCell {
         }
     }
 }
+
+// MARK: - ClassNameProtocol
+
+extension ProductDetailInfoCollectionViewCell: ClassNameProtocol { }

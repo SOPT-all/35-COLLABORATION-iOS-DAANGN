@@ -66,9 +66,9 @@ class ProductDetailViewController: UIViewController {
         )
         
         rootView.collectionView.register(
-            ProductRelatedHeaderCell.self,
+            ProductRelatedHeaderReusableView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: ProductRelatedHeaderCell.className
+            withReuseIdentifier: ProductRelatedHeaderReusableView.className
         )
     }
 }
@@ -161,9 +161,9 @@ extension ProductDetailViewController: UICollectionViewDataSource {
         if kind == UICollectionView.elementKindSectionHeader {
             guard let header = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
-                withReuseIdentifier: ProductRelatedHeaderCell.className,
+                withReuseIdentifier: ProductRelatedHeaderReusableView.className,
                 for: indexPath
-            ) as? ProductRelatedHeaderCell,
+            ) as? ProductRelatedHeaderReusableView,
                   let section = ProductDetailSection(rawValue: indexPath.section)
             else { return UICollectionReusableView() }
             
@@ -190,6 +190,4 @@ extension ProductDetailViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegate
 
-extension ProductDetailViewController: UICollectionViewDelegate {
-    
-}
+extension ProductDetailViewController: UICollectionViewDelegate { }

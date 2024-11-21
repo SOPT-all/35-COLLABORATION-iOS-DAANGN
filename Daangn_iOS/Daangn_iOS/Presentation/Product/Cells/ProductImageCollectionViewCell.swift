@@ -52,3 +52,7 @@ class ProductImageCollectionViewCell: UICollectionViewCell {
         }
     }
 }
+
+// MARK: - ClassNameProtocol
+
+extension ProductImageCollectionViewCell: ClassNameProtocol { }

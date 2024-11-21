@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-class ProductRelatedHeaderCell: UICollectionViewCell {
+class ProductRelatedHeaderReusableView: UICollectionReusableView {
     
     // MARK: - UI Component
     
@@ -54,9 +54,13 @@ class ProductRelatedHeaderCell: UICollectionViewCell {
 
 // MARK: - Configure
 
-extension ProductRelatedHeaderCell {
+extension ProductRelatedHeaderReusableView {
     
     func configure(title: String) {
         titleLabel.text = title
     }
 }
+
+// MARK: - ClassNameProtocol
+
+extension ProductRelatedHeaderReusableView: ClassNameProtocol { }
