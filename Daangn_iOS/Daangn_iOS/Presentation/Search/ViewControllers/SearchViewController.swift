@@ -70,7 +70,7 @@ final class SearchViewController: UIViewController {
 
     private func setRegister() {
         // TODO: className으로 변경
-        tabbarCollectionView.register(TopTabbarCollectionViewCell.self, forCellWithReuseIdentifier: TopTabbarCollectionViewCell.identifier)
+        tabbarCollectionView.register(TopTabbarCollectionViewCell.self, forCellWithReuseIdentifier: TopTabbarCollectionViewCell.className)
     }
     
     private func setPageViewController() {
@@ -149,7 +149,7 @@ extension SearchViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopTabbarCollectionViewCell.identifier, for: indexPath) as? TopTabbarCollectionViewCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TopTabbarCollectionViewCell.className, for: indexPath) as? TopTabbarCollectionViewCell
         else { return UICollectionViewCell() }
         cell.configure(type: .search, title: tabbarData[indexPath.item].title)
         return cell

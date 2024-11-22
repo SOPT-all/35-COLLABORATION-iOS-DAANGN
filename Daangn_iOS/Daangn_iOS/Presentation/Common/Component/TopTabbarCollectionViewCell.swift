@@ -11,7 +11,6 @@ import SnapKit
 import Then
 
 final class TopTabbarCollectionViewCell: UICollectionViewCell {
-    static let identifier = "TopTabbarCollectionViewCell"
     
     private let titleLabel = UILabel()
     
@@ -64,7 +63,7 @@ final class TopTabbarCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension TopTabbarCollectionViewCell {
+extension TopTabbarCollectionViewCell: ClassNameProtocol {
     
     func configure(type: TabbarType, title: String) {
         self.type = type
