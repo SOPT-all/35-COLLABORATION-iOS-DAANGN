@@ -18,6 +18,8 @@ final class HomeViewController: UIViewController {
     
     // MARK: - UI Components
     
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     private let resetButton = UIButton()
     private var tagCollectionView: UICollectionView!
     private var productCollectionView: UICollectionView!
@@ -58,11 +60,15 @@ final class HomeViewController: UIViewController {
         productCollectionView = UICollectionView(frame: .zero, collectionViewLayout: productLayout).then {
             $0.showsVerticalScrollIndicator = false
             $0.backgroundColor = .clear
+            
         }
     }
     
     private func setUI() {
-        view.addSubviews(
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        contentView.addSubviews(
             resetButton,
             tagCollectionView,
             productCollectionView
@@ -70,8 +76,19 @@ final class HomeViewController: UIViewController {
     }
     
     private func setLayout() {
+        
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.edges.equalTo(scrollView.contentLayoutGuide)
+            $0.width.equalTo(scrollView.snp.width)
+            $0.height.equalToSuperview()
+        }
+
         resetButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
+            $0.top.equalTo(contentView.snp.top).offset(16)
             $0.leading.equalToSuperview().offset(16)
             $0.width.height.equalTo(40)
         }
@@ -79,13 +96,14 @@ final class HomeViewController: UIViewController {
         tagCollectionView.snp.makeConstraints {
             $0.centerY.equalTo(resetButton)
             $0.leading.equalTo(resetButton.snp.trailing).offset(5)
-            $0.trailing.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(16)
             $0.height.equalTo(34)
         }
         
         productCollectionView.snp.makeConstraints {
             $0.top.equalTo(tagCollectionView.snp.bottom).offset(12)
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
     }
 }
@@ -143,21 +161,21 @@ extension HomeViewController: UICollectionViewDataSource {
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-           if collectionView == tagCollectionView {
-               let tag = tags[indexPath.item]
-               let estimatedWidth = calculateDynamicWidth(for: tag.title, font: .sfPro(.body_md_12))
-               return CGSize(width: estimatedWidth, height: 34)
-           } else if collectionView == productCollectionView {
-               return CGSize(width: collectionView.frame.width - 16, height: 162)
-           }
-           return CGSize.zero
-       }
-       
-       private func calculateDynamicWidth(for text: String, font: UIFont) -> CGFloat {
-           let padding: CGFloat = 50
-           let size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)
-           let attributes = [NSAttributedString.Key.font: font]
-           let textWidth = (text as NSString).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil).width
-           return textWidth + padding
-       }
+        if collectionView == tagCollectionView {
+            let tag = tags[indexPath.item]
+            let estimatedWidth = calculateDynamicWidth(for: tag.title, font: .sfPro(.body_md_12))
+            return CGSize(width: estimatedWidth, height: 34)
+        } else if collectionView == productCollectionView {
+            return CGSize(width: collectionView.frame.width, height: 162)
+        }
+        return CGSize.zero
+    }
+    
+    private func calculateDynamicWidth(for text: String, font: UIFont) -> CGFloat {
+        let padding: CGFloat = 50
+        let size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)
+        let attributes = [NSAttributedString.Key.font: font]
+        let textWidth = (text as NSString).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil).width
+        return textWidth + padding
+    }
 }
