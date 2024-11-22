@@ -57,6 +57,17 @@ extension ProductDetailCompositionalLayout {
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .paging
         
+        let footer = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: .init(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .absolute(8)
+            ),
+            elementKind: UICollectionView.elementKindSectionFooter,
+            alignment: .bottom
+        )
+        
+        section.boundarySupplementaryItems = [footer]
+        
         return section
     }
     
