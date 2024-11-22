@@ -69,7 +69,6 @@ final class SearchViewController: UIViewController {
     }
 
     private func setRegister() {
-        // TODO: className으로 변경
         tabbarCollectionView.register(TopTabbarCollectionViewCell.self, forCellWithReuseIdentifier: TopTabbarCollectionViewCell.className)
     }
     
