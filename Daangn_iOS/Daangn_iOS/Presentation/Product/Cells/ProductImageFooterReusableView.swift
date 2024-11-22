@@ -13,3 +13,7 @@ import Then
 class ProductImageFooterReusableView: UICollectionReusableView {
     
 }
+
+// MARK: - ClassNameProtocol
+
+extension ProductImageFooterReusableView: ClassNameProtocol { }

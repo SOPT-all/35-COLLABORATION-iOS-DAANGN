@@ -70,6 +70,12 @@ class ProductDetailViewController: UIViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: ProductRelatedHeaderReusableView.className
         )
+        
+        rootView.collectionView.register(
+            ProductImageFooterReusableView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+            withReuseIdentifier: ProductImageFooterReusableView.className
+        )
     }
 }
 
@@ -178,8 +184,25 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             
             return header
         }
-        
-        return UICollectionReusableView()
+            
+        else {
+            guard let footer = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: ProductImageFooterReusableView.className,
+                for: indexPath
+            ) as? ProductImageFooterReusableView,
+                  let section = ProductDetailSection(rawValue: indexPath.section)
+            else { return UICollectionReusableView() }
+            
+            switch section {
+            case .productImage:
+                break
+            default:
+                break
+            }
+            
+            return footer
+        }
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
