@@ -23,10 +23,7 @@
 			membershipExceptions = (
 				Info.plist,
 				Presentation/Home/Models/.gitkeep,
-				Presentation/Product/Cells/.gitkeep,
-				Presentation/Product/Models/.gitkeep,
-				Presentation/Product/ViewControllers/.gitkeep,
-				Presentation/Product/Views/.gitkeep,
+				Presentation/Home/Views/.gitkeep,
 				Presentation/Profile/Cells/.gitkeep,
 				Presentation/Profile/Models/.gitkeep,
 				Presentation/Profile/ViewControllers/.gitkeep,
