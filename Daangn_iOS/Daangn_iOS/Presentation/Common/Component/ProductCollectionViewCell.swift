@@ -30,7 +30,6 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         $0.image = .icLocation
         $0.contentMode = .scaleAspectFit
     }
-    // 제약 조건 까지도 여기
     
     private lazy var distanceLabel = UILabel().then {
         $0.font = .sfPro(.body_md_13_026)

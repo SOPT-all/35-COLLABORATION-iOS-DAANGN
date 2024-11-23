@@ -21,8 +21,25 @@ final class HomeViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let resetButton = UIButton()
-    private var tagCollectionView: IntrinsicCollectionView!
-    private var productCollectionView: IntrinsicCollectionView!
+    
+    private lazy var tagCollectionView: IntrinsicCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let collectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
+        return collectionView
+    }()
+    
+    private lazy var productCollectionView: IntrinsicCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let collectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.backgroundColor = .clear
+        collectionView.isScrollEnabled = false
+        return collectionView
+    }()
     
     // MARK: - Lifecycle
     
@@ -47,21 +64,6 @@ final class HomeViewController: UIViewController {
             $0.setImage(.icReset, for: .normal)
             $0.imageView?.contentMode = .scaleAspectFit
         }
-        
-        let tagLayout = UICollectionViewFlowLayout()
-        tagLayout.scrollDirection = .horizontal
-        tagCollectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: tagLayout).then {
-            $0.showsHorizontalScrollIndicator = false
-            $0.backgroundColor = .clear
-        }
-        
-        let productLayout = UICollectionViewFlowLayout()
-        productLayout.scrollDirection = .vertical
-        productCollectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: productLayout).then {
-            $0.showsVerticalScrollIndicator = false
-            $0.backgroundColor = .clear
-            $0.isScrollEnabled = false
-        }
     }
     
     private func setUI() {
@@ -84,9 +86,8 @@ final class HomeViewController: UIViewController {
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
             $0.width.equalTo(scrollView.snp.width)
-//            $0.height.equalToSuperview()
         }
-
+        
         resetButton.snp.makeConstraints {
             $0.top.equalTo(contentView.snp.top).offset(16)
             $0.leading.equalToSuperview().offset(16)
