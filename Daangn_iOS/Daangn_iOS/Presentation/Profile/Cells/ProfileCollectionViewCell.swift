@@ -19,8 +19,9 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
     private let nicknameLabel = UILabel()
     private let userCodeLabel = UILabel()
     private let lastAccessTimeLabel = UILabel()
-    private lazy var mannersPraiseButton = UIButton()
-    private lazy var followButton = UIButton()
+    private let buttonStackView = UIStackView()
+    private let mannersPraiseButton = UIButton()
+    private let followButton = UIButton()
     
     // MARK: - View Life Cycle
     
@@ -69,6 +70,12 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
             $0.font = .sfPro(.caption_md_11)
         }
         
+        buttonStackView.do {
+            $0.axis = .horizontal
+            $0.spacing = 7
+            $0.distribution = .fillEqually
+        }
+        
         mannersPraiseButton.do {
             $0.setAttributedTitle(
                 UIFont.sfProAttributedString(
@@ -99,7 +106,8 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
     }
     
     private func setHierarchy() {
-        contentView.addSubviews(profileImageView, miniBadgeImageView, nicknameLabel, userCodeLabel, lastAccessTimeLabel, mannersPraiseButton, followButton)
+        contentView.addSubviews(profileImageView, miniBadgeImageView, nicknameLabel, userCodeLabel, lastAccessTimeLabel, buttonStackView)
+        buttonStackView.addArrangeSubViews(mannersPraiseButton, followButton)
     }
     
     private func setLayout() {
@@ -130,18 +138,11 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
             $0.leading.equalTo(nicknameLabel)
         }
         
-        mannersPraiseButton.snp.makeConstraints {
+        buttonStackView.snp.makeConstraints {
             $0.height.equalTo(36)
             $0.top.equalTo(miniBadgeImageView.snp.bottom).offset(10)
-            $0.leading.equalToSuperview().inset(16)
+            $0.horizontalEdges.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview()
-        }
-        
-        followButton.snp.makeConstraints {
-            $0.height.equalTo(36)
-            $0.leading.equalTo(mannersPraiseButton.snp.trailing).offset(7)
-            $0.trailing.equalToSuperview().inset(16)
-            $0.centerY.equalTo(mannersPraiseButton)
         }
     }
 }

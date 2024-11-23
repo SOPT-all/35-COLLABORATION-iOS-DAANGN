@@ -12,7 +12,7 @@ import Then
 
 enum ProfileSection: CaseIterable {
     case profile
-//    case mannerTemperature
+    case mannerTemperature
 //    case verificationInfo
 //    case badge
 }
@@ -78,24 +78,31 @@ private extension ProfileView {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, _ -> NSCollectionLayoutSection in
             let sectionType = ProfileSection.allCases[sectionIndex]
             switch sectionType {
-            case .profile:
-                return self.profileSectionLayout()
+            case .profile, .mannerTemperature:
+                return self.profileSectionLayout(type: sectionType)
             }
         }
         
         return layout
     }
     
-    func profileSectionLayout() -> NSCollectionLayoutSection {
+    func profileSectionLayout(type: ProfileSection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .fractionalHeight(1)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
+        let heightDimension: NSCollectionLayoutDimension
+        switch type {
+        case .profile:
+            heightDimension = .estimated(140)
+        case .mannerTemperature:
+            heightDimension = .estimated(182)
+        }
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(140)
+            heightDimension: heightDimension
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 

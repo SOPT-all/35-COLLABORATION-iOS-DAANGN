@@ -43,6 +43,8 @@ final class ProfileViewController: UIViewController {
     
     private func setRegister() {
         collectionView.register(ProfileCollectionViewCell.self, forCellWithReuseIdentifier: ProfileCollectionViewCell.className)
+        
+        collectionView.register(MannerTemperatureCollectionViewCell.self, forCellWithReuseIdentifier: MannerTemperatureCollectionViewCell.className)
     }
     
     private func setNavigationBar() {
@@ -59,7 +61,7 @@ extension ProfileViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let sectionType = ProfileSection.allCases[section]
         switch sectionType {
-        case .profile:
+        case .profile, .mannerTemperature:
             return 1
         }
     }
@@ -71,6 +73,10 @@ extension ProfileViewController: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileCollectionViewCell.className, for: indexPath) as? ProfileCollectionViewCell
             else { return UICollectionViewCell() }
             cell.configure(with: profileData)
+            return cell
+        case .mannerTemperature:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannerTemperatureCollectionViewCell.className, for: indexPath) as? MannerTemperatureCollectionViewCell
+            else { return UICollectionViewCell() }
             return cell
         }
     }

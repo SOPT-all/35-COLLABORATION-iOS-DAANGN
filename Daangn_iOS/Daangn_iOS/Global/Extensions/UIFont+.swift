@@ -69,7 +69,8 @@ extension UIFont {
         color: UIColor,
         letterSpacing: CGFloat? = nil,
         lineHeight: CGFloat? = nil,
-        isUnderlined: Bool = false
+        isUnderlined: Bool = false,
+        underlineRange: NSRange? = nil
     ) -> NSAttributedString {
         let font = UIFont.sfPro(style)
         var attributes: [NSAttributedString.Key: Any] = [
