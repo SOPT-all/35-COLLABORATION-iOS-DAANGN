@@ -67,6 +67,7 @@ extension ProductDetailCompositionalLayout {
         )
         
         section.boundarySupplementaryItems = [footer]
+
         
         return section
     }

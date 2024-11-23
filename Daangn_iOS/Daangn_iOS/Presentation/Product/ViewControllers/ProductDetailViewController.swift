@@ -13,6 +13,7 @@ class ProductDetailViewController: UIViewController {
     
     private var sellerProducts = RelatedProduct.sampleSellerProducts
     private var relatedProducts = RelatedProduct.sampleRelatedArticle
+    weak var delegate: FooterScrollDelegate?
     
     // MARK: - UI Component
     
@@ -168,8 +169,7 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             guard let header = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: ProductRelatedHeaderReusableView.className,
-                for: indexPath
-            ) as? ProductRelatedHeaderReusableView,
+                for: indexPath ) as? ProductRelatedHeaderReusableView,
                   let section = ProductDetailSection(rawValue: indexPath.section)
             else { return UICollectionReusableView() }
             
@@ -184,25 +184,20 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             
             return header
         }
-            
-        else {
+        else if kind == UICollectionView.elementKindSectionFooter {
             guard let footer = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: ProductImageFooterReusableView.className,
-                for: indexPath
-            ) as? ProductImageFooterReusableView,
-                  let section = ProductDetailSection(rawValue: indexPath.section)
+                for: indexPath) as? ProductImageFooterReusableView,
+                  let section = ProductDetailSection(rawValue: indexPath.section),
+                  section == .productImage
             else { return UICollectionReusableView() }
-            
-            switch section {
-            case .productImage:
-                break
-            default:
-                break
-            }
-            
+                    
+            self.delegate = footer as? any FooterScrollDelegate
             return footer
         }
+        
+        return UICollectionReusableView()
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -214,3 +209,9 @@ extension ProductDetailViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 
 extension ProductDetailViewController: UICollectionViewDelegate { }
+
+// MARK: - FooterScrollDelgate
+
+protocol FooterScrollDelegate: AnyObject {
+    func didScrollTo(_page: Int)
+}
