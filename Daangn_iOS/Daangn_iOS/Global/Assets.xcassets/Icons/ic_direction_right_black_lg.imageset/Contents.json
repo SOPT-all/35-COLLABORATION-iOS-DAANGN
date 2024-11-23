@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_direction_right_black_lg.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

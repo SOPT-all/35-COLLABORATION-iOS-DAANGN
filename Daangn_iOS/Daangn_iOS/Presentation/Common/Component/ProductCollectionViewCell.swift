@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SwiftUI
 
 import SnapKit
 import Then
@@ -97,9 +96,10 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         }
         
         titleLabel.do {
-            $0.font = .sfPro(.body_md_15)
+            $0.font = .sfPro(.title_bla_15_22)
             $0.textColor = .black
             $0.numberOfLines = 2
+            $0.lineBreakMode = .byCharWrapping
         }
         
         infoHStackView.do {
