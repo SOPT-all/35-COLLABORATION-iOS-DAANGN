@@ -13,7 +13,7 @@ import Then
 enum ProfileSection: CaseIterable {
     case profile
     case mannerTemperature
-//    case verificationInfo
+    case verificationInfo
 //    case badge
 }
 
@@ -80,13 +80,15 @@ private extension ProfileView {
             switch sectionType {
             case .profile, .mannerTemperature:
                 return self.profileSectionLayout(type: sectionType)
+            case .verificationInfo:
+                return self.verificationInfoSectionLayout()
             }
         }
         
         return layout
     }
     
-    func profileSectionLayout(type: ProfileSection) -> NSCollectionLayoutSection {
+    private func profileSectionLayout(type: ProfileSection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .fractionalHeight(1)
@@ -99,10 +101,29 @@ private extension ProfileView {
             heightDimension = .estimated(140)
         case .mannerTemperature:
             heightDimension = .estimated(182)
+        default:
+            heightDimension = .absolute(0)
         }
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: heightDimension
+        )
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+
+        let section = NSCollectionLayoutSection(group: group)
+        return section
+    }
+    
+    private func verificationInfoSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(107)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
