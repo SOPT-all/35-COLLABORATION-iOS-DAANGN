@@ -30,6 +30,7 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         $0.image = .icLocation
         $0.contentMode = .scaleAspectFit
     }
+    // 제약 조건 까지도 여기
     
     private lazy var distanceLabel = UILabel().then {
         $0.font = .sfPro(.body_md_13_026)
@@ -105,7 +106,7 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         infoHStackView.do {
             $0.axis = .horizontal
             $0.spacing = 2
-            $0.alignment = .fill
+            $0.alignment = .center
         }
         
         chatAndLikeHStackView.do {
@@ -238,7 +239,7 @@ extension ProductCollectionViewCell {
             $0.image = UIImage(systemName: "circle.fill")
             $0.tintColor = .gray
             $0.contentMode = .scaleAspectFit
-            $0.snp.makeConstraints { $0.width.height.equalTo (1) }
+            $0.snp.makeConstraints { $0.width.height.equalTo(4) }
         }
     }
     

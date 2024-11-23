@@ -21,8 +21,8 @@ final class HomeViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let resetButton = UIButton()
-    private var tagCollectionView: UICollectionView!
-    private var productCollectionView: UICollectionView!
+    private var tagCollectionView: IntrinsicCollectionView!
+    private var productCollectionView: IntrinsicCollectionView!
     
     // MARK: - Lifecycle
     
@@ -50,17 +50,17 @@ final class HomeViewController: UIViewController {
         
         let tagLayout = UICollectionViewFlowLayout()
         tagLayout.scrollDirection = .horizontal
-        tagCollectionView = UICollectionView(frame: .zero, collectionViewLayout: tagLayout).then {
+        tagCollectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: tagLayout).then {
             $0.showsHorizontalScrollIndicator = false
             $0.backgroundColor = .clear
         }
         
         let productLayout = UICollectionViewFlowLayout()
         productLayout.scrollDirection = .vertical
-        productCollectionView = UICollectionView(frame: .zero, collectionViewLayout: productLayout).then {
+        productCollectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: productLayout).then {
             $0.showsVerticalScrollIndicator = false
             $0.backgroundColor = .clear
-            
+            $0.isScrollEnabled = false
         }
     }
     
@@ -84,7 +84,7 @@ final class HomeViewController: UIViewController {
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
             $0.width.equalTo(scrollView.snp.width)
-            $0.height.equalToSuperview()
+//            $0.height.equalToSuperview()
         }
 
         resetButton.snp.makeConstraints {
@@ -177,5 +177,16 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         let attributes = [NSAttributedString.Key.font: font]
         let textWidth = (text as NSString).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil).width
         return textWidth + padding
+    }
+}
+
+class IntrinsicCollectionView: UICollectionView {
+    override func layoutSubviews() {
+        self.invalidateIntrinsicContentSize()
+        super.layoutSubviews()
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        return contentSize
     }
 }
