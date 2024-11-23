@@ -41,6 +41,8 @@ final class HomeViewController: UIViewController {
         return collectionView
     }()
     
+    let navigationBar = DaangnNavigationBar(type: .home)
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -50,6 +52,11 @@ final class HomeViewController: UIViewController {
         setLayout()
         setDelegate()
         registerCells()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     private func setStyle() {
@@ -71,6 +78,7 @@ final class HomeViewController: UIViewController {
         scrollView.addSubview(contentView)
         
         contentView.addSubviews(
+            navigationBar,
             resetButton,
             tagCollectionView,
             productCollectionView
@@ -78,7 +86,6 @@ final class HomeViewController: UIViewController {
     }
     
     private func setLayout() {
-        
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -88,8 +95,13 @@ final class HomeViewController: UIViewController {
             $0.width.equalTo(scrollView.snp.width)
         }
         
+        navigationBar.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(44)
+        }
+        
         resetButton.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top).offset(16)
+            $0.top.equalTo(navigationBar.snp.bottom).offset(22)
             $0.leading.equalToSuperview().offset(16)
             $0.width.height.equalTo(40)
         }
@@ -178,16 +190,5 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         let attributes = [NSAttributedString.Key.font: font]
         let textWidth = (text as NSString).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil).width
         return textWidth + padding
-    }
-}
-
-class IntrinsicCollectionView: UICollectionView {
-    override func layoutSubviews() {
-        self.invalidateIntrinsicContentSize()
-        super.layoutSubviews()
-    }
-    
-    override var intrinsicContentSize: CGSize {
-        return contentSize
     }
 }
