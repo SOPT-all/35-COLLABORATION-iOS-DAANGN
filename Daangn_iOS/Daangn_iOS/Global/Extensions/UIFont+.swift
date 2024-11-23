@@ -92,6 +92,16 @@ extension UIFont {
         if isUnderlined { attributes.updateValue(NSUnderlineStyle.single.rawValue, forKey: .underlineStyle)
         }
         
-        return NSAttributedString(string: text, attributes: attributes)
+        let attributedString = NSMutableAttributedString(string: text, attributes: attributes)
+        
+        if let underlineRange = underlineRange {
+            attributedString.addAttribute(
+                .underlineStyle,
+                value: NSUnderlineStyle.single.rawValue,
+                range: underlineRange
+            )
+        }
+        
+        return attributedString
     }
 }

@@ -62,6 +62,7 @@ final class MannerTemperatureCollectionViewCell: UICollectionViewCell {
             config.image = .icHelp
             config.imagePlacement = .trailing
             config.imagePadding = 2
+            config.contentInsets = .zero
             $0.configuration = config
         }
         
@@ -186,7 +187,7 @@ final class MannerTemperatureCollectionViewCell: UICollectionViewCell {
         chatImageView.snp.makeConstraints {
             $0.size.equalTo(18)
             $0.top.equalTo(heartImageView)
-            $0.centerX.equalToSuperview().offset(8.5)
+            $0.leading.equalTo(safeAreaLayoutGuide.snp.centerX).offset(8.5)
         }
         
         responseRateLabel.snp.makeConstraints {
