@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SwiftUI
 
 import SnapKit
 import Then
@@ -53,8 +52,6 @@ final class ProductCollectionViewCell: UICollectionViewCell {
             chatAndLikeHStackView.addArrangeSubViews($0)
         }
     
-    
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setStyle()
@@ -76,9 +73,10 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         }
         
         titleLabel.do {
-            $0.font = .sfPro(.body_md_15)
+            $0.font = .sfPro(.title_bla_15_22)
             $0.textColor = .black
             $0.numberOfLines = 2
+            $0.lineBreakMode = .byCharWrapping
         }
         
         infoHStackView.do {
@@ -229,13 +227,13 @@ final class ProductCollectionViewCell: UICollectionViewCell {
             $0.textColor = .gray
         }
     }
-    
 }
 
 extension ProductCollectionViewCell {
     func configureUI(with product: Product) {
         thumnailImageView.image = UIImage(named: product.thumbnailImageName)
         titleLabel.text = product.title
+        titleLabel.setAttributedText(lineHeight: 22)
         priceLabel.text = product.price
         
         setupDynamicStackViews(

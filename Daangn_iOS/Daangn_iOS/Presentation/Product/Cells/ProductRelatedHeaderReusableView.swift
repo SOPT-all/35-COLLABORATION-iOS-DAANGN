@@ -36,7 +36,7 @@ class ProductRelatedHeaderReusableView: UICollectionReusableView {
         backgroundColor = .clear
         
         titleLabel.do {
-            $0.font = .sfPro(.body_md_15)
+            $0.font = .sfPro(.title_bla_15_22)
             $0.textColor = .gray9
         }
     }
@@ -58,6 +58,7 @@ extension ProductRelatedHeaderReusableView {
     
     func configure(title: String) {
         titleLabel.text = title
+        titleLabel.setAttributedText(lineHeight: 22)
     }
 }
 
