@@ -75,5 +75,6 @@ final class TagCollectionViewCell: UICollectionViewCell {
 extension TagCollectionViewCell {
     func configureUI(tag: HomeTagResponseDTO) {
         titleLabel.text = tag.title
+        titleLabel.setAttributedText(lineHeight: 12)
     }
 }

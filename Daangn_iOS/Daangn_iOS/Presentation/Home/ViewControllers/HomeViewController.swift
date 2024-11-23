@@ -96,14 +96,15 @@ final class HomeViewController: UIViewController {
         }
         
         navigationBar.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(44)
+            $0.top.equalTo(scrollView).offset(16)
+            $0.leading.trailing.equalTo(scrollView)
+            $0.height.equalTo(16)
         }
         
         resetButton.snp.makeConstraints {
             $0.top.equalTo(navigationBar.snp.bottom).offset(22)
             $0.leading.equalToSuperview().offset(16)
-            $0.width.height.equalTo(40)
+            $0.width.height.equalTo(34)
         }
         
         tagCollectionView.snp.makeConstraints {

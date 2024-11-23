@@ -40,7 +40,7 @@ final class DaangnNavigationBar: UIView {
         .then {
             addSubview($0)
             $0.snp.makeConstraints {
-                $0.leading.equalToSuperview().inset(18)
+                $0.leading.equalToSuperview().inset(8)
                 $0.centerY.equalToSuperview()
             }
         }
