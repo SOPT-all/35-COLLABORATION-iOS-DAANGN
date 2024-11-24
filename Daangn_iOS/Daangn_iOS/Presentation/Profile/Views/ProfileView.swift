@@ -17,7 +17,7 @@ enum ProfileSection: String, CaseIterable {
     case badge = "활동 배지 17개"
 //    case itemsForSale = "판매물품 206개"
     case mannerRating = "받은 매너 평가"
-//    case tradeReview = "받은 거래 후기 32"
+    case tradeReview = "받은 거래 후기 32"
 }
 
 final class ProfileView: UIView {
@@ -85,13 +85,15 @@ private extension ProfileView {
                 return self.profileSectionLayout(type: sectionType)
             case .mannerRating:
                 return self.mannerRatingSectionLayout()
+            case .tradeReview:
+                return self.tradeReviewSectionLayout()
             }
         }
         
         return layout
     }
     
-    private func profileSectionLayout(type: ProfileSection) -> NSCollectionLayoutSection {
+    func profileSectionLayout(type: ProfileSection) -> NSCollectionLayoutSection {
         var heightDimension: NSCollectionLayoutDimension
         switch type {
         case .profile:
@@ -127,7 +129,7 @@ private extension ProfileView {
         return section
     }
     
-    private func mannerRatingSectionLayout() -> NSCollectionLayoutSection {
+    func mannerRatingSectionLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .fractionalHeight(1)
@@ -149,7 +151,29 @@ private extension ProfileView {
         return section
     }
     
-    private func profileSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+    func tradeReviewSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(80)
+        )
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        let header = profileSectionHeader()
+        section.boundarySupplementaryItems = [header]
+        section.interGroupSpacing = 14
+        section.contentInsets = .init(top: 1, leading: 0, bottom: 0, trailing: 0)
+
+        return section
+    }
+    
+    func profileSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
        let header = NSCollectionLayoutBoundarySupplementaryItem(
            layoutSize: NSCollectionLayoutSize(
                widthDimension: .fractionalWidth(1),

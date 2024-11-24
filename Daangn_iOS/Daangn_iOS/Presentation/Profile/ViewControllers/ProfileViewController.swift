@@ -18,6 +18,7 @@ final class ProfileViewController: UIViewController {
     
     private var profileData = ProfileModel.mockData()
     private var mannerRatingData = MannerRatingModel.mockData()
+    private var tradeReviewData = TradeReviewModel.mockData()
     
     // MARK: - Life Cycles
     
@@ -48,6 +49,7 @@ final class ProfileViewController: UIViewController {
         collectionView.register(VerificationInfoCollectionViewCell.self, forCellWithReuseIdentifier: VerificationInfoCollectionViewCell.className)
         collectionView.register(BadgeCollectionViewCell.self, forCellWithReuseIdentifier: BadgeCollectionViewCell.className)
         collectionView.register(MannerRatingCollectionViewCell.self, forCellWithReuseIdentifier: MannerRatingCollectionViewCell.className)
+        collectionView.register(TradeReviewCollectionViewCell.self, forCellWithReuseIdentifier: TradeReviewCollectionViewCell.className)
         
         collectionView.register(HeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderCollectionReusableView.className)
     }
@@ -70,6 +72,8 @@ extension ProfileViewController: UICollectionViewDataSource {
             return 1
         case .mannerRating:
             return mannerRatingData.count
+        case .tradeReview:
+            return tradeReviewData.count
         }
     }
     
@@ -99,6 +103,13 @@ extension ProfileViewController: UICollectionViewDataSource {
             
             let data = mannerRatingData[indexPath.item]
             cell.configure(count: data.ratingCount, title: data.mannerType)
+            return cell
+        case .tradeReview:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TradeReviewCollectionViewCell.className, for: indexPath) as? TradeReviewCollectionViewCell
+            else { return UICollectionViewCell() }
+            
+            let data = tradeReviewData[indexPath.item]
+            cell.configure(with: data)
             return cell
         }
     }
