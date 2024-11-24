@@ -187,7 +187,7 @@ final class MannerTemperatureCollectionViewCell: UICollectionViewCell {
         chatImageView.snp.makeConstraints {
             $0.size.equalTo(18)
             $0.top.equalTo(heartImageView)
-            $0.leading.equalTo(safeAreaLayoutGuide.snp.centerX).offset(8.5)
+            $0.leading.equalTo(contentView.snp.centerX).offset(8.5)
         }
         
         responseRateLabel.snp.makeConstraints {
