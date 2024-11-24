@@ -15,7 +15,7 @@ enum ProfileSection: String, CaseIterable {
     case mannerTemperature
     case verificationInfo
     case badge = "활동 배지 17개"
-//    case itemsForSale = "판매물품 206개"
+    case itemsForSale = "판매물품 206개"
     case mannerRating = "받은 매너 평가"
     case tradeReview = "받은 거래 후기 32"
 }
@@ -83,6 +83,8 @@ private extension ProfileView {
             switch sectionType {
             case .profile, .mannerTemperature, .verificationInfo, .badge:
                 return self.profileSectionLayout(type: sectionType)
+            case .itemsForSale:
+                return self.itemsForSaleSectionLayout()
             case .mannerRating:
                 return self.mannerRatingSectionLayout()
             case .tradeReview:
@@ -125,6 +127,26 @@ private extension ProfileView {
             let header = profileSectionHeader()
             section.boundarySupplementaryItems = [header]
         }
+
+        return section
+    }
+    
+    func itemsForSaleSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .absolute(0),
+            heightDimension: .absolute(0)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .absolute(0),
+            heightDimension: .absolute(0)
+        )
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        let header = profileSectionHeader()
+        section.boundarySupplementaryItems = [header]
 
         return section
     }

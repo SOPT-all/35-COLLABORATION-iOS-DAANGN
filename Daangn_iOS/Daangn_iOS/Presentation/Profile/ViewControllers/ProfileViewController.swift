@@ -70,6 +70,8 @@ extension ProfileViewController: UICollectionViewDataSource {
         switch sectionType {
         case .profile, .mannerTemperature, .verificationInfo, .badge:
             return 1
+        case .itemsForSale:
+            return 0
         case .mannerRating:
             return mannerRatingData.count
         case .tradeReview:
@@ -97,6 +99,8 @@ extension ProfileViewController: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BadgeCollectionViewCell.className, for: indexPath) as? BadgeCollectionViewCell
             else { return UICollectionViewCell() }
             return cell
+        case .itemsForSale:
+            return UICollectionViewCell()
         case .mannerRating:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannerRatingCollectionViewCell.className, for: indexPath) as? MannerRatingCollectionViewCell
             else { return UICollectionViewCell() }
