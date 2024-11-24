@@ -52,6 +52,7 @@ final class ProfileViewController: UIViewController {
         collectionView.register(TradeReviewCollectionViewCell.self, forCellWithReuseIdentifier: TradeReviewCollectionViewCell.className)
         
         collectionView.register(HeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderCollectionReusableView.className)
+        collectionView.register(DividerCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: DividerCollectionReusableView.className)
     }
     
     private func setNavigationBar() {
@@ -119,17 +120,24 @@ extension ProfileViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderCollectionReusableView.className, for: indexPath) as? HeaderCollectionReusableView
-        else { return UICollectionReusableView() }
-        
-        header.configure(
-            title: ProfileSection.allCases[indexPath.section].rawValue,
-            type: .profile
-        )
-        return header
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderCollectionReusableView.className, for: indexPath) as? HeaderCollectionReusableView
+            else { return UICollectionReusableView() }
+            
+            header.configure(
+                title: ProfileSection.allCases[indexPath.section].rawValue,
+                type: .profile
+            )
+            return header
+        case UICollectionView.elementKindSectionFooter:
+            guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DividerCollectionReusableView.className, for: indexPath) as? DividerCollectionReusableView
+            else { return UICollectionReusableView() }
+            return footer
+        default:
+            return UICollectionReusableView()
+        }
     }
 }
 
-extension ProfileViewController: UICollectionViewDelegate {
-    
-}
+extension ProfileViewController: UICollectionViewDelegate {}

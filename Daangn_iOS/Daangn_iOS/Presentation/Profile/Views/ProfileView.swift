@@ -125,7 +125,8 @@ private extension ProfileView {
         let section = NSCollectionLayoutSection(group: group)
         if type == .badge {
             let header = profileSectionHeader()
-            section.boundarySupplementaryItems = [header]
+            let footer = profileSectionFooter()
+            section.boundarySupplementaryItems = [header, footer]
         }
 
         return section
@@ -146,7 +147,8 @@ private extension ProfileView {
         
         let section = NSCollectionLayoutSection(group: group)
         let header = profileSectionHeader()
-        section.boundarySupplementaryItems = [header]
+        let footer = profileSectionFooter()
+        section.boundarySupplementaryItems = [header, footer]
 
         return section
     }
@@ -166,7 +168,8 @@ private extension ProfileView {
         
         let section = NSCollectionLayoutSection(group: group)
         let header = profileSectionHeader()
-        section.boundarySupplementaryItems = [header]
+        let footer = profileSectionFooter()
+        section.boundarySupplementaryItems = [header, footer]
         section.interGroupSpacing = 8
         section.contentInsets = .init(top: 11, leading: 0, bottom: 27, trailing: 0)
 
@@ -205,5 +208,17 @@ private extension ProfileView {
            alignment: .top
        )
        return header
+    }
+    
+    func profileSectionFooter() -> NSCollectionLayoutBoundarySupplementaryItem {
+       let footer = NSCollectionLayoutBoundarySupplementaryItem(
+           layoutSize: NSCollectionLayoutSize(
+               widthDimension: .fractionalWidth(1),
+               heightDimension: .absolute(1)
+           ),
+           elementKind: UICollectionView.elementKindSectionFooter,
+           alignment: .bottom
+       )
+       return footer
     }
 }
