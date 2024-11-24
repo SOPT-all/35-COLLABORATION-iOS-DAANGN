@@ -30,4 +30,11 @@ extension UIView {
         layer.borderWidth = width
         layer.borderColor = color.cgColor
     }
+    
+    /// 특정 corner에만 radius값을 적용하는 함수입니다.
+    func roundCorners(radius: CGFloat, to corners: CACornerMask) {
+        layer.cornerRadius = radius
+        layer.maskedCorners = corners
+        layer.masksToBounds = true
+    }
 }

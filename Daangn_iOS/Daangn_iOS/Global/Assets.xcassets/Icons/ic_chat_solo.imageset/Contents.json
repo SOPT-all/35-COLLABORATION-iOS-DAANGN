@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_chat_solo.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

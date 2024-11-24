@@ -79,7 +79,7 @@ final class HeaderCollectionReusableView: UICollectionReusableView {
 extension HeaderCollectionReusableView {
     
     func configure(
-        with title: String,
+        title: String,
         type: HeaderType,
         isMoreButtonIncluded: Bool = true
     ) {
@@ -102,3 +102,5 @@ extension HeaderCollectionReusableView {
         }
     }
 }
+
+extension HeaderCollectionReusableView: ClassNameProtocol {}

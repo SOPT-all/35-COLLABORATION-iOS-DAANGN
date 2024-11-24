@@ -69,7 +69,8 @@ extension UIFont {
         color: UIColor,
         letterSpacing: CGFloat? = nil,
         lineHeight: CGFloat? = nil,
-        isUnderlined: Bool = false
+        isUnderlined: Bool = false,
+        underlineRange: NSRange? = nil
     ) -> NSAttributedString {
         let font = UIFont.sfPro(style)
         var attributes: [NSAttributedString.Key: Any] = [
@@ -91,6 +92,16 @@ extension UIFont {
         if isUnderlined { attributes.updateValue(NSUnderlineStyle.single.rawValue, forKey: .underlineStyle)
         }
         
-        return NSAttributedString(string: text, attributes: attributes)
+        let attributedString = NSMutableAttributedString(string: text, attributes: attributes)
+        
+        if let underlineRange = underlineRange {
+            attributedString.addAttribute(
+                .underlineStyle,
+                value: NSUnderlineStyle.single.rawValue,
+                range: underlineRange
+            )
+        }
+        
+        return attributedString
     }
 }
