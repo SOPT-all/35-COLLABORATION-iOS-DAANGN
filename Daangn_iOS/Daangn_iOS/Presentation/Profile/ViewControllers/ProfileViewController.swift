@@ -43,10 +43,11 @@ final class ProfileViewController: UIViewController {
     
     private func setRegister() {
         collectionView.register(ProfileCollectionViewCell.self, forCellWithReuseIdentifier: ProfileCollectionViewCell.className)
-        
         collectionView.register(MannerTemperatureCollectionViewCell.self, forCellWithReuseIdentifier: MannerTemperatureCollectionViewCell.className)
-        
         collectionView.register(VerificationInfoCollectionViewCell.self, forCellWithReuseIdentifier: VerificationInfoCollectionViewCell.className)
+        collectionView.register(BadgeCollectionViewCell.self, forCellWithReuseIdentifier: BadgeCollectionViewCell.className)
+        
+        collectionView.register(HeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderCollectionReusableView.className)
     }
     
     private func setNavigationBar() {
@@ -63,7 +64,7 @@ extension ProfileViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let sectionType = ProfileSection.allCases[section]
         switch sectionType {
-        case .profile, .mannerTemperature, .verificationInfo:
+        case .profile, .mannerTemperature, .verificationInfo, .badge:
             return 1
         }
     }
@@ -84,7 +85,22 @@ extension ProfileViewController: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VerificationInfoCollectionViewCell.className, for: indexPath) as? VerificationInfoCollectionViewCell
             else { return UICollectionViewCell() }
             return cell
+        case .badge:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BadgeCollectionViewCell.className, for: indexPath) as? BadgeCollectionViewCell
+            else { return UICollectionViewCell() }
+            return cell
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderCollectionReusableView.className, for: indexPath) as? HeaderCollectionReusableView
+        else { return UICollectionReusableView() }
+        
+        header.configure(
+            title: ProfileSection.allCases[indexPath.section].rawValue,
+            type: .profile
+        )
+        return header
     }
 }
 

@@ -10,11 +10,11 @@ import UIKit
 import SnapKit
 import Then
 
-enum ProfileSection: CaseIterable {
+enum ProfileSection: String, CaseIterable {
     case profile
     case mannerTemperature
     case verificationInfo
-//    case badge
+    case badge = "활동 배지 17개"
 }
 
 final class ProfileView: UIView {
@@ -78,10 +78,8 @@ private extension ProfileView {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, _ -> NSCollectionLayoutSection in
             let sectionType = ProfileSection.allCases[sectionIndex]
             switch sectionType {
-            case .profile, .mannerTemperature:
+            case .profile, .mannerTemperature, .verificationInfo, .badge:
                 return self.profileSectionLayout(type: sectionType)
-            case .verificationInfo:
-                return self.verificationInfoSectionLayout()
             }
         }
         
@@ -89,45 +87,48 @@ private extension ProfileView {
     }
     
     private func profileSectionLayout(type: ProfileSection) -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalHeight(1)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let heightDimension: NSCollectionLayoutDimension
+        var heightDimension: NSCollectionLayoutDimension
         switch type {
         case .profile:
             heightDimension = .estimated(140)
         case .mannerTemperature:
             heightDimension = .estimated(182)
-        default:
-            heightDimension = .absolute(0)
+        case .verificationInfo:
+            heightDimension = .estimated(91)
+        case .badge:
+            heightDimension = .estimated(115)
         }
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: heightDimension
-        )
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-
-        let section = NSCollectionLayoutSection(group: group)
-        return section
-    }
-    
-    private func verificationInfoSectionLayout() -> NSCollectionLayoutSection {
+        
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalHeight(1)
+            heightDimension: heightDimension
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(107)
+            heightDimension: heightDimension
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-
+        
         let section = NSCollectionLayoutSection(group: group)
+        if type == .badge {
+            let header = profileSectionHeader()
+            section.boundarySupplementaryItems = [header]
+        }
+
         return section
+    }
+    
+    func profileSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+       let header = NSCollectionLayoutBoundarySupplementaryItem(
+           layoutSize: NSCollectionLayoutSize(
+               widthDimension: .fractionalWidth(1),
+               heightDimension: .estimated(62)
+           ),
+           elementKind: UICollectionView.elementKindSectionHeader,
+           alignment: .top
+       )
+       return header
     }
 }
