@@ -134,14 +134,15 @@ private extension ProfileView {
     
     func itemsForSaleSectionLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(0),
-            heightDimension: .absolute(0)
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
+        /// 해당 섹션은 아이템 없이 섹션을 구성해야 하므로 1로 설정 (0으로 설정할 경우 경고 발생)
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(0),
-            heightDimension: .absolute(0)
+            widthDimension: .absolute(1),
+            heightDimension: .absolute(1)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
