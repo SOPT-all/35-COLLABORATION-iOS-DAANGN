@@ -22,9 +22,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-				Presentation/Home/Cells/.gitkeep,
 				Presentation/Home/Models/.gitkeep,
-				Presentation/Home/Views/.gitkeep,
 				Presentation/Profile/Cells/.gitkeep,
 				Presentation/Profile/Models/.gitkeep,
 				Presentation/Profile/ViewControllers/.gitkeep,
