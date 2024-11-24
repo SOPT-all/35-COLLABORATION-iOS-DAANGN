@@ -17,6 +17,7 @@ final class ProfileViewController: UIViewController {
     // MARK: - Properties
     
     private var profileData = ProfileModel.mockData()
+    private var mannerRatingData = MannerRatingModel.mockData()
     
     // MARK: - Life Cycles
     
@@ -46,6 +47,7 @@ final class ProfileViewController: UIViewController {
         collectionView.register(MannerTemperatureCollectionViewCell.self, forCellWithReuseIdentifier: MannerTemperatureCollectionViewCell.className)
         collectionView.register(VerificationInfoCollectionViewCell.self, forCellWithReuseIdentifier: VerificationInfoCollectionViewCell.className)
         collectionView.register(BadgeCollectionViewCell.self, forCellWithReuseIdentifier: BadgeCollectionViewCell.className)
+        collectionView.register(MannerRatingCollectionViewCell.self, forCellWithReuseIdentifier: MannerRatingCollectionViewCell.className)
         
         collectionView.register(HeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderCollectionReusableView.className)
     }
@@ -66,6 +68,8 @@ extension ProfileViewController: UICollectionViewDataSource {
         switch sectionType {
         case .profile, .mannerTemperature, .verificationInfo, .badge:
             return 1
+        case .mannerRating:
+            return mannerRatingData.count
         }
     }
     
@@ -88,6 +92,13 @@ extension ProfileViewController: UICollectionViewDataSource {
         case .badge:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BadgeCollectionViewCell.className, for: indexPath) as? BadgeCollectionViewCell
             else { return UICollectionViewCell() }
+            return cell
+        case .mannerRating:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannerRatingCollectionViewCell.className, for: indexPath) as? MannerRatingCollectionViewCell
+            else { return UICollectionViewCell() }
+            
+            let data = mannerRatingData[indexPath.item]
+            cell.configure(count: data.ratingCount, title: data.mannerType)
             return cell
         }
     }

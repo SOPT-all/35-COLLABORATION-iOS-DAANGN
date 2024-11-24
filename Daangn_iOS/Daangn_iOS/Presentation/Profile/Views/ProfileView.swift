@@ -15,6 +15,9 @@ enum ProfileSection: String, CaseIterable {
     case mannerTemperature
     case verificationInfo
     case badge = "활동 배지 17개"
+//    case itemsForSale = "판매물품 206개"
+    case mannerRating = "받은 매너 평가"
+//    case tradeReview = "받은 거래 후기 32"
 }
 
 final class ProfileView: UIView {
@@ -80,6 +83,8 @@ private extension ProfileView {
             switch sectionType {
             case .profile, .mannerTemperature, .verificationInfo, .badge:
                 return self.profileSectionLayout(type: sectionType)
+            case .mannerRating:
+                return self.mannerRatingSectionLayout()
             }
         }
         
@@ -97,6 +102,8 @@ private extension ProfileView {
             heightDimension = .estimated(91)
         case .badge:
             heightDimension = .estimated(115)
+        default:
+            heightDimension = .absolute(0)
         }
         
         let itemSize = NSCollectionLayoutSize(
@@ -120,7 +127,29 @@ private extension ProfileView {
         return section
     }
     
-    func profileSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+    private func mannerRatingSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .fractionalHeight(1)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(50)
+        )
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        let header = profileSectionHeader()
+        section.boundarySupplementaryItems = [header]
+        section.interGroupSpacing = 8
+        section.contentInsets = .init(top: 11, leading: 0, bottom: 27, trailing: 0)
+
+        return section
+    }
+    
+    private func profileSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
        let header = NSCollectionLayoutBoundarySupplementaryItem(
            layoutSize: NSCollectionLayoutSize(
                widthDimension: .fractionalWidth(1),
