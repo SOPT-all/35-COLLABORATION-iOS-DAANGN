@@ -14,7 +14,7 @@ class ProductImageFooterReusableView: UICollectionReusableView {
     
     // MARK: - UI Component
     
-    private lazy var imageSlider = UIPageControl()
+    lazy var imageSlider = UIPageControl()
     
     // MARK: - View Life Cycle
     
@@ -33,7 +33,7 @@ class ProductImageFooterReusableView: UICollectionReusableView {
     // MARK: - UI&Layout
     
     private func setStyle() {
-        backgroundColor = .black
+        backgroundColor = .clear
         
         imageSlider.do {
             $0.hidesForSinglePage = true
@@ -51,9 +51,12 @@ class ProductImageFooterReusableView: UICollectionReusableView {
             $0.edges.equalToSuperview()
         }
     }
+    
+    func updatePage(_ page: Int) {
+        imageSlider.currentPage = page
+    }
 }
 
 // MARK: - ClassNameProtocol
 
 extension ProductImageFooterReusableView: ClassNameProtocol { }
-

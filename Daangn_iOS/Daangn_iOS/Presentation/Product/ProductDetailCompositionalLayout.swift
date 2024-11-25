@@ -8,6 +8,7 @@
 import UIKit
 
 struct ProductDetailCompositionalLayout {
+    static weak var scrollDelegate: FooterScrollDelegate?
     
     static func createLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout { (sectionNumber, _) -> NSCollectionLayoutSection? in
@@ -38,7 +39,6 @@ struct ProductDetailCompositionalLayout {
 extension ProductDetailCompositionalLayout {
     
     static private func productImageSectionLayout() -> NSCollectionLayoutSection {
-        
         let item = NSCollectionLayoutItem(
             layoutSize: .init(
                 widthDimension: .fractionalWidth(1),
@@ -57,6 +57,11 @@ extension ProductDetailCompositionalLayout {
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .paging
         
+        section.visibleItemsInvalidationHandler = { items, offset, environment in
+            let page = Int(round(offset.x / environment.container.contentSize.width))
+            self.scrollDelegate?.didScrollTo(page: page)
+        }
+        
         let footer = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: .init(
                 widthDimension: .fractionalWidth(1),
@@ -66,8 +71,9 @@ extension ProductDetailCompositionalLayout {
             alignment: .bottom
         )
         
+        footer.contentInsets = NSDirectionalEdgeInsets(top: -28, leading: 0, bottom: 8, trailing: 0)
+        
         section.boundarySupplementaryItems = [footer]
-
         
         return section
     }

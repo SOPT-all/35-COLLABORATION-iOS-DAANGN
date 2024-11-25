@@ -8,13 +8,13 @@
 import UIKit
 
 class ProductDetailViewController: UIViewController {
-
+    
     // MARK: - Properties
     
     private var sellerProducts = RelatedProduct.sampleSellerProducts
     private var relatedProducts = RelatedProduct.sampleRelatedArticle
-    weak var delegate: FooterScrollDelegate?
-    
+    private var footer: ProductImageFooterReusableView?
+
     // MARK: - UI Component
     
     private let rootView = ProductDetailView()
@@ -29,14 +29,16 @@ class ProductDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setDelegate()
         setRegister()
+        
     }
     
     private func setDelegate() {
         rootView.collectionView.delegate = self
         rootView.collectionView.dataSource = self
+        ProductDetailCompositionalLayout.scrollDelegate = self
     }
     
     private func setRegister() {
@@ -169,7 +171,7 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             guard let header = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: ProductRelatedHeaderReusableView.className,
-                for: indexPath ) as? ProductRelatedHeaderReusableView,
+                for: indexPath) as? ProductRelatedHeaderReusableView,
                   let section = ProductDetailSection(rawValue: indexPath.section)
             else { return UICollectionReusableView() }
             
@@ -184,16 +186,17 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             
             return header
         }
-        else if kind == UICollectionView.elementKindSectionFooter {
+        
+        if kind == UICollectionView.elementKindSectionFooter {
             guard let footer = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: ProductImageFooterReusableView.className,
                 for: indexPath) as? ProductImageFooterReusableView,
-                  let section = ProductDetailSection(rawValue: indexPath.section),
-                  section == .productImage
+                  let section = ProductDetailSection(rawValue: indexPath.section)
             else { return UICollectionReusableView() }
-                    
-            self.delegate = footer as? any FooterScrollDelegate
+            
+            self.footer = footer
+            footer.imageSlider.numberOfPages = section.numberOfItemsInSection
             return footer
         }
         
@@ -212,6 +215,8 @@ extension ProductDetailViewController: UICollectionViewDelegate { }
 
 // MARK: - FooterScrollDelgate
 
-protocol FooterScrollDelegate: AnyObject {
-    func didScrollTo(_page: Int)
+extension ProductDetailViewController: FooterScrollDelegate {
+    func didScrollTo(page: Int) {
+        footer?.updatePage(page)
+    }
 }
