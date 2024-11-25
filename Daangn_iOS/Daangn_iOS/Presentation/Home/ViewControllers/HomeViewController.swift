@@ -151,6 +151,40 @@ final class HomeViewController: UIViewController {
                $0.width.equalTo(98)
         }
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scrollOffsetY = scrollView.contentOffset.y
+
+        UIView.animate(withDuration: 0.3) {
+            if scrollOffsetY > 50 {
+                self.writeButton.configuration?.attributedTitle = nil
+                self.writeButton.configuration?.image = UIImage(resource: .icPlusLg)
+                self.writeButton.configuration?.imagePlacement = .leading
+                self.writeButton.configuration?.imagePadding = 0
+                self.writeButton.snp.updateConstraints {
+                    $0.width.height.equalTo(58)
+                }
+                self.writeButton.layer.cornerRadius = 29
+            } else {
+                self.writeButton.configuration?.attributedTitle = AttributedString(
+                    "글쓰기",
+                    attributes: AttributeContainer([
+                        .font: UIFont.sfPro(.title_bla_15_22),
+                        .foregroundColor: UIColor.white
+                    ])
+                )
+                self.writeButton.configuration?.image = UIImage(resource: .icPlusSm) 
+                self.writeButton.configuration?.imagePlacement = .leading
+                self.writeButton.configuration?.imagePadding = 4
+                self.writeButton.snp.updateConstraints {
+                    $0.height.equalTo(46)
+                    $0.width.equalTo(98)
+                }
+                self.writeButton.layer.cornerRadius = 25
+            }
+            self.view.layoutIfNeeded()
+        }
+    }
 }
 
 private extension HomeViewController {
@@ -160,6 +194,7 @@ private extension HomeViewController {
         tagCollectionView.dataSource = self
         productCollectionView.delegate = self
         productCollectionView.dataSource = self
+        scrollView.delegate = self
     }
     
     func registerCells() {
