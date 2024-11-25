@@ -13,7 +13,7 @@ final class HomeViewController: UIViewController {
     
     // MARK: - Mock Data
     
-    let tags: [HomeTagResponseDTO] = HomeTagResponseDTO.sampleTags
+    let tags: [HomeTag] = Array(HomeTag.allCases)
     let products: [ProductResponseDTO] = ProductResponseDTO.sampleProducts
     
     // MARK: - UI Components
@@ -25,20 +25,13 @@ final class HomeViewController: UIViewController {
     private lazy var tagCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        let collectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .clear
-        return collectionView
+        return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
-    
+
     private lazy var productCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        let collectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.backgroundColor = .clear
-        collectionView.isScrollEnabled = false
-        return collectionView
+        return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
     
     private let navigationBar = DaangnNavigationBar(type: .home)
@@ -71,14 +64,24 @@ final class HomeViewController: UIViewController {
             $0.setImage(.icReset, for: .normal)
             $0.imageView?.contentMode = .scaleAspectFit
         }
+        
+        tagCollectionView.do {
+            $0.showsHorizontalScrollIndicator = false
+            $0.backgroundColor = .clear
+        }
+
+        productCollectionView.do {
+            $0.showsVerticalScrollIndicator = false
+            $0.backgroundColor = .clear
+            $0.isScrollEnabled = false
+        }
     }
     
     private func setUI() {
-        view.addSubview(scrollView)
+        view.addSubviews(navigationBar, scrollView)
         scrollView.addSubview(contentView)
-        
+
         contentView.addSubviews(
-            navigationBar,
             resetButton,
             tagCollectionView,
             productCollectionView
@@ -86,8 +89,16 @@ final class HomeViewController: UIViewController {
     }
     
     private func setLayout() {
+        
+        navigationBar.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(50)
+        }
+        
         scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(navigationBar.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
         
         contentView.snp.makeConstraints {
@@ -95,14 +106,8 @@ final class HomeViewController: UIViewController {
             $0.width.equalTo(scrollView.snp.width)
         }
         
-        navigationBar.snp.makeConstraints {
-            $0.top.equalTo(scrollView).offset(16)
-            $0.leading.trailing.equalTo(scrollView)
-            $0.height.equalTo(28)
-        }
-        
         resetButton.snp.makeConstraints {
-            $0.top.equalTo(navigationBar.snp.bottom).offset(22)
+            $0.top.equalToSuperview().offset(11)
             $0.leading.equalToSuperview().offset(16)
             $0.width.height.equalTo(34)
         }
@@ -123,7 +128,6 @@ final class HomeViewController: UIViewController {
 }
 
 private extension HomeViewController {
-    
     func setDelegate() {
         tagCollectionView.delegate = self
         tagCollectionView.dataSource = self
@@ -132,20 +136,19 @@ private extension HomeViewController {
     }
     
     func registerCells() {
-        tagCollectionView.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: TagCollectionViewCell.identifier)
-        productCollectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: ProductCollectionViewCell.identifier)
+        tagCollectionView.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: TagCollectionViewCell.className)
+        productCollectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: ProductCollectionViewCell.className)
     }
 }
 
 extension HomeViewController: UICollectionViewDataSource {
-    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == tagCollectionView {
-            return tags.count
+            return HomeTag.allCases.count // 변경된 부분: enum의 모든 케이스 개수
         } else if collectionView == productCollectionView {
             return products.count
         }
@@ -154,14 +157,14 @@ extension HomeViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == tagCollectionView {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCollectionViewCell.identifier, for: indexPath) as? TagCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCollectionViewCell.className, for: indexPath) as? TagCollectionViewCell else {
                 return UICollectionViewCell()
             }
-            let tag = tags[indexPath.item]
-            cell.configureUI(tag: tag)
+            let tagTitle = HomeTag.allCases[indexPath.item].rawValue // 변경된 부분: enum에서 rawValue를 가져옴
+            cell.configureUI(tagTitle: tagTitle)
             return cell
         } else if collectionView == productCollectionView {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionViewCell.identifier, for: indexPath) as? ProductCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionViewCell.className, for: indexPath) as? ProductCollectionViewCell else {
                 return UICollectionViewCell()
             }
             let product = products[indexPath.item]
@@ -173,24 +176,16 @@ extension HomeViewController: UICollectionViewDataSource {
 }
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == tagCollectionView {
-            let tag = tags[indexPath.item]
-            let estimatedWidth = calculateDynamicWidth(for: tag.title, font: .sfPro(.body_md_12))
-            return CGSize(width: estimatedWidth, height: 34)
+            let tagTitle = HomeTag.allCases[indexPath.item].rawValue
+            let textSize = tagTitle.getLabelContentSize(withFont: .sfPro(.body_md_12))
+            let padding: CGFloat = 50 
+            return CGSize(width: textSize.width + padding, height: 34)
         } else if collectionView == productCollectionView {
             return CGSize(width: collectionView.frame.width, height: 162)
         }
         return CGSize.zero
-    }
-    
-    private func calculateDynamicWidth(for text: String, font: UIFont) -> CGFloat {
-        let padding: CGFloat = 50
-        let size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)
-        let attributes = [NSAttributedString.Key.font: font]
-        let textWidth = (text as NSString).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil).width
-        return textWidth + padding
     }
 }
 

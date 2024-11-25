@@ -7,10 +7,8 @@
 
 import UIKit
 
-final class TagCollectionViewCell: UICollectionViewCell {
-    
-    static let identifier = "TagCollectionViewCell"
-    
+final class TagCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
+
     // MARK: - UI Components
     
     private let titleLabel = UILabel()
@@ -18,7 +16,6 @@ final class TagCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setStyle()
         setUI()
         setLayout()
@@ -34,7 +31,7 @@ final class TagCollectionViewCell: UICollectionViewCell {
         
         contentView.do {
             $0.backgroundColor = .white
-            $0.layer.cornerRadius = 16
+            $0.makeCornerRound(radius: 16)
             $0.layer.masksToBounds = true
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray3.cgColor
@@ -72,8 +69,8 @@ final class TagCollectionViewCell: UICollectionViewCell {
 }
 
 extension TagCollectionViewCell {
-    func configureUI(tag: HomeTagResponseDTO) {
-        titleLabel.text = tag.title
+    func configureUI(tagTitle: String) {
+        titleLabel.text = tagTitle
         titleLabel.setAttributedText(lineHeight: 12)
     }
 }

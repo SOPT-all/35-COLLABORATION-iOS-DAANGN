@@ -37,7 +37,6 @@ class ProductImageCollectionViewCell: UICollectionViewCell {
         
         detailImageView.do {
             $0.contentMode = .scaleAspectFill
-            $0.makeCornerRound(radius: 6)
             $0.image = .imgDetails
         }
     }
