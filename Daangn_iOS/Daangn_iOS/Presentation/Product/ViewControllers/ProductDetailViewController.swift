@@ -13,7 +13,7 @@ class ProductDetailViewController: UIViewController {
     
     private var sellerProducts = RelatedProduct.sampleSellerProducts
     private var relatedProducts = RelatedProduct.sampleRelatedArticle
-    private var footer: ProductImageFooterReusableView?
+    private var footerReusableView: ProductImageFooterReusableView?
 
     // MARK: - UI Component
     
@@ -195,7 +195,7 @@ extension ProductDetailViewController: UICollectionViewDataSource {
                   let section = ProductDetailSection(rawValue: indexPath.section)
             else { return UICollectionReusableView() }
             
-            self.footer = footer
+            self.footerReusableView = footer
             footer.imageSlider.numberOfPages = section.numberOfItemsInSection
             return footer
         }
@@ -217,6 +217,6 @@ extension ProductDetailViewController: UICollectionViewDelegate { }
 
 extension ProductDetailViewController: FooterScrollDelegate {
     func didScrollTo(page: Int) {
-        footer?.updatePage(page)
+        footerReusableView?.updatePageIndex(page)
     }
 }

@@ -8,6 +8,7 @@
 import UIKit
 
 struct ProductDetailCompositionalLayout {
+    
     static weak var scrollDelegate: FooterScrollDelegate?
     
     static func createLayout() -> UICollectionViewCompositionalLayout {
