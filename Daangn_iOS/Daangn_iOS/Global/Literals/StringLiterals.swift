@@ -29,6 +29,8 @@ enum I18N {
     }
     
     enum Profile {
+        static let mannerPraise = "매너 칭찬하기"
+        static let follow = "팔로우"
     }
     
     enum Search {
