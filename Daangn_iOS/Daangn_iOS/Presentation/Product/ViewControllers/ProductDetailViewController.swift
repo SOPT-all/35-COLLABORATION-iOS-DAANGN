@@ -13,11 +13,11 @@ class ProductDetailViewController: UIViewController {
     
     private var sellerProducts = RelatedProduct.sampleSellerProducts
     private var relatedProducts = RelatedProduct.sampleRelatedArticle
-    private var footerReusableView: ProductImageFooterReusableView?
+    weak var delegate: FooterScrollDelegate?
 
     // MARK: - UI Component
     
-    private let rootView = ProductDetailView()
+    private lazy var rootView = ProductDetailView(viewController: self)
     
     // MARK: - View Life Cycle
     
@@ -38,7 +38,6 @@ class ProductDetailViewController: UIViewController {
     private func setDelegate() {
         rootView.collectionView.delegate = self
         rootView.collectionView.dataSource = self
-        ProductDetailCompositionalLayout.scrollDelegate = self
     }
     
     private func setRegister() {
@@ -167,7 +166,8 @@ extension ProductDetailViewController: UICollectionViewDataSource {
         at indexPath: IndexPath
     ) -> UICollectionReusableView {
         
-        if kind == UICollectionView.elementKindSectionHeader {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
             guard let header = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: ProductRelatedHeaderReusableView.className,
@@ -185,9 +185,7 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             }
             
             return header
-        }
-        
-        if kind == UICollectionView.elementKindSectionFooter {
+        case UICollectionView.elementKindSectionFooter:
             guard let footer = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: ProductImageFooterReusableView.className,
@@ -195,18 +193,17 @@ extension ProductDetailViewController: UICollectionViewDataSource {
                   let section = ProductDetailSection(rawValue: indexPath.section)
             else { return UICollectionReusableView() }
             
-            self.footerReusableView = footer
-            footer.imageSlider.numberOfPages = section.numberOfItemsInSection
+            self.delegate = footer
+            footer.configure(pageNumber: section.numberOfItemsInSection)
             return footer
+        default:
+            return UICollectionReusableView()
         }
-        
-        return UICollectionReusableView()
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return ProductDetailSection.allCases.count
     }
-    
 }
 
 // MARK: - UICollectionViewDelegate
@@ -215,8 +212,8 @@ extension ProductDetailViewController: UICollectionViewDelegate { }
 
 // MARK: - FooterScrollDelgate
 
-extension ProductDetailViewController: FooterScrollDelegate {
-    func didScrollTo(page: Int) {
-        footerReusableView?.updatePageIndex(page)
+extension ProductDetailViewController: FooterConnectDelegate {
+    func connect(page: Int) {
+        delegate?.didScrollTo(page: page)
     }
 }

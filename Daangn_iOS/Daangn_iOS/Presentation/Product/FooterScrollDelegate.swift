@@ -8,3 +8,7 @@
 protocol FooterScrollDelegate: AnyObject {
     func didScrollTo(page: Int)
 }
+
+protocol FooterConnectDelegate: AnyObject {
+    func connect(page: Int)
+}

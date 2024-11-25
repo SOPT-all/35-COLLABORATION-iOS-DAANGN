@@ -53,13 +53,21 @@ class ProductImageFooterReusableView: UICollectionReusableView {
     }
     
     // MARK: - updatePageIndex 함수
-    func updatePageIndex(_ page: Int) {
+    private func updatePageIndex(_ page: Int) {
         imageSlider.currentPage = page
     }
 }
 
 // MARK: - ClassNameProtocol
 
-extension ProductImageFooterReusableView: ClassNameProtocol { }
+extension ProductImageFooterReusableView: ClassNameProtocol {
+    func configure(pageNumber: Int) {
+        imageSlider.numberOfPages = pageNumber
+    }
+}
 
-
+extension ProductImageFooterReusableView: FooterScrollDelegate {
+    func didScrollTo(page: Int) {
+        updatePageIndex(page)
+    }
+}

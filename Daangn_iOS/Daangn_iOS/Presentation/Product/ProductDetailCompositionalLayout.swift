@@ -7,11 +7,11 @@
 
 import UIKit
 
-struct ProductDetailCompositionalLayout {
+class ProductDetailCompositionalLayout {
     
-    static weak var scrollDelegate: FooterScrollDelegate?
+    weak var connectDelegate: FooterConnectDelegate?
     
-    static func createLayout() -> UICollectionViewCompositionalLayout {
+    func createLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout { (sectionNumber, _) -> NSCollectionLayoutSection? in
             
             guard let section = ProductDetailSection(rawValue: sectionNumber)
@@ -39,7 +39,7 @@ struct ProductDetailCompositionalLayout {
 
 extension ProductDetailCompositionalLayout {
     
-    static private func productImageSectionLayout() -> NSCollectionLayoutSection {
+    private func productImageSectionLayout() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(
             layoutSize: .init(
                 widthDimension: .fractionalWidth(1),
@@ -60,7 +60,7 @@ extension ProductDetailCompositionalLayout {
         
         section.visibleItemsInvalidationHandler = { items, offset, environment in
             let page = Int(round(offset.x / environment.container.contentSize.width))
-            self.scrollDelegate?.didScrollTo(page: page)
+            self.connectDelegate?.connect(page: page)
         }
         
         let footer = NSCollectionLayoutBoundarySupplementaryItem(
@@ -79,7 +79,7 @@ extension ProductDetailCompositionalLayout {
         return section
     }
     
-    static private func sellerInfoSectionLayout() -> NSCollectionLayoutSection {
+    private func sellerInfoSectionLayout() -> NSCollectionLayoutSection {
         
         let item = NSCollectionLayoutItem(
             layoutSize: .init(
@@ -101,7 +101,7 @@ extension ProductDetailCompositionalLayout {
         return section
     }
     
-    static private func productDetailInfoSectionLayout() -> NSCollectionLayoutSection {
+    private func productDetailInfoSectionLayout() -> NSCollectionLayoutSection {
         
         let item = NSCollectionLayoutItem(
             layoutSize: .init(
@@ -123,7 +123,7 @@ extension ProductDetailCompositionalLayout {
         return section
     }
     
-    static private func sellerProductSectionLayout() -> NSCollectionLayoutSection {
+    private func sellerProductSectionLayout() -> NSCollectionLayoutSection {
         
         let item = NSCollectionLayoutItem(
             layoutSize: .init(
@@ -165,7 +165,7 @@ extension ProductDetailCompositionalLayout {
         return section
     }
     
-    static private func keywordNotifySectionLayout() -> NSCollectionLayoutSection {
+    private func keywordNotifySectionLayout() -> NSCollectionLayoutSection {
         
         let item = NSCollectionLayoutItem(
             layoutSize: .init(
@@ -187,7 +187,7 @@ extension ProductDetailCompositionalLayout {
         return section
     }
     
-    static private func relatedArticleSectionLayout() -> NSCollectionLayoutSection {
+    private func relatedArticleSectionLayout() -> NSCollectionLayoutSection {
         
         let item = NSCollectionLayoutItem(
             layoutSize: .init(
