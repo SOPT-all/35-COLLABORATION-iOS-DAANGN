@@ -36,7 +36,7 @@ class ProductDetailInfoCollectionViewCell: UICollectionViewCell {
         backgroundColor = .clear
         
         sampleView.do {
-            $0.backgroundColor = .gray
+            $0.backgroundColor = .white
         }
     }
     

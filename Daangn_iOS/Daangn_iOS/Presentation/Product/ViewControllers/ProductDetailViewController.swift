@@ -13,6 +13,7 @@ class ProductDetailViewController: UIViewController {
     
     private var sellerProducts = RelatedProduct.sampleSellerProducts
     private var relatedProducts = RelatedProduct.sampleRelatedArticle
+    private var sampleSellerInfo = SellerInfo.sellerInfo
     weak var delegate: FooterScrollDelegate?
 
     // MARK: - UI Component
@@ -117,6 +118,9 @@ extension ProductDetailViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as? SellerInfoCollectionViewCell
             else { return UICollectionViewCell() }
+            
+            let model = sampleSellerInfo
+            cell.configure(with: model)
             
             return cell
         case .productDetailInfo:
