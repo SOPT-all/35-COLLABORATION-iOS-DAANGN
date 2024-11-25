@@ -91,7 +91,7 @@ extension ProductDetailCompositionalLayout {
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: .init(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .absolute(80)
+                heightDimension: .estimated(80)
             ),
             subitems: [item]
         )
@@ -113,7 +113,7 @@ extension ProductDetailCompositionalLayout {
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: .init(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .absolute(364)
+                heightDimension: .estimated(364)
             ),
             subitems: [item]
         )
