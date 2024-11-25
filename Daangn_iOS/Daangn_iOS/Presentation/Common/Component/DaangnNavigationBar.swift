@@ -27,6 +27,7 @@ final class DaangnNavigationBar: UIView {
             $0.configuration = UIButton.Configuration.plain()
             $0.configuration?.baseForegroundColor = .gray11
             $0.configuration?.image = .icDirectionDown
+            $0.configuration?.contentInsets = .zero
             $0.configuration?.imagePadding = 3
             $0.configuration?.imagePlacement = .trailing
             $0.configuration?.attributedTitle = AttributedString(
@@ -40,7 +41,7 @@ final class DaangnNavigationBar: UIView {
         .then {
             addSubview($0)
             $0.snp.makeConstraints {
-                $0.leading.equalToSuperview().inset(18)
+                $0.leading.equalToSuperview().inset(16)
                 $0.centerY.equalToSuperview()
             }
         }
