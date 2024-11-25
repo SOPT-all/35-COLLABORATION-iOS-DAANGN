@@ -210,7 +210,7 @@ extension ProductDetailViewController: UICollectionViewDataSource {
 
 extension ProductDetailViewController: UICollectionViewDelegate { }
 
-// MARK: - FooterScrollDelgate
+// MARK: - FooterConnectDelgate
 
 extension ProductDetailViewController: FooterConnectDelegate {
     func connect(page: Int) {
