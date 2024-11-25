@@ -83,12 +83,12 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
         
         degreeBackgroundView.do {
             $0.backgroundColor = .gray4
-            $0.makeCornerRound(radius: 10)
+            $0.makeCornerRound(radius: 3)
         }
         
         degreeView.do {
             $0.backgroundColor = .orange2
-            $0.makeCornerRound(radius: 10)
+            $0.makeCornerRound(radius: 3)
         }
         
         degreeImageView.do {
@@ -99,7 +99,7 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
         mannerDegreeLabel.do {
             $0.text = "매너온도"
             $0.font = .sfPro(.caption_r_12_08)
-            $0.setAttributedText(letterSpacing: -0.8)
+            $0.setAttributedText(letterSpacing: -0.8, lineHeight: 10)
             $0.textColor = .gray7
         }
         
@@ -162,15 +162,15 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
         }
         
         degreeBackgroundView.snp.makeConstraints {
-            $0.bottom.equalTo(degreeImageView.snp.bottom)
+            $0.top.equalTo(degreeLabel.snp.bottom).offset(5)
             $0.trailing.equalTo(degreeLabel)
             $0.width.equalTo(50)
             $0.height.equalTo(3)
         }
         
         degreeView.snp.makeConstraints {
-            $0.bottom.equalTo(degreeImageView.snp.bottom)
-            $0.leading.equalTo(degreeBackgroundView)
+            $0.top.equalTo(degreeLabel.snp.bottom).offset(5)
+            $0.leading.equalTo(degreeBackgroundView.snp.leading)
             $0.width.equalTo(50*0.535)
             $0.height.equalTo(3)
         }
@@ -182,7 +182,7 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
         
         horizontalDivider.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(16)
-            $0.top.equalTo(mannerDegreeLabel.snp.bottom).offset(17)
+//            $0.top.equalTo(mannerDegreeLabel.snp.bottom).offset(17)
             $0.height.equalTo(1)
             $0.bottom.equalToSuperview()
         }
@@ -192,6 +192,8 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
 // MARK: - ClassNameProtocol
 
 extension SellerInfoCollectionViewCell: ClassNameProtocol { }
+
+// MARK: - configure
 
 extension SellerInfoCollectionViewCell {
     func configure(with seller: SellerInfo) {
