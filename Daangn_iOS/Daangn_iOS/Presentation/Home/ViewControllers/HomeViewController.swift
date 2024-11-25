@@ -21,6 +21,7 @@ final class HomeViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let resetButton = UIButton()
+    private let writeButton = UIButton()
     
     private lazy var tagCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -34,7 +35,7 @@ final class HomeViewController: UIViewController {
         return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
     
-    let navigationBar = DaangnNavigationBar(type: .home)
+    private let navigationBar = DaangnNavigationBar(type: .home)
     
     // MARK: - Lifecycle
     
@@ -64,6 +65,26 @@ final class HomeViewController: UIViewController {
             $0.setImage(.icReset, for: .normal)
             $0.imageView?.contentMode = .scaleAspectFit
         }
+    
+        writeButton.do {
+            $0.configuration = UIButton.Configuration.plain()
+            $0.configuration?.image = UIImage(resource: .icPlusSm)
+            $0.configuration?.imagePadding = 4
+            $0.configuration?.imagePlacement = .leading
+            $0.configuration?.attributedTitle = AttributedString(
+                "글쓰기",
+                attributes: AttributeContainer([
+                    .font: UIFont.sfPro(.title_bla_15_22),
+                    .foregroundColor: UIColor.white
+                ])
+            )
+            $0.backgroundColor = .orange1
+            $0.layer.cornerRadius = 25
+            $0.layer.shadowColor = UIColor.black.cgColor
+            $0.layer.shadowOpacity = 0.2
+            $0.layer.shadowOffset = CGSize(width: 0, height: 4)
+            $0.layer.shadowRadius = 6
+        }
         
         tagCollectionView.do {
             $0.showsHorizontalScrollIndicator = false
@@ -84,7 +105,8 @@ final class HomeViewController: UIViewController {
         contentView.addSubviews(
             resetButton,
             tagCollectionView,
-            productCollectionView
+            productCollectionView,
+            writeButton
         )
     }
     
@@ -105,7 +127,7 @@ final class HomeViewController: UIViewController {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
             $0.width.equalTo(scrollView.snp.width)
         }
-    
+        
         resetButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(11)
             $0.leading.equalToSuperview().offset(16)
@@ -124,6 +146,47 @@ final class HomeViewController: UIViewController {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
+        
+        writeButton.snp.makeConstraints {
+            $0.trailing.equalTo(scrollView.frameLayoutGuide.snp.trailing).offset(-13)
+               $0.bottom.equalTo(scrollView.frameLayoutGuide.snp.bottom).offset(-102)
+               $0.height.equalTo(46)
+               $0.width.equalTo(98)
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scrollOffsetY = scrollView.contentOffset.y
+
+        UIView.animate(withDuration: 0.3) {
+            if scrollOffsetY > 50 {
+                self.writeButton.configuration?.attributedTitle = nil
+                self.writeButton.configuration?.image = UIImage(resource: .icPlusLg)
+                self.writeButton.configuration?.imagePlacement = .leading
+                self.writeButton.configuration?.imagePadding = 0
+                self.writeButton.snp.updateConstraints {
+                    $0.width.height.equalTo(58)
+                }
+                self.writeButton.layer.cornerRadius = 29
+            } else {
+                self.writeButton.configuration?.attributedTitle = AttributedString(
+                    "글쓰기",
+                    attributes: AttributeContainer([
+                        .font: UIFont.sfPro(.title_bla_15_22),
+                        .foregroundColor: UIColor.white
+                    ])
+                )
+                self.writeButton.configuration?.image = UIImage(resource: .icPlusSm) 
+                self.writeButton.configuration?.imagePlacement = .leading
+                self.writeButton.configuration?.imagePadding = 4
+                self.writeButton.snp.updateConstraints {
+                    $0.height.equalTo(46)
+                    $0.width.equalTo(98)
+                }
+                self.writeButton.layer.cornerRadius = 25
+            }
+            self.view.layoutIfNeeded()
+        }
     }
 }
 
@@ -133,6 +196,7 @@ private extension HomeViewController {
         tagCollectionView.dataSource = self
         productCollectionView.delegate = self
         productCollectionView.dataSource = self
+        scrollView.delegate = self
     }
     
     func registerCells() {
@@ -188,3 +252,20 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         return CGSize.zero
     }
 }
+
+extension HomeViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == tagCollectionView {
+            let selectedTag = tags[indexPath.item]
+            navigateToCategoryScreen(with: selectedTag)
+        }
+    }
+}
+
+private extension HomeViewController {
+    func navigateToCategoryScreen(with tag: HomeTagResponseDTO) {
+        let detaileFilterController = DetaileFilterViewController()
+        navigationController?.pushViewController(detaileFilterController, animated: true)
+    }
+}
+
