@@ -21,6 +21,7 @@ final class HomeViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let resetButton = UIButton()
+    private let writeButton = UIButton()
     
     private lazy var tagCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -71,6 +72,28 @@ final class HomeViewController: UIViewController {
             $0.setImage(.icReset, for: .normal)
             $0.imageView?.contentMode = .scaleAspectFit
         }
+    
+        writeButton.do {
+            $0.configuration = UIButton.Configuration.plain()
+            $0.configuration?.baseForegroundColor = .white
+            $0.configuration?.image = UIImage(resource: .icPlusSm)
+            $0.configuration?.imagePadding = 4
+            $0.configuration?.imagePlacement = .leading
+            $0.configuration?.attributedTitle = AttributedString(
+                "글쓰기",
+                attributes: AttributeContainer([
+                    .font: UIFont.sfPro(.title_bla_15_22),
+                    .foregroundColor: UIColor.white
+                ])
+            )
+            $0.backgroundColor = .orange1
+            $0.layer.cornerRadius = 25
+            $0.layer.shadowColor = UIColor.black.cgColor
+            $0.layer.shadowOpacity = 0.2
+            $0.layer.shadowOffset = CGSize(width: 0, height: 4)
+            $0.layer.shadowRadius = 6
+        }
+        
     }
     
     private func setUI() {
@@ -81,7 +104,8 @@ final class HomeViewController: UIViewController {
             navigationBar,
             resetButton,
             tagCollectionView,
-            productCollectionView
+            productCollectionView,
+            writeButton
         )
     }
     
@@ -118,6 +142,13 @@ final class HomeViewController: UIViewController {
             $0.top.equalTo(tagCollectionView.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
+        }
+        
+        writeButton.snp.makeConstraints {
+            $0.trailing.equalTo(scrollView.frameLayoutGuide.snp.trailing).offset(-13)
+               $0.bottom.equalTo(scrollView.frameLayoutGuide.snp.bottom).offset(-102)
+               $0.height.equalTo(46)
+               $0.width.equalTo(98)
         }
     }
 }
