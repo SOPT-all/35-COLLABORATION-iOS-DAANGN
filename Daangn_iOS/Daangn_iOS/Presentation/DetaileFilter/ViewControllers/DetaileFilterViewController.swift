@@ -92,9 +92,14 @@ class DetaileFilterViewController: UIViewController {
 private extension DetaileFilterViewController {
 
     func addViewControllersData() {
-        for _ in 0 ..< tabbarData.count {
-            let vc = UIViewController()
-            vc.view.backgroundColor = .gray1
+        for index in 0 ..< tabbarData.count {
+            let vc: UIViewController
+            if index == 2 {
+                vc = CategoryListViewController()
+            } else {
+                vc = UIViewController()
+                vc.view.backgroundColor = .gray1
+            }
             viewControllers.append(vc)
         }
     }

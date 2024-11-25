@@ -11,29 +11,29 @@ import SnapKit
 import Then
 
 final class DetaileFilterView: UIView {
-
+    
     // MARK: - UI Components
     
     private let navigationBar = DaangnNavigationBar(type: .normal)
     private let titleLabel = UILabel()
     lazy var tabbar = TopTabbar(type: .filter)
-
+    
     // MARK: - View Life Cycle
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        
         setStyle()
         setHierarchy()
         setLayout()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - Methods
-
+    
     private func setStyle() {
         backgroundColor = .white
         
@@ -43,11 +43,11 @@ final class DetaileFilterView: UIView {
             $0.textColor = .black
         }
     }
-
+    
     private func setHierarchy() {
         addSubviews(navigationBar, titleLabel, tabbar)
     }
-
+    
     private func setLayout() {
         navigationBar.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide.snp.top).offset(16)
@@ -62,8 +62,7 @@ final class DetaileFilterView: UIView {
         
         tabbar.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(44)
+            $0.horizontalEdges.bottom.equalToSuperview()
         }
     }
 }
