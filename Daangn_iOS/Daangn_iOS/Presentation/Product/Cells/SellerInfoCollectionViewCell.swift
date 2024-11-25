@@ -182,7 +182,6 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
         
         horizontalDivider.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(16)
-//            $0.top.equalTo(mannerDegreeLabel.snp.bottom).offset(17)
             $0.height.equalTo(1)
             $0.bottom.equalToSuperview()
         }
