@@ -75,7 +75,6 @@ final class HomeViewController: UIViewController {
     
         writeButton.do {
             $0.configuration = UIButton.Configuration.plain()
-            $0.configuration?.baseForegroundColor = .white
             $0.configuration?.image = UIImage(resource: .icPlusSm)
             $0.configuration?.imagePadding = 4
             $0.configuration?.imagePlacement = .leading
