@@ -14,13 +14,16 @@ class ProductDetailView: UIView {
 
     // MARK: - Properties
     
-    private let layout = ProductDetailCompositionalLayout.createLayout()
-    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    private let layout = ProductDetailCompositionalLayout()
+    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout.createLayout())
+    private let productDetailViewController: ProductDetailViewController
     
     // MARK: - View Life Cycle
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(viewController: ProductDetailViewController) {
+        self.productDetailViewController = viewController
+        super.init(frame: .zero)
         
+        setDelegate()
         setStyle()
         setUI()
         setLayout()
@@ -31,6 +34,10 @@ class ProductDetailView: UIView {
     }
     
     // MARK: - UI&Layout
+    
+    private func setDelegate() {
+        layout.connectDelegate = productDetailViewController
+    }
     
     private func setStyle() {
         backgroundColor = .white
