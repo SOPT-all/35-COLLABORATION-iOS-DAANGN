@@ -40,13 +40,11 @@ class DetailFilterViewController: UIViewController {
     
     override func loadView() {
         super.loadView()
-
         view = rootView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setDelegate()
         setRegister()
         setPageViewController()
@@ -54,13 +52,11 @@ class DetailFilterViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         setNavigationBar()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         moveIndicatorbar(to: 2)
     }
     

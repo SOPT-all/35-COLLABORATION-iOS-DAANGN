@@ -13,7 +13,7 @@ final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
     
     private let selectButton = UIButton()
     private let titleLabel = UILabel()
-
+    
     // MARK: - Properties
     
     private var isButtonSelected: Bool = false {
@@ -21,12 +21,11 @@ final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
             updateButtonImage()
         }
     }
-
+    
     // MARK: - Initializer
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setStyle()
         setUI()
         setLayout()
@@ -71,8 +70,9 @@ final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(selectButton.snp.trailing).offset(13)
         }
+        
     }
-
+    
     private func setActions() {
         selectButton.addTarget(self, action: #selector(toggleButtonState), for: .touchUpInside)
     }
