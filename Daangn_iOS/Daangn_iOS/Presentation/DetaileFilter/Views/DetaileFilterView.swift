@@ -17,7 +17,7 @@ final class DetaileFilterView: UIView {
     private let navigationBar = DaangnNavigationBar(type: .normal)
     private let titleLabel = UILabel()
     lazy var tabbar = TopTabbar(type: .filter)
-    private let bottomButtonUIView = UIView()
+    private let bottomButtonView = UIView()
     private let resetButton = UIButton()
     private let applyButton = UIButton()
     
@@ -46,7 +46,7 @@ final class DetaileFilterView: UIView {
             $0.textColor = .black
         }
         
-        bottomButtonUIView.do {
+        bottomButtonView.do {
             $0.backgroundColor = .white
         }
         
@@ -61,7 +61,7 @@ final class DetaileFilterView: UIView {
                     .foregroundColor: UIColor.black
                 ])
             )
-            $0.layer.cornerRadius = 8 // 둥근 모서리
+            $0.layer.cornerRadius = 8
             $0.layer.masksToBounds = true
         }
         
@@ -81,8 +81,8 @@ final class DetaileFilterView: UIView {
     }
     
     private func setHierarchy() {
-        addSubviews(navigationBar, titleLabel, tabbar, bottomButtonUIView)
-        bottomButtonUIView.addSubviews(resetButton, applyButton)
+        addSubviews(navigationBar, titleLabel, tabbar, bottomButtonView)
+        bottomButtonView.addSubviews(resetButton, applyButton)
     }
     
     private func setLayout() {
@@ -101,10 +101,10 @@ final class DetaileFilterView: UIView {
         tabbar.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(bottomButtonUIView.snp.top)
+            $0.bottom.equalTo(bottomButtonView.snp.top)
         }
         
-        bottomButtonUIView.snp.makeConstraints {
+        bottomButtonView.snp.makeConstraints {
             $0.height.equalTo(128)
             $0.leading.trailing.bottom.equalToSuperview()
         }
@@ -121,7 +121,6 @@ final class DetaileFilterView: UIView {
             $0.leading.equalTo(resetButton.snp.trailing).offset(15)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(53)
-            $0.width.equalToSuperview().multipliedBy(0.6).priority(.medium)
         }
     }
 }

@@ -28,7 +28,7 @@ final class HomeViewController: UIViewController {
         layout.scrollDirection = .horizontal
         return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
-
+    
     private lazy var productCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -65,32 +65,29 @@ final class HomeViewController: UIViewController {
             $0.setImage(.icReset, for: .normal)
             $0.imageView?.contentMode = .scaleAspectFit
         }
-    
+        
         writeButton.do {
             $0.configuration = UIButton.Configuration.plain()
             $0.configuration?.image = UIImage(resource: .icPlusSm)
             $0.configuration?.imagePadding = 4
             $0.configuration?.imagePlacement = .leading
             $0.configuration?.attributedTitle = AttributedString(
-                "글쓰기",
-                attributes: AttributeContainer([
-                    .font: UIFont.sfPro(.title_bla_15_22),
-                    .foregroundColor: UIColor.white
-                ])
-            )
+                UIFont.sfProAttributedString(
+                    text: "글쓰기",
+                    style: .title_bla_15_22,
+                    color: .white,
+                    lineHeight: 22
+                ))
             $0.backgroundColor = .orange1
-            $0.layer.cornerRadius = 25
-            $0.layer.shadowColor = UIColor.black.cgColor
-            $0.layer.shadowOpacity = 0.2
-            $0.layer.shadowOffset = CGSize(width: 0, height: 4)
-            $0.layer.shadowRadius = 6
+            $0.makeCornerRound(radius: 25)
+            $0.makeShadow(radius: 6, offset: CGSize(width: 0, height: 4), opacity: 0.2)
         }
         
         tagCollectionView.do {
             $0.showsHorizontalScrollIndicator = false
             $0.backgroundColor = .clear
         }
-
+        
         productCollectionView.do {
             $0.showsVerticalScrollIndicator = false
             $0.backgroundColor = .clear
@@ -101,7 +98,7 @@ final class HomeViewController: UIViewController {
     private func setUI() {
         view.addSubviews(navigationBar, scrollView)
         scrollView.addSubview(contentView)
-
+        
         contentView.addSubviews(
             resetButton,
             tagCollectionView,
@@ -149,44 +146,44 @@ final class HomeViewController: UIViewController {
         
         writeButton.snp.makeConstraints {
             $0.trailing.equalTo(scrollView.frameLayoutGuide.snp.trailing).offset(-13)
-               $0.bottom.equalTo(scrollView.frameLayoutGuide.snp.bottom).offset(-102)
-               $0.height.equalTo(46)
-               $0.width.equalTo(98)
+            $0.bottom.equalTo(scrollView.frameLayoutGuide.snp.bottom).offset(-102)
+            $0.height.equalTo(46)
+            $0.width.equalTo(98)
         }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let scrollOffsetY = scrollView.contentOffset.y
 
-        UIView.animate(withDuration: 0.3) {
+        writeButton.do {
             if scrollOffsetY > 50 {
-                self.writeButton.configuration?.attributedTitle = nil
-                self.writeButton.configuration?.image = UIImage(resource: .icPlusLg)
-                self.writeButton.configuration?.imagePlacement = .leading
-                self.writeButton.configuration?.imagePadding = 0
-                self.writeButton.snp.updateConstraints {
+                $0.configuration?.attributedTitle = nil
+                $0.configuration?.image = UIImage(resource: .icPlusLg)
+                $0.configuration?.imagePlacement = .leading
+                $0.configuration?.imagePadding = 0
+                $0.snp.updateConstraints {
                     $0.width.height.equalTo(58)
                 }
-                self.writeButton.layer.cornerRadius = 29
+                $0.layer.cornerRadius = 29
             } else {
-                self.writeButton.configuration?.attributedTitle = AttributedString(
+                $0.configuration?.attributedTitle = AttributedString(
                     "글쓰기",
                     attributes: AttributeContainer([
                         .font: UIFont.sfPro(.title_bla_15_22),
                         .foregroundColor: UIColor.white
                     ])
                 )
-                self.writeButton.configuration?.image = UIImage(resource: .icPlusSm) 
-                self.writeButton.configuration?.imagePlacement = .leading
-                self.writeButton.configuration?.imagePadding = 4
-                self.writeButton.snp.updateConstraints {
+                $0.configuration?.image = UIImage(resource: .icPlusSm)
+                $0.configuration?.imagePlacement = .leading
+                $0.configuration?.imagePadding = 4
+                $0.snp.updateConstraints {
                     $0.height.equalTo(46)
                     $0.width.equalTo(98)
                 }
-                self.writeButton.layer.cornerRadius = 25
+                $0.layer.cornerRadius = 25
             }
-            self.view.layoutIfNeeded()
         }
+        view.layoutIfNeeded()
     }
 }
 
@@ -244,7 +241,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         if collectionView == tagCollectionView {
             let tagTitle = HomeTag.allCases[indexPath.item].rawValue
             let textSize = tagTitle.getLabelContentSize(withFont: .sfPro(.body_md_12))
-            let padding: CGFloat = 50 
+            let padding: CGFloat = 50
             return CGSize(width: textSize.width + padding, height: 34)
         } else if collectionView == productCollectionView {
             return CGSize(width: collectionView.frame.width, height: 162)
