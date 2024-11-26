@@ -14,7 +14,7 @@ enum SecondHandTradingSection: CaseIterable {
     case relatedSearchWords
     case filter
     case resultItems
-//    case similarItems
+    case similarItems
 }
 
 final class SecondHandTradingView: UIView {
@@ -88,8 +88,8 @@ private extension SecondHandTradingView {
             switch sectionType {
             case .relatedSearchWords, .filter:
                 return self.chipsSectionLayout(type: sectionType)
-            case .resultItems:
-                return self.resultItemsSectionLayout()
+            case .resultItems, .similarItems:
+                return self.itemsSectionLayout(type: sectionType)
             }
         }
         
@@ -141,7 +141,7 @@ private extension SecondHandTradingView {
         return section
     }
     
-    func resultItemsSectionLayout() -> NSCollectionLayoutSection {
+    func itemsSectionLayout(type: SecondHandTradingSection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(142)
@@ -158,14 +158,21 @@ private extension SecondHandTradingView {
         section.contentInsets = .init(
             top: 0,
             leading: 0,
-            bottom: 2,
+            bottom: type == .resultItems ? 2 : 30,
             trailing: 0
         )
-//        if type == .relatedSearchWords {
+        
+        switch type {
+        case .resultItems:
             let header = onSaleOnlyHeader()
             let footer = dividerFooter()
             section.boundarySupplementaryItems = [header, footer]
-//        }
+        case .similarItems:
+            let header = similarItemsHeader()
+            section.boundarySupplementaryItems = [header]
+        default:
+            break
+        }
         
         return section
     }
@@ -175,6 +182,18 @@ private extension SecondHandTradingView {
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
                 heightDimension: .absolute(28)
+            ),
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        return header
+     }
+    
+    func similarItemsHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .estimated(65)
             ),
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top

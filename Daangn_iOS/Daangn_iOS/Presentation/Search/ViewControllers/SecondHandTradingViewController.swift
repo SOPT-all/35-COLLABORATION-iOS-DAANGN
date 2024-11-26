@@ -16,6 +16,7 @@ final class SecondHandTradingViewController: UIViewController {
     
     // MARK: - Properties
     
+    private var searchKeyword: String = "렉토"
     private let relatedSearchWordsData = RelatedSearchWordModel.mockData()
     private let filterData = HomeTag.allCases
     private let resultItems = ProductResponseDTO.sampleProducts
@@ -48,6 +49,7 @@ final class SecondHandTradingViewController: UIViewController {
         collectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: ProductCollectionViewCell.className)
         
         collectionView.register(OnSaleFilterCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: OnSaleFilterCollectionReusableView.className)
+        collectionView.register(SimilarItemsCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SimilarItemsCollectionReusableView.className)
         collectionView.register(DividerCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: DividerCollectionReusableView.className)
     }
     
@@ -69,7 +71,7 @@ extension SecondHandTradingViewController: UICollectionViewDataSource {
             return relatedSearchWordsData.count
         case .filter:
             return filterData.count
-        case .resultItems:
+        case .resultItems, .similarItems:
             return resultItems.count
         }
     }
@@ -95,6 +97,12 @@ extension SecondHandTradingViewController: UICollectionViewDataSource {
             
             cell.configureForSearchResult(product: resultItems[indexPath.item])
             return cell
+        case .similarItems:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionViewCell.className, for: indexPath) as? ProductCollectionViewCell
+            else { return UICollectionViewCell() }
+            
+            cell.configureForSearchResult(product: resultItems[indexPath.item])
+            return cell
         }
     }
     
@@ -106,6 +114,12 @@ extension SecondHandTradingViewController: UICollectionViewDataSource {
             case .resultItems:
                 guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: OnSaleFilterCollectionReusableView.className, for: indexPath) as? OnSaleFilterCollectionReusableView
                 else { return UICollectionReusableView() }
+                return header
+            case .similarItems:
+                guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SimilarItemsCollectionReusableView.className, for: indexPath) as? SimilarItemsCollectionReusableView
+                else { return UICollectionReusableView() }
+                
+                header.configure(searchKeyword: self.searchKeyword)
                 return header
             default:
                 return UICollectionReusableView()
