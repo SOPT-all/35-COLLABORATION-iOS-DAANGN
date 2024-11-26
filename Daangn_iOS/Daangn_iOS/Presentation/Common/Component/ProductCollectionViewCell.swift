@@ -10,17 +10,38 @@ import UIKit
 import SnapKit
 import Then
 
-final class ProductCollectionViewCell: UICollectionViewCell {
+final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
     
     // MARK: - UI Components
     
     private let thumnailImageView = UIImageView()
     private let titleLabel = UILabel()
-    private let infoHStackView = UIStackView()
     private let priceLabel = UILabel()
     private let chatAndLikeHStackView = UIStackView()
     private let menuIconImageView = UIImageView()
     private let separatorView = UIView()
+    
+    private let infoHStackView = UIStackView()
+    
+    private lazy var distanceImageView = UIImageView().then {
+        $0.image = .icLocation
+        $0.contentMode = .scaleAspectFit
+    }
+    
+    private lazy var distanceLabel = UILabel().then {
+        $0.font = .sfPro(.body_md_13_026)
+        $0.textColor = .gray8
+    }
+    
+    private lazy var locationLabel = UILabel().then {
+        $0.font = .sfPro(.body_md_13_026)
+        $0.textColor = .gray8
+    }
+    
+    private lazy var timeLabel = UILabel().then {
+        $0.font = .sfPro(.body_md_13_026)
+        $0.textColor = .gray8
+    }
     
     private lazy var chatButton = UIButton()
         .then {
@@ -139,6 +160,7 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         infoHStackView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(2)
             $0.leading.equalTo(titleLabel.snp.leading)
+            $0.height.equalTo(16)
         }
         
         priceLabel.snp.makeConstraints {
@@ -147,7 +169,7 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         }
         
         chatAndLikeHStackView.snp.makeConstraints {
-            $0.top.equalTo(priceLabel.snp.bottom).offset(14)
+            $0.top.equalTo(priceLabel.snp.bottom).offset(21)
             $0.trailing.equalToSuperview().inset(25)
         }
         
@@ -159,51 +181,61 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         }
         
     }
+}
+
+extension ProductCollectionViewCell {
+    func configureUI(product: ProductResponseDTO) {
+        thumnailImageView.image = UIImage(named: product.thumbnailImageName)
+        titleLabel.text = product.title
+        priceLabel.text = product.price
+        titleLabel.setAttributedText(lineHeight: 22)
+        setupInfoStackView(distance: product.distance,
+                           location: product.location,
+                           time: product.time)
+        configureChatAndLikeButtons(chatCount: product.chatCount,
+                                    likeCount: product.likeCount)
+    }
     
-    private func setupDynamicStackViews(distance: String?,
-                                        location: String,
-                                        time: String,
-                                        chatCount: Int?,
-                                        likeCount: Int?) {
-        
+    private func setupInfoStackView(distance: String?, location: String, time: String) {
         infoHStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        chatAndLikeHStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         if let distance = distance {
-            let distanceImage = UIImageView().then {
-                $0.image = .icLocation
-                $0.contentMode = .scaleAspectFit
-                $0.snp.makeConstraints { $0.width.height.equalTo(12) }
-            }
-            let distanceLabel = createLabel(with: distance)
-            infoHStackView.addArrangeSubViews(distanceImage,distanceLabel)
+            infoHStackView.addArrangedSubview(distanceImageView)
+            distanceLabel.text = distance
+            infoHStackView.addArrangedSubview(distanceLabel)
             addSeparatorIfNeeded(to: infoHStackView)
         }
         
-        let locationLabel = createLabel(with: location)
+        locationLabel.text = location
         infoHStackView.addArrangedSubview(locationLabel)
-        
         addSeparatorIfNeeded(to: infoHStackView)
-        let timeLabel = createLabel(with: time)
+        
+        timeLabel.text = time
         infoHStackView.addArrangedSubview(timeLabel)
+    }
+    
+    private func configureChatAndLikeButtons(chatCount: Int?, likeCount: Int?) {
+        chatAndLikeHStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         if let chatCount = chatCount, chatCount > 0 {
-            var chatTitleContainer = AttributeContainer()
-            chatTitleContainer.font = UIFont.sfPro(.body_md_13_026)
-            let attributedTitle = AttributedString("\(chatCount)", attributes: chatTitleContainer)
-            
-            chatButton.configuration?.attributedTitle = attributedTitle
-            chatAndLikeHStackView.addArrangeSubViews(chatButton)
-        }
-        
-        if let likeCount = likeCount, likeCount > 0 {
-            var likeTitleContainer = AttributeContainer()
-            likeTitleContainer.font = UIFont.sfPro(.body_md_13_026)
-            let attributedTitle = AttributedString("\(likeCount)", attributes: likeTitleContainer)
-            likeButton.configuration?.attributedTitle = attributedTitle
-            chatAndLikeHStackView.addArrangeSubViews(likeButton)
-        }
-        
+               let attributedChatTitle = UIFont.sfProAttributedString(
+                   text: "\(chatCount)",
+                   style: .body_md_13_026,
+                   color: .gray8
+               )
+               chatButton.setAttributedTitle(attributedChatTitle, for: .normal)
+               chatAndLikeHStackView.addArrangedSubview(chatButton)
+           }
+           
+           if let likeCount = likeCount, likeCount > 0 {
+               let attributedLikeTitle = UIFont.sfProAttributedString(
+                   text: "\(likeCount)",
+                   style: .body_md_13_026,
+                   color: .gray8
+               )
+               likeButton.setAttributedTitle(attributedLikeTitle, for: .normal)
+               chatAndLikeHStackView.addArrangedSubview(likeButton)
+           }
     }
     
     private func createSeparator() -> UIImageView {
@@ -218,30 +250,5 @@ final class ProductCollectionViewCell: UICollectionViewCell {
     private func addSeparatorIfNeeded(to stackView: UIStackView) {
         let separator = createSeparator()
         stackView.addArrangedSubview(separator)
-    }
-    
-    private func createLabel(with text: String) -> UILabel {
-        return UILabel().then {
-            $0.text = text
-            $0.font = .sfPro(.body_md_13_026)
-            $0.textColor = .gray
-        }
-    }
-}
-
-extension ProductCollectionViewCell {
-    func configureUI(with product: Product) {
-        thumnailImageView.image = UIImage(named: product.thumbnailImageName)
-        titleLabel.text = product.title
-        titleLabel.setAttributedText(lineHeight: 22)
-        priceLabel.text = product.price
-        
-        setupDynamicStackViews(
-            distance: product.distance,
-            location: product.location,
-            time: product.time,
-            chatCount: product.chatCount,
-            likeCount: product.likeCount
-        )
     }
 }
