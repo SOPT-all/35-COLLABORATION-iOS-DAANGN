@@ -34,7 +34,7 @@ final class HomeViewController: UIViewController {
         return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
     
-    let navigationBar = DaangnNavigationBar(type: .home)
+    private let navigationBar = DaangnNavigationBar(type: .home)
     
     // MARK: - Lifecycle
     
@@ -105,7 +105,7 @@ final class HomeViewController: UIViewController {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
             $0.width.equalTo(scrollView.snp.width)
         }
-    
+        
         resetButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(11)
             $0.leading.equalToSuperview().offset(16)
@@ -188,3 +188,20 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         return CGSize.zero
     }
 }
+
+extension HomeViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == tagCollectionView {
+            let selectedTag = tags[indexPath.item]
+            navigateToDetailFilterViewController(with: selectedTag)
+        }
+    }
+}
+
+private extension HomeViewController {
+    func navigateToDetailFilterViewController(with tag: HomeTag) {
+        let detaileFilterController = DetailFilterViewController()
+        navigationController?.pushViewController(detaileFilterController, animated: true)
+    }
+}
+

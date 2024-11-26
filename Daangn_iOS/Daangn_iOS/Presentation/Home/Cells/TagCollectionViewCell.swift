@@ -47,7 +47,6 @@ final class TagCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
             $0.image = .icDirectionDown
             $0.contentMode = .scaleAspectFit
         }
-        
     }
     
     private func setUI() {
