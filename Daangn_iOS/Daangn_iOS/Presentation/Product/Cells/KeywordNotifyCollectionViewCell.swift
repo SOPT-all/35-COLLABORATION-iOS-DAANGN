@@ -47,6 +47,7 @@ class KeywordNotifyCollectionViewCell: UICollectionViewCell {
             $0.numberOfLines = 2
             $0.font = .sfPro(.body_md_13)
             $0.textColor = .gray9
+            $0.setAttributedText(lineHeight: 22)
         }
         
         keywordNotifyButton.do {
@@ -88,17 +89,17 @@ class KeywordNotifyCollectionViewCell: UICollectionViewCell {
         }
         
         notifyLabel.snp.makeConstraints {
-            $0.top.equalTo(firstHorizontalDivider.snp.bottom).offset(23)
+            $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
         }
         
         keywordNotifyButton.snp.makeConstraints {
-            $0.top.equalTo(notifyLabel)
+            $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().offset(-16)
         }
         
         secondHorizontalDivider.snp.makeConstraints {
-            $0.top.equalTo(notifyLabel.snp.bottom).offset(23)
+            $0.top.equalTo(keywordNotifyButton.snp.bottom).offset(23)
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview()
             $0.height.equalTo(1)
