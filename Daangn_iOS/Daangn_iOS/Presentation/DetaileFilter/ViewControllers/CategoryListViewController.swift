@@ -7,22 +7,28 @@
 
 import UIKit
 
+protocol CategoryListDelegate {
+    func didSelectCategory(at indexPath: IndexPath)
+    func didDeselectCategory(at indexPath: IndexPath)
+}
+
 class CategoryListViewController: UIViewController {
     
     // MARK: - Properties
     
+    var delegate: CategoryListDelegate?
     let categorys: [CategoryResponseDTO] = CategoryResponseDTO.sampleCategories
     
     // MARK: - UI Components
     
-    private lazy var filterCollectionView: IntrinsicCollectionView = {
+    lazy var filterCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 26
         layout.sectionInset = UIEdgeInsets(top: 27, left: 0, bottom: 0, right: 0)
         return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
-
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -53,8 +59,18 @@ class CategoryListViewController: UIViewController {
             $0.width.equalTo(UIScreen.main.bounds.width)
         }
     }
+    
+    func resetSelections() {
+        for item in 0..<categorys.count {
+            let indexPath = IndexPath(item: item, section: 0)
+            if let cell = filterCollectionView.cellForItem(at: indexPath) as? FilterListViewCell {
+                cell.resetSelection() // 버튼이미지 리셋
+            }
+        }
+        filterCollectionView.reloadData()
+    }
+    
 }
-
 
 private extension CategoryListViewController {
     
@@ -87,6 +103,8 @@ extension CategoryListViewController: UICollectionViewDataSource {
         }
         let category = categorys[indexPath.item]
         cell.configureUI(category: category)
+        cell.delegate = self // 델리게이트 설정
+        
         return cell
     }
 }
@@ -98,3 +116,14 @@ extension CategoryListViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+extension CategoryListViewController: FilterListViewCellDelegate {
+    func didToggleSelection(for cell: FilterListViewCell, isSelected: Bool) {
+        guard let indexPath = filterCollectionView.indexPath(for: cell) else { return }
+        
+        if isSelected {
+            delegate?.didSelectCategory(at: indexPath)
+        } else {
+            delegate?.didDeselectCategory(at: indexPath)
+        }
+    }
+}

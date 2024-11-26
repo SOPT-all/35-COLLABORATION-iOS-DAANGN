@@ -10,7 +10,17 @@ import UIKit
 import SnapKit
 import Then
 
+protocol DetaileFilterViewDelegate {
+    func didTapResetButton()
+    func didTapApplyButton(selectedCells: [IndexPath])
+}
+
 final class DetaileFilterView: UIView {
+    
+    // MARK: - Delegate
+    
+    var delegate: DetaileFilterViewDelegate?
+    var selectedCells: Set<IndexPath> = []
     
     // MARK: - UI Components
     
@@ -63,11 +73,12 @@ final class DetaileFilterView: UIView {
             )
             $0.layer.cornerRadius = 8
             $0.layer.masksToBounds = true
+            $0.addTarget(self, action: #selector(didTapResetButton), for: .touchUpInside)
         }
         
         applyButton.do {
             $0.configuration = UIButton.Configuration.filled()
-            $0.configuration?.baseBackgroundColor = .orange1
+            $0.configuration?.baseBackgroundColor = .gray5
             $0.configuration?.attributedTitle = AttributedString(
                 "적용하기",
                 attributes: AttributeContainer([
@@ -123,4 +134,21 @@ final class DetaileFilterView: UIView {
             $0.height.equalTo(53)
         }
     }
+    
+    func configureButtonStates() {
+        self.applyButton.isEnabled = !self.selectedCells.isEmpty
+        self.applyButton.configuration?.baseBackgroundColor = self.applyButton.isEnabled ? .orange1 : .gray5
+        
+    }
+    
+    @objc private func didTapResetButton() {
+        selectedCells.removeAll()
+        configureButtonStates()
+        delegate?.didTapResetButton()
+    }
+    
+    @objc private func didTapApplyButton() {
+        delegate?.didTapApplyButton(selectedCells: Array(selectedCells))
+    }
+    
 }

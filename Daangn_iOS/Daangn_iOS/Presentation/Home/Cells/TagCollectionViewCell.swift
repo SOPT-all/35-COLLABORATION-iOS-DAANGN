@@ -8,7 +8,7 @@
 import UIKit
 
 final class TagCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
-
+    
     // MARK: - UI Components
     
     private let titleLabel = UILabel()

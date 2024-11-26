@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol FilterListViewCellDelegate: AnyObject {
+    func didToggleSelection(for cell: FilterListViewCell, isSelected: Bool)
+}
+
 final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
     
     // MARK: - UI Components
@@ -16,9 +20,12 @@ final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
     
     // MARK: - Properties
     
+    weak var delegate: FilterListViewCellDelegate?
+    
     private var isButtonSelected: Bool = false {
         didSet {
             updateButtonImage()
+            delegate?.didToggleSelection(for: self, isSelected: isButtonSelected)
         }
     }
     
@@ -85,6 +92,10 @@ final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
     
     private func updateButtonImage() {
         selectButton.setImage( isButtonSelected ? .icCheckboxSelected : .icCheckboxNormal, for: .normal )
+    }
+    
+    func resetSelection() {
+        isButtonSelected = false
     }
 }
 
