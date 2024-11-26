@@ -88,9 +88,14 @@ final class SearchViewController: UIViewController {
 private extension SearchViewController {
     
     func addViewControllersData() {
-        for _ in 0 ..< tabbarData.count {
-            let vc = UIViewController()
-            vc.view.backgroundColor = .gray1
+        for index in 0 ..< tabbarData.count {
+            let vc: UIViewController
+            if index == 1 {
+                vc = SecondHandTradingViewController()
+            } else {
+                vc = UIViewController()
+                vc.view.backgroundColor = .gray1
+            }
             viewControllers.append(vc)
         }
     }

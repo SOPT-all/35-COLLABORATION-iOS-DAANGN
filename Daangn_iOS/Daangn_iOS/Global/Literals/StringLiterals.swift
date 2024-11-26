@@ -34,5 +34,7 @@ enum I18N {
     }
     
     enum Search {
+        static let getNotification = "알림 받기"
+        static let viewOnlyOnSale = "판매중만 보기"
     }
 }
