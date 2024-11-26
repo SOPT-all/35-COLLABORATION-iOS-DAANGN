@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import SnapKit
 import Then
 
@@ -13,7 +14,7 @@ final class HomeViewController: UIViewController {
     
     // MARK: - Mock Data
     
-    var categorys = CategoryResponseDTO.sampleCategories
+    var categorys: [CategoryResponseDTO] = []
     let tags: [HomeTag] = Array(HomeTag.allCases)
     let products: [ProductResponseDTO] = ProductResponseDTO.sampleProducts
     
@@ -151,23 +152,32 @@ final class HomeViewController: UIViewController {
             $0.height.equalTo(34)
         }
         
-        categoryCollectionView.snp.makeConstraints {
-            $0.top.equalTo(resetButton.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(54)
-        }
-        
-        productCollectionView.snp.makeConstraints {
-            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
-        }
-        
         writeButton.snp.makeConstraints {
             $0.trailing.equalTo(scrollView.frameLayoutGuide.snp.trailing).offset(-13)
             $0.bottom.equalTo(scrollView.frameLayoutGuide.snp.bottom).offset(-102)
             $0.height.equalTo(46)
             $0.width.equalTo(98)
+        }
+        
+        if categorys.isEmpty {
+            categoryCollectionView.isHidden = true
+            productCollectionView.snp.remakeConstraints {
+                $0.top.equalTo(tagCollectionView.snp.bottom).offset(12)
+                $0.leading.trailing.equalToSuperview()
+                $0.bottom.equalToSuperview()
+            }
+        } else {
+            categoryCollectionView.isHidden = false
+            categoryCollectionView.snp.makeConstraints {
+                $0.top.equalTo(resetButton.snp.bottom).offset(12)
+                $0.leading.trailing.equalToSuperview()
+                $0.height.equalTo(54)
+            }
+            productCollectionView.snp.remakeConstraints {
+                $0.top.equalTo(categoryCollectionView.snp.bottom).offset(12)
+                $0.leading.trailing.equalToSuperview()
+                $0.bottom.equalToSuperview()
+            }
         }
     }
     
@@ -202,6 +212,11 @@ final class HomeViewController: UIViewController {
                 $0.layer.cornerRadius = 25
             }
         }
+        view.layoutIfNeeded()
+    }
+    
+    func updateCategoryVisibility() {
+        setLayout()
         view.layoutIfNeeded()
     }
 }
@@ -306,7 +321,15 @@ extension HomeViewController: UICollectionViewDelegate {
 private extension HomeViewController {
     func navigateToDetailFilterViewController() {
         let detaileFilterController = DetailFilterViewController()
+        detaileFilterController.delegate = self
         navigationController?.pushViewController(detaileFilterController, animated: true)
     }
 }
 
+extension HomeViewController: DetailFilterViewControllerDelegate {
+    func didApplyFilters(selectedCategories: [CategoryResponseDTO]) {
+        categorys = selectedCategories
+        categoryCollectionView.reloadData()
+        updateCategoryVisibility()
+    }
+}

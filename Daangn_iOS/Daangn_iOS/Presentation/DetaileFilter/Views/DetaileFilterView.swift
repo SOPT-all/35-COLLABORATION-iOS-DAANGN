@@ -24,7 +24,7 @@ final class DetaileFilterView: UIView {
     
     // MARK: - UI Components
     
-    private let navigationBar = DaangnNavigationBar(type: .normal)
+    let navigationBar = DaangnNavigationBar(type: .normal)
     private let titleLabel = UILabel()
     lazy var tabbar = TopTabbar(type: .filter)
     private let bottomButtonView = UIView()
@@ -88,6 +88,7 @@ final class DetaileFilterView: UIView {
             )
             $0.layer.cornerRadius = 8
             $0.layer.masksToBounds = true
+            $0.addTarget(self, action: #selector(didTapApplyButton), for: .touchUpInside)
         }
     }
     

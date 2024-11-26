@@ -10,6 +10,10 @@ import UIKit
 import Then
 import SnapKit
 
+protocol DetailFilterViewControllerDelegate {
+    func didApplyFilters(selectedCategories: [CategoryResponseDTO])
+}
+
 class DetailFilterViewController: UIViewController {
     
     // MARK: - UI Components
@@ -36,6 +40,10 @@ class DetailFilterViewController: UIViewController {
         }
     }
     
+    // MARK: - Delegate
+    
+    var delegate: DetailFilterViewControllerDelegate?
+    
     // MARK: - Lifecycle
     
     override func loadView() {
@@ -48,6 +56,7 @@ class DetailFilterViewController: UIViewController {
         setDelegate()
         setRegister()
         setPageViewController()
+        setButtonAction()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -84,10 +93,18 @@ class DetailFilterViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
     }
     
+    private func setButtonAction() {
+        rootView.navigationBar.backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
+    }
+    
+    @objc
+    private func backButtonDidTap() {
+        navigationController?.popViewController(animated: true)
+    }
+    
 }
 
 extension DetailFilterViewController: DetaileFilterViewDelegate {
-    
     func didTapResetButton() {
         if let categoryVC = viewControllers[2] as? CategoryListViewController {
             categoryVC.resetSelections()
@@ -95,9 +112,15 @@ extension DetailFilterViewController: DetaileFilterViewDelegate {
     }
     
     func didTapApplyButton(selectedCells: [IndexPath]) {
-        print("적용된 필터: \(selectedCells)") // HomeView로 이동
+        print("didTapApplyButton \(selectedCells)")
+        if let categoryVC = viewControllers[2] as? CategoryListViewController {
+            let selectedCategories = selectedCells.map { categoryVC.categorys[$0.item] }
+            delegate?.didApplyFilters(selectedCategories: selectedCategories) // 전달
+            navigationController?.popViewController(animated: true)
+        }
     }
 }
+
 
 extension DetailFilterViewController: CategoryListDelegate {
     func didSelectCategory(at indexPath: IndexPath) {
