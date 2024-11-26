@@ -155,6 +155,12 @@ private extension SecondHandTradingView {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = .init(
+            top: 0,
+            leading: 0,
+            bottom: 2,
+            trailing: 0
+        )
 //        if type == .relatedSearchWords {
             let header = onSaleOnlyHeader()
             let footer = dividerFooter()

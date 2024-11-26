@@ -137,7 +137,8 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
     
     private func setLayout() {
         thumnailImageView.snp.makeConstraints {
-            $0.top.leading.equalToSuperview().inset(18)
+            $0.top.equalToSuperview().inset(18)
+            $0.leading.equalToSuperview().inset(16)
             $0.width.height.equalTo(108)
         }
         
@@ -197,9 +198,12 @@ extension ProductCollectionViewCell {
         
         infoHStackView.spacing = 3
         chatAndLikeHStackView.spacing = 6
+        chatButton.configuration?.imagePadding = 2
+        likeButton.configuration?.imagePadding = 2
+        
         menuIconImageView.removeFromSuperview()
         thumnailImageView.snp.remakeConstraints {
-            $0.size.equalTo(108)
+            $0.width.equalTo(108)
             $0.top.equalToSuperview().inset(18)
             $0.leading.equalToSuperview().inset(16)
         }
