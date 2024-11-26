@@ -14,7 +14,10 @@ class KeywordNotifyCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Component
     
-    private let sampleView = UIView()
+    private let firstHorizontalDivider = UIView()
+    private let notifyLabel = UILabel()
+    private let keywordNotifyButton = UIButton()
+    private let secondHorizontalDivider = UIView()
     
     // MARK: - View Life Cycle
     
@@ -35,18 +38,70 @@ class KeywordNotifyCollectionViewCell: UICollectionViewCell {
     private func setStyle() {
         backgroundColor = .clear
         
-        sampleView.do {
-            $0.backgroundColor = .green
+        firstHorizontalDivider.do {
+            $0.backgroundColor = .gray3
+        }
+        
+        notifyLabel.do {
+            $0.text = "이웃들이 렉토 맨투맨 게시글을\n올리면 바로 알려드릴까요?"
+            $0.numberOfLines = 2
+            $0.font = .sfPro(.body_md_13)
+            $0.textColor = .gray9
+        }
+        
+        keywordNotifyButton.do {
+            $0.configuration = UIButton.Configuration.plain()
+            $0.configuration?.image = UIImage(resource: .icNotificationSmBlack)
+            $0.configuration?.imagePadding = 8
+            $0.configuration?.imagePlacement = .leading
+            $0.configuration?.attributedTitle = AttributedString(
+                UIFont.sfProAttributedString(
+                    text: "키워드 알림 받기",
+                    style: .body_md_13,
+                    color: .gray9
+                )
+            )
+            $0.configuration?.contentInsets = NSDirectionalEdgeInsets(
+                top: 10,
+                leading: 16,
+                bottom: 10,
+                trailing: 16
+            )
+            $0.backgroundColor = .gray2
+            $0.makeCornerRound(radius: 6)
+        }
+        
+        secondHorizontalDivider.do {
+            $0.backgroundColor = .gray3
         }
     }
     
     private func setHierarchy() {
-        addSubview(sampleView)
+        addSubviews(firstHorizontalDivider, notifyLabel, keywordNotifyButton, secondHorizontalDivider)
     }
     
     private func setLayout() {
-        sampleView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+        firstHorizontalDivider.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview().inset(16)
+            $0.height.equalTo(1)
+        }
+        
+        notifyLabel.snp.makeConstraints {
+            $0.top.equalTo(firstHorizontalDivider.snp.bottom).offset(23)
+            $0.leading.equalToSuperview().offset(16)
+        }
+        
+        keywordNotifyButton.snp.makeConstraints {
+            $0.top.equalTo(notifyLabel)
+            $0.trailing.equalToSuperview().offset(-16)
+        }
+        
+        secondHorizontalDivider.snp.makeConstraints {
+            $0.top.equalTo(notifyLabel.snp.bottom).offset(23)
+            $0.horizontalEdges.equalToSuperview().inset(16)
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(1)
         }
     }
 }
