@@ -10,7 +10,7 @@ import UIKit
 import Then
 import SnapKit
 
-class DetaileFilterViewController: UIViewController {
+class DetailFilterViewController: UIViewController {
     
     // MARK: - UI Components
     
@@ -89,7 +89,7 @@ class DetaileFilterViewController: UIViewController {
     
 }
 
-private extension DetaileFilterViewController {
+private extension DetailFilterViewController {
 
     func addViewControllersData() {
         for index in 0 ..< tabbarData.count {
@@ -141,7 +141,7 @@ private extension DetaileFilterViewController {
     }
 }
 
-extension DetaileFilterViewController: UICollectionViewDelegate {
+extension DetailFilterViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let newIndex = indexPath.item
@@ -150,7 +150,7 @@ extension DetaileFilterViewController: UICollectionViewDelegate {
     }
 }
 
-extension DetaileFilterViewController: UICollectionViewDataSource {
+extension DetailFilterViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tabbarData.count
@@ -164,7 +164,7 @@ extension DetaileFilterViewController: UICollectionViewDataSource {
     }
 }
 
-extension DetaileFilterViewController: UICollectionViewDelegateFlowLayout {
+extension DetailFilterViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = tabbarData[indexPath.item].title
@@ -177,7 +177,7 @@ extension DetaileFilterViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension DetaileFilterViewController: UIPageViewControllerDelegate {
+extension DetailFilterViewController: UIPageViewControllerDelegate {
 
     func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
         guard let newVC = pendingViewControllers.first,
@@ -196,7 +196,7 @@ extension DetaileFilterViewController: UIPageViewControllerDelegate {
     }
 }
 
-extension DetaileFilterViewController: UIPageViewControllerDataSource {
+extension DetailFilterViewController: UIPageViewControllerDataSource {
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let index = viewControllers.firstIndex(of: viewController) else { return nil }

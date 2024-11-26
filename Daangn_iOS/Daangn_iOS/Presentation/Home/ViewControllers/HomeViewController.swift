@@ -193,14 +193,14 @@ extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == tagCollectionView {
             let selectedTag = tags[indexPath.item]
-            navigateToCategoryScreen(with: selectedTag)
+            navigateToDetailFilterViewController(with: selectedTag)
         }
     }
 }
 
 private extension HomeViewController {
-    func navigateToCategoryScreen(with tag: HomeTagResponseDTO) {
-        let detaileFilterController = DetaileFilterViewController()
+    func navigateToDetailFilterViewController(with tag: HomeTag) {
+        let detaileFilterController = DetailFilterViewController()
         navigationController?.pushViewController(detaileFilterController, animated: true)
     }
 }

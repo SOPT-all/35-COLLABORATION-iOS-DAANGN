@@ -20,12 +20,9 @@ class CategoryListViewController: UIViewController {
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 26
         layout.sectionInset = UIEdgeInsets(top: 27, left: 0, bottom: 0, right: 0)
-        let collectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.backgroundColor = .clear
-        return collectionView
+        return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
-    
+
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -39,6 +36,11 @@ class CategoryListViewController: UIViewController {
     
     private func setStyle() {
         view.backgroundColor = .white
+        
+        filterCollectionView.do {
+            $0.showsVerticalScrollIndicator = false
+            $0.backgroundColor = .clear
+        }
     }
     
     private func setUI() {
@@ -62,7 +64,7 @@ private extension CategoryListViewController {
     }
     
     func registerCells() {
-        filterCollectionView.register(FilterListViewCell.self, forCellWithReuseIdentifier: FilterListViewCell.identifier)
+        filterCollectionView.register(FilterListViewCell.self, forCellWithReuseIdentifier: FilterListViewCell.className)
     }
 }
 
@@ -78,7 +80,7 @@ extension CategoryListViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: FilterListViewCell.identifier,
+            withReuseIdentifier: FilterListViewCell.className,
             for: indexPath
         ) as? FilterListViewCell else {
             return UICollectionViewCell()
