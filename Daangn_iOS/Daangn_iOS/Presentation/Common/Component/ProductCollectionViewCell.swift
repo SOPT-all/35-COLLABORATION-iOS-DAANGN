@@ -47,30 +47,26 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
         .then {
             var config = UIButton.Configuration.plain()
             config.image = .icChatSm
-            config.imagePadding = 2
-            config.baseForegroundColor = .gray6
+            config.contentInsets = .zero
             $0.configuration = config
-            $0.snp.makeConstraints {
-                $0.height.width.equalTo(18)
-            }
         }
         .then {
-            chatAndLikeHStackView.addArrangeSubViews($0)
+            $0.snp.makeConstraints {
+                $0.height.equalTo(18)
+            }
         }
     
     private lazy var likeButton = UIButton()
         .then {
             var config = UIButton.Configuration.plain()
             config.image = .icLikeSmGray
-            config.imagePadding = 2
-            config.baseForegroundColor = .gray6
+            config.contentInsets = .zero
             $0.configuration = config
-            $0.snp.makeConstraints {
-                $0.height.width.equalTo(18)
-            }
         }
         .then {
-            chatAndLikeHStackView.addArrangeSubViews($0)
+            $0.snp.makeConstraints {
+                $0.height.equalTo(18)
+            }
         }
     
     override init(frame: CGRect) {
@@ -108,8 +104,7 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
         
         chatAndLikeHStackView.do {
             $0.axis = .horizontal
-            $0.spacing = 16
-            $0.alignment = .leading
+            $0.spacing = 2
         }
         
         priceLabel.do {
@@ -129,19 +124,20 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
     }
     
     private func setUI() {
-        contentView.addSubviews(thumnailImageView,
-                                titleLabel,
-                                infoHStackView,
-                                chatAndLikeHStackView,
-                                priceLabel,
-                                menuIconImageView,
-                                separatorView
+        contentView.addSubviews(
+            thumnailImageView,
+            titleLabel,
+            infoHStackView,
+            chatAndLikeHStackView,
+            priceLabel,
+            menuIconImageView,
+            separatorView
         )
     }
     
     private func setLayout() {
         thumnailImageView.snp.makeConstraints {
-            $0.top.leading.equalToSuperview().inset(16)
+            $0.top.leading.equalToSuperview().inset(18)
             $0.width.height.equalTo(108)
         }
         
@@ -169,21 +165,21 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
         }
         
         chatAndLikeHStackView.snp.makeConstraints {
-            $0.top.equalTo(priceLabel.snp.bottom).offset(21)
+            $0.top.greaterThanOrEqualTo(priceLabel.snp.bottom).offset(21)
             $0.trailing.equalToSuperview().inset(25)
         }
         
         separatorView.snp.makeConstraints {
-            $0.top.equalTo(chatAndLikeHStackView.snp.bottom).offset(16)
+            $0.top.equalTo(chatAndLikeHStackView.snp.bottom).offset(18)
             $0.leading.trailing.equalToSuperview().inset(16)
             $0.height.equalTo(1)
             $0.bottom.equalToSuperview()
         }
-        
     }
 }
 
 extension ProductCollectionViewCell {
+    
     func configureUI(product: Product) {
         thumnailImageView.image = UIImage(named: product.thumbnailImageName)
         titleLabel.text = product.title
@@ -218,24 +214,28 @@ extension ProductCollectionViewCell {
         chatAndLikeHStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         if let chatCount = chatCount, chatCount > 0 {
-               let attributedChatTitle = UIFont.sfProAttributedString(
-                   text: "\(chatCount)",
-                   style: .body_md_13_026,
-                   color: .gray8
-               )
-               chatButton.setAttributedTitle(attributedChatTitle, for: .normal)
-               chatAndLikeHStackView.addArrangedSubview(chatButton)
-           }
-           
-           if let likeCount = likeCount, likeCount > 0 {
-               let attributedLikeTitle = UIFont.sfProAttributedString(
-                   text: "\(likeCount)",
-                   style: .body_md_13_026,
-                   color: .gray8
-               )
-               likeButton.setAttributedTitle(attributedLikeTitle, for: .normal)
-               chatAndLikeHStackView.addArrangedSubview(likeButton)
-           }
+            chatButton.configuration?.attributedTitle = AttributedString(
+                UIFont.sfProAttributedString(
+                    text: "\(chatCount)",
+                    style: .body_md_13_026,
+                    color: .gray8,
+                    letterSpacing: -0.26
+                )
+            )
+            chatAndLikeHStackView.addArrangeSubViews(chatButton)
+        }
+        
+        if let likeCount = likeCount, likeCount > 0 {
+            likeButton.configuration?.attributedTitle = AttributedString(
+                UIFont.sfProAttributedString(
+                    text: "\(likeCount)",
+                    style: .body_md_13_026,
+                    color: .gray8,
+                    letterSpacing: -0.26
+                )
+            )
+            chatAndLikeHStackView.addArrangeSubViews(likeButton)
+        }
     }
     
     private func createSeparator() -> UIImageView {

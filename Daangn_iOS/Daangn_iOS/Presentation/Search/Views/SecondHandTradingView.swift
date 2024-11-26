@@ -144,19 +144,19 @@ private extension SecondHandTradingView {
     func resultItemsSectionLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(343)
+            heightDimension: .estimated(162)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(343)
+            heightDimension: .estimated(162)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
 //        if type == .relatedSearchWords {
-            let header = resultItemsSectionHeader()
+            let header = onSaleOnlyHeader()
             let footer = dividerFooter()
             section.boundarySupplementaryItems = [header, footer]
 //        }
@@ -164,7 +164,7 @@ private extension SecondHandTradingView {
         return section
     }
     
-    func resultItemsSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+    func onSaleOnlyHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
