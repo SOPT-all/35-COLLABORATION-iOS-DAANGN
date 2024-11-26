@@ -83,12 +83,12 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
         
         degreeBackgroundView.do {
             $0.backgroundColor = .gray4
-            $0.makeCornerRound(radius: 3)
+            $0.makeCornerRound(radius: 3 / 2)
         }
         
         degreeView.do {
             $0.backgroundColor = .orange2
-            $0.makeCornerRound(radius: 3)
+            $0.makeCornerRound(radius: 3 / 2)
         }
         
         degreeImageView.do {
@@ -113,7 +113,7 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
         degreeBackgroundView.addSubview(degreeView)
         addSubviews(
             profileImageView, badgeImageView, nicknameLabel, verticalDivider, timeLabel, addressLabel,
-            degreeLabel, degreeBackgroundView, degreeView, degreeImageView, mannerDegreeLabel, horizontalDivider)
+            degreeLabel, degreeBackgroundView, degreeImageView, mannerDegreeLabel, horizontalDivider)
     }
     
     private func setLayout() {
