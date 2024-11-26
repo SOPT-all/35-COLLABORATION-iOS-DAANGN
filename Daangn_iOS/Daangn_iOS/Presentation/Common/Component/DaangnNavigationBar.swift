@@ -84,7 +84,32 @@ final class DaangnNavigationBar: UIView {
         }
     
     private lazy var searchTextField = UITextField()
-    
+        .then {
+            $0.autocapitalizationType = .none
+            $0.autocorrectionType = .no
+            $0.spellCheckingType = .no
+            $0.backgroundColor = .gray2
+            $0.font = .sfPro(.body_sb_16)
+            $0.textColor = .gray11
+            $0.clearButtonMode = .whileEditing
+            $0.attributedPlaceholder = UIFont
+                .sfProAttributedString(
+                    text: "가락2동 근처에서 검색",
+                    style: .body_sb_16,
+                    color: .gray5
+                )
+            $0.setLeftPadding(amount: 12)
+            $0.makeCornerRound(radius: 6)
+        }
+        .then {
+            addSubview($0)
+            $0.snp.makeConstraints {
+                $0.height.equalTo(36)
+                $0.leading.equalTo(backButton.snp.trailing).offset(12)
+                $0.trailing.equalToSuperview().inset(16)
+                $0.centerY.equalToSuperview()
+            }
+        }
     
     private lazy var homeButton = UIButton()
         .then {
