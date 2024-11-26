@@ -166,7 +166,7 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
         
         chatAndLikeHStackView.snp.makeConstraints {
             $0.top.greaterThanOrEqualTo(priceLabel.snp.bottom).offset(21)
-            $0.trailing.equalToSuperview().inset(25)
+            $0.trailing.equalTo(menuIconImageView)
         }
         
         separatorView.snp.makeConstraints {
@@ -180,6 +180,40 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
 
 extension ProductCollectionViewCell {
     
+    func configureForSearchResult(product: Product) {
+        thumnailImageView.image = UIImage(named: product.thumbnailImageName)
+        titleLabel.text = product.title
+        priceLabel.text = product.price
+        titleLabel.setAttributedText(lineHeight: 22)
+        
+        setupInfoStackView(
+            location: product.location,
+            time: product.time
+        )
+        configureChatAndLikeButtons(
+            chatCount: product.chatCount,
+            likeCount: product.likeCount
+        )
+        
+        infoHStackView.spacing = 3
+        chatAndLikeHStackView.spacing = 6
+        menuIconImageView.removeFromSuperview()
+        thumnailImageView.snp.remakeConstraints {
+            $0.size.equalTo(108)
+            $0.top.equalToSuperview().inset(18)
+            $0.leading.equalToSuperview().inset(16)
+        }
+        titleLabel.snp.remakeConstraints {
+            $0.top.equalTo(thumnailImageView.snp.top)
+            $0.leading.equalTo(thumnailImageView.snp.trailing).offset(16)
+            $0.trailing.equalToSuperview().inset(16)
+        }
+        chatAndLikeHStackView.snp.remakeConstraints {
+            $0.bottom.equalTo(thumnailImageView)
+            $0.trailing.equalToSuperview().inset(16)
+        }
+    }
+    
     func configureUI(product: Product) {
         thumnailImageView.image = UIImage(named: product.thumbnailImageName)
         titleLabel.text = product.title
@@ -192,7 +226,7 @@ extension ProductCollectionViewCell {
                                     likeCount: product.likeCount)
     }
     
-    private func setupInfoStackView(distance: String?, location: String, time: String) {
+    private func setupInfoStackView(distance: String? = nil, location: String, time: String) {
         infoHStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         if let distance = distance {

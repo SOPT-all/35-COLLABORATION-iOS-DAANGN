@@ -93,7 +93,7 @@ extension SecondHandTradingViewController: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionViewCell.className, for: indexPath) as? ProductCollectionViewCell
             else { return UICollectionViewCell() }
             
-            cell.configureUI(product: resultItems[indexPath.item])
+            cell.configureForSearchResult(product: resultItems[indexPath.item])
             return cell
         }
     }
@@ -121,16 +121,3 @@ extension SecondHandTradingViewController: UICollectionViewDataSource {
         }
     }
 }
-
-//extension SecondHandTradingViewController: UICollectionViewCompositionalLayout {
-//    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        let cellWidth = relatedSearchWordsData[indexPath.item].title
-//            .getLabelContentSize(withFont: .sfPro(.body_md_12)).width
-//            + 12 * 2
-//        return CGSize(
-//            width: cellWidth,
-//            height: collectionView.frame.height
-//        )
-//    }
-//}
