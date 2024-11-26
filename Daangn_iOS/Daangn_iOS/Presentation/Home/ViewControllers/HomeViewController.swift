@@ -14,7 +14,7 @@ final class HomeViewController: UIViewController {
     // MARK: - Mock Data
     
     let tags: [HomeTag] = Array(HomeTag.allCases)
-    let products: [ProductResponseDTO] = ProductResponseDTO.sampleProducts
+    let products: [Product] = ProductResponseDTO.sampleProducts
     
     // MARK: - UI Components
     
@@ -79,7 +79,7 @@ final class HomeViewController: UIViewController {
                     lineHeight: 22
                 ))
             $0.backgroundColor = .orange1
-            $0.makeCornerRound(radius: 25)
+            $0.makeCornerRound(radius: 46 / 2)
             $0.makeShadow(radius: 6, offset: CGSize(width: 0, height: 4), opacity: 0.2)
         }
         
@@ -164,7 +164,7 @@ final class HomeViewController: UIViewController {
                 $0.snp.updateConstraints {
                     $0.width.height.equalTo(58)
                 }
-                $0.layer.cornerRadius = 29
+                $0.layer.cornerRadius = 58 / 2
             } else {
                 $0.configuration?.attributedTitle = AttributedString(
                     "글쓰기",
@@ -180,7 +180,7 @@ final class HomeViewController: UIViewController {
                     $0.height.equalTo(46)
                     $0.width.equalTo(98)
                 }
-                $0.layer.cornerRadius = 25
+                $0.layer.cornerRadius = 46 / 2
             }
         }
         view.layoutIfNeeded()
