@@ -23,7 +23,6 @@
 			membershipExceptions = (
 				Info.plist,
 				Presentation/Home/Models/.gitkeep,
-				Presentation/Home/Views/.gitkeep,
 				Presentation/Search/Cells/.gitkeep,
 			);
 			target = 95C49C132CE868F8007F8160 /* Daangn_iOS */;

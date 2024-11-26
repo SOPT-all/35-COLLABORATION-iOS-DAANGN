@@ -86,14 +86,15 @@ final class DetaileFilterView: UIView {
     }
     
     private func setLayout() {
+        
         navigationBar.snp.makeConstraints {
-            $0.top.equalTo(safeAreaLayoutGuide.snp.top).offset(16)
+            $0.top.equalTo(safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(28)
+            $0.height.equalTo(50)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(navigationBar.snp.bottom).offset(24)
+            $0.top.equalTo(navigationBar.snp.bottom).offset(13)
             $0.leading.equalToSuperview().inset(16)
         }
         

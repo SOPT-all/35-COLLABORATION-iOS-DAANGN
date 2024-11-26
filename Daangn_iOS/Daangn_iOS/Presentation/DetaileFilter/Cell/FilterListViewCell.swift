@@ -7,9 +7,7 @@
 
 import UIKit
 
-final class FilterListViewCell: UICollectionViewCell {
-    
-    static let identifier = "FilterListViewCell"
+final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
     
     // MARK: - UI Components
     
@@ -48,7 +46,6 @@ final class FilterListViewCell: UICollectionViewCell {
         titleLabel.do {
             $0.font = .sfPro(.title_bla_15_22)
             $0.textColor = .black
-            $0.textAlignment = .center
         }
         
         selectButton.do {
@@ -87,8 +84,7 @@ final class FilterListViewCell: UICollectionViewCell {
     }
     
     private func updateButtonImage() {
-        let imageName = isButtonSelected ? "ic_checkbox_selected" : "ic_checkbox_normal"
-        selectButton.setImage(UIImage(named: imageName), for: .normal)
+        selectButton.setImage( isButtonSelected ? .icCheckboxSelected : .icCheckboxNormal, for: .normal )
     }
 }
 
