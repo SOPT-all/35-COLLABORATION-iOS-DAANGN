@@ -61,6 +61,8 @@ final class HomeViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
+    // MARK: - Layout
+    
     private func setStyle() {
         view.backgroundColor = .white
         
@@ -159,27 +161,11 @@ final class HomeViewController: UIViewController {
             $0.width.equalTo(98)
         }
         
-        if categorys.isEmpty {
-            categoryCollectionView.isHidden = true
-            productCollectionView.snp.remakeConstraints {
-                $0.top.equalTo(tagCollectionView.snp.bottom).offset(12)
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalToSuperview()
-            }
-        } else {
-            categoryCollectionView.isHidden = false
-            categoryCollectionView.snp.makeConstraints {
-                $0.top.equalTo(resetButton.snp.bottom).offset(12)
-                $0.leading.trailing.equalToSuperview()
-                $0.height.equalTo(54)
-            }
-            productCollectionView.snp.remakeConstraints {
-                $0.top.equalTo(categoryCollectionView.snp.bottom).offset(12)
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalToSuperview()
-            }
-        }
+        updateCategoryLayout()
+
     }
+    
+    // MARK: - Actions
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let scrollOffsetY = scrollView.contentOffset.y
@@ -215,8 +201,27 @@ final class HomeViewController: UIViewController {
         view.layoutIfNeeded()
     }
     
-    func updateCategoryVisibility() {
-        setLayout()
+    func updateCategoryLayout() {
+        if categorys.isEmpty {
+            categoryCollectionView.isHidden = true
+            productCollectionView.snp.remakeConstraints {
+                $0.top.equalTo(tagCollectionView.snp.bottom).offset(12)
+                $0.leading.trailing.equalToSuperview()
+                $0.bottom.equalToSuperview()
+            }
+        } else {
+            categoryCollectionView.isHidden = false
+            categoryCollectionView.snp.makeConstraints {
+                $0.top.equalTo(resetButton.snp.bottom).offset(12)
+                $0.leading.trailing.equalToSuperview()
+                $0.height.equalTo(54)
+            }
+            productCollectionView.snp.remakeConstraints {
+                $0.top.equalTo(categoryCollectionView.snp.bottom).offset(12)
+                $0.leading.trailing.equalToSuperview()
+                $0.bottom.equalToSuperview()
+            }
+        }
         view.layoutIfNeeded()
     }
 }
@@ -275,6 +280,7 @@ extension HomeViewController: UICollectionViewDataSource {
                 return UICollectionViewCell()
             }
             let category = categorys[indexPath.item]
+            cell.delegate = self
             cell.configureUI(category: category.name)
             return cell
         }
@@ -327,9 +333,17 @@ private extension HomeViewController {
 }
 
 extension HomeViewController: DetailFilterViewControllerDelegate {
-    func didApplyFilters(selectedCategories: [CategoryResponseDTO]) {
+    func filtersApplyHomeView(selectedCategories: [CategoryResponseDTO]) {
         categorys = selectedCategories
         categoryCollectionView.reloadData()
-        updateCategoryVisibility()
+        updateCategoryLayout()
+    }
+}
+
+extension HomeViewController: CategoryCollectionViewCellDelegate {
+    func deleteButtonDidTap(for category: String) {
+        categorys.removeAll { $0.name == category }
+        categoryCollectionView.reloadData()
+        updateCategoryLayout()
     }
 }

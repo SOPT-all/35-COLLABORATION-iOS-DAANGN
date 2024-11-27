@@ -11,13 +11,13 @@ import SnapKit
 import Then
 
 protocol DetaileFilterViewDelegate {
-    func didTapResetButton()
-    func didTapApplyButton(selectedCells: [IndexPath])
+    func resetButtonDidTap()
+    func applyButtonDidTap(selectedCells: [IndexPath])
 }
 
 final class DetaileFilterView: UIView {
     
-    // MARK: - Delegate
+    // MARK: - Properties
     
     var delegate: DetaileFilterViewDelegate?
     var selectedCells: Set<IndexPath> = []
@@ -35,7 +35,6 @@ final class DetaileFilterView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setStyle()
         setHierarchy()
         setLayout()
@@ -45,7 +44,7 @@ final class DetaileFilterView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Methods
+    // MARK: - Style
     
     private func setStyle() {
         backgroundColor = .white
@@ -136,6 +135,8 @@ final class DetaileFilterView: UIView {
         }
     }
     
+    // MARK: - Methods
+    
     func configureButtonStates() {
         self.applyButton.isEnabled = !self.selectedCells.isEmpty
         self.applyButton.configuration?.baseBackgroundColor = self.applyButton.isEnabled ? .orange1 : .gray5
@@ -145,11 +146,10 @@ final class DetaileFilterView: UIView {
     @objc private func didTapResetButton() {
         selectedCells.removeAll()
         configureButtonStates()
-        delegate?.didTapResetButton()
+        delegate?.resetButtonDidTap()
     }
     
     @objc private func didTapApplyButton() {
-        delegate?.didTapApplyButton(selectedCells: Array(selectedCells))
+        delegate?.applyButtonDidTap(selectedCells: Array(selectedCells))
     }
-    
 }

@@ -11,7 +11,7 @@ import Then
 import SnapKit
 
 protocol DetailFilterViewControllerDelegate {
-    func didApplyFilters(selectedCategories: [CategoryResponseDTO])
+    func filtersApplyHomeView(selectedCategories: [CategoryResponseDTO])
 }
 
 class DetailFilterViewController: UIViewController {
@@ -39,8 +39,6 @@ class DetailFilterViewController: UIViewController {
             setPageVC(from: oldValue, to: currentPageIndex)
         }
     }
-    
-    // MARK: - Delegate
     
     var delegate: DetailFilterViewControllerDelegate?
     
@@ -76,7 +74,7 @@ class DetailFilterViewController: UIViewController {
         tabbarCollectionView.dataSource = self
         pageViewController.delegate = self
         pageViewController.dataSource = self
-        rootView.delegate = self // Delegate 설정
+        rootView.delegate = self
     }
     
     private func setRegister() {
@@ -104,31 +102,32 @@ class DetailFilterViewController: UIViewController {
     
 }
 
+// rootView에서 버튼들을 눌렀을때 상태를 Cell과 HomeView로 전달
 extension DetailFilterViewController: DetaileFilterViewDelegate {
-    func didTapResetButton() {
+    func resetButtonDidTap() {
         if let categoryVC = viewControllers[2] as? CategoryListViewController {
             categoryVC.resetSelections()
         }
     }
     
-    func didTapApplyButton(selectedCells: [IndexPath]) {
+    func applyButtonDidTap(selectedCells: [IndexPath]) {
         print("didTapApplyButton \(selectedCells)")
         if let categoryVC = viewControllers[2] as? CategoryListViewController {
             let selectedCategories = selectedCells.map { categoryVC.categorys[$0.item] }
-            delegate?.didApplyFilters(selectedCategories: selectedCategories) // 전달
+            delegate?.filtersApplyHomeView(selectedCategories: selectedCategories)
             navigationController?.popViewController(animated: true)
         }
     }
 }
 
-
+// Cell을 눌렀을때 상태를 rootView 까지 전달
 extension DetailFilterViewController: CategoryListDelegate {
-    func didSelectCategory(at indexPath: IndexPath) {
+    func categoryCellDidSelect(at indexPath: IndexPath) {
         rootView.selectedCells.insert(indexPath)
         rootView.configureButtonStates()
     }
     
-    func didDeselectCategory(at indexPath: IndexPath) {
+    func CategoryCellDidDeselect(at indexPath: IndexPath) {
         rootView.selectedCells.remove(indexPath)
         rootView.configureButtonStates()
     }
@@ -140,7 +139,7 @@ private extension DetailFilterViewController {
         for index in 0 ..< tabbarData.count {
             if index == 2 {
                 let categoryVC = CategoryListViewController()
-                categoryVC.delegate = self // Delegate 설정
+                categoryVC.delegate = self 
                 viewControllers.append(categoryVC)
             } else {
                 let vc = UIViewController()

@@ -8,15 +8,10 @@
 import UIKit
 
 protocol FilterListViewCellDelegate: AnyObject {
-    func didToggleSelection(for cell: FilterListViewCell, isSelected: Bool)
+    func didToggleSelection(for cell: CategoryListViewCell, isSelected: Bool)
 }
 
-final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
-    
-    // MARK: - UI Components
-    
-    private let selectButton = UIButton()
-    private let titleLabel = UILabel()
+final class CategoryListViewCell: UICollectionViewCell, ClassNameProtocol {
     
     // MARK: - Properties
     
@@ -28,6 +23,11 @@ final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
             delegate?.didToggleSelection(for: self, isSelected: isButtonSelected)
         }
     }
+    
+    // MARK: - UI Components
+    
+    private let selectButton = UIButton()
+    private let titleLabel = UILabel()
     
     // MARK: - Initializer
     
@@ -80,11 +80,11 @@ final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
         
     }
     
+    // MARK: - Actions
+    
     private func setActions() {
         selectButton.addTarget(self, action: #selector(toggleButtonState), for: .touchUpInside)
     }
-    
-    // MARK: - Actions
     
     @objc private func toggleButtonState() {
         isButtonSelected.toggle()
@@ -99,9 +99,7 @@ final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
     }
 }
 
-// MARK: - Extension for Configuration
-
-extension FilterListViewCell {
+extension CategoryListViewCell {
     func configureUI(category: CategoryResponseDTO) {
         titleLabel.text = category.name
         titleLabel.setAttributedText(lineHeight: 22)

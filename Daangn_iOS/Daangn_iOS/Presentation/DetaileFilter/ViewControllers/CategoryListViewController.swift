@@ -8,8 +8,8 @@
 import UIKit
 
 protocol CategoryListDelegate {
-    func didSelectCategory(at indexPath: IndexPath)
-    func didDeselectCategory(at indexPath: IndexPath)
+    func categoryCellDidSelect(at indexPath: IndexPath)
+    func CategoryCellDidDeselect(at indexPath: IndexPath)
 }
 
 class CategoryListViewController: UIViewController {
@@ -63,7 +63,7 @@ class CategoryListViewController: UIViewController {
     func resetSelections() {
         for item in 0..<categorys.count {
             let indexPath = IndexPath(item: item, section: 0)
-            if let cell = filterCollectionView.cellForItem(at: indexPath) as? FilterListViewCell {
+            if let cell = filterCollectionView.cellForItem(at: indexPath) as? CategoryListViewCell {
                 cell.resetSelection() // 버튼이미지 리셋
             }
         }
@@ -80,7 +80,7 @@ private extension CategoryListViewController {
     }
     
     func registerCells() {
-        filterCollectionView.register(FilterListViewCell.self, forCellWithReuseIdentifier: FilterListViewCell.className)
+        filterCollectionView.register(CategoryListViewCell.self, forCellWithReuseIdentifier: CategoryListViewCell.className)
     }
 }
 
@@ -96,9 +96,9 @@ extension CategoryListViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: FilterListViewCell.className,
+            withReuseIdentifier: CategoryListViewCell.className,
             for: indexPath
-        ) as? FilterListViewCell else {
+        ) as? CategoryListViewCell else {
             return UICollectionViewCell()
         }
         let category = categorys[indexPath.item]
@@ -117,13 +117,13 @@ extension CategoryListViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension CategoryListViewController: FilterListViewCellDelegate {
-    func didToggleSelection(for cell: FilterListViewCell, isSelected: Bool) {
+    func didToggleSelection(for cell: CategoryListViewCell, isSelected: Bool) {
         guard let indexPath = filterCollectionView.indexPath(for: cell) else { return }
         
         if isSelected {
-            delegate?.didSelectCategory(at: indexPath)
+            delegate?.categoryCellDidSelect(at: indexPath)
         } else {
-            delegate?.didDeselectCategory(at: indexPath)
+            delegate?.CategoryCellDidDeselect(at: indexPath)
         }
     }
 }

@@ -28,7 +28,6 @@ final class TagCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
     // MARK: - UI Setup
     
     private func setStyle() {
-        
         contentView.do {
             $0.backgroundColor = .white
             $0.makeCornerRound(radius: 16)

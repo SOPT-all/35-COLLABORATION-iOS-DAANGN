@@ -7,7 +7,15 @@
 
 import UIKit
 
+protocol CategoryCollectionViewCellDelegate {
+    func deleteButtonDidTap(for category: String)
+}
+
 final class CategoryCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
+    
+    // MARK: - Properties
+    
+    var delegate: CategoryCollectionViewCellDelegate?
     
     // MARK: - UI Components
     
@@ -47,6 +55,7 @@ final class CategoryCollectionViewCell: UICollectionViewCell, ClassNameProtocol 
             $0.setImage(UIImage(resource: .icDeleteOrange), for: .normal)
             $0.tintColor = .gray
             $0.contentMode = .scaleAspectFit
+            $0.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         }
     }
     
@@ -68,8 +77,14 @@ final class CategoryCollectionViewCell: UICollectionViewCell, ClassNameProtocol 
         }
     }
     
-    // MARK: - Configure
+    // MARK: - Actions
     
+    @objc private func deleteButtonTapped() {
+        delegate?.deleteButtonDidTap(for: titleLabel.text ?? "")
+    }
+}
+
+extension CategoryCollectionViewCell {
     func configureUI(category: String) {
         titleLabel.text = category
         titleLabel.setAttributedText(lineHeight: 12)
