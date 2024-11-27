@@ -9,6 +9,7 @@ import UIKit
 
 import SnapKit
 import Then
+import Kingfisher
 
 final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
     
@@ -185,16 +186,29 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
 
 extension ProductCollectionViewCell {
     func configureUI(product: Product) {
-        thumnailImageView.image = UIImage(named: product.thumbnailImageName)
+        if let imageUrl = URL(string: product.productImage) {
+            thumnailImageView.kf.setImage(
+                with: imageUrl,
+                placeholder: UIImage(named: "placeholder"),
+                options: [
+                    .transition(.fade(0.3)),
+                    .cacheOriginalImage
+                ]
+            )
+        } else {
+            thumnailImageView.image = UIImage(named: "placeholder")
+        }
+        
         titleLabel.text = product.title
         priceLabel.text = product.price
         titleLabel.setAttributedText(lineHeight: 22)
-        setupInfoStackView(distance: product.distance,
-                           location: product.location,
-                           time: product.time)
-        configureChatAndLikeButtons(chatCount: product.chatCount,
-                                    likeCount: product.likeCount)
+        
+        setupInfoStackView(distance: nil,
+                           location: product.address,
+                           time: 10.description)
+        configureChatAndLikeButtons(chatCount: 0, likeCount: product.view)
     }
+    
     
     private func setupInfoStackView(distance: String?, location: String, time: String) {
         infoHStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
@@ -218,24 +232,24 @@ extension ProductCollectionViewCell {
         chatAndLikeHStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         if let chatCount = chatCount, chatCount > 0 {
-               let attributedChatTitle = UIFont.sfProAttributedString(
-                   text: "\(chatCount)",
-                   style: .body_md_13_026,
-                   color: .gray8
-               )
-               chatButton.setAttributedTitle(attributedChatTitle, for: .normal)
-               chatAndLikeHStackView.addArrangedSubview(chatButton)
-           }
-           
-           if let likeCount = likeCount, likeCount > 0 {
-               let attributedLikeTitle = UIFont.sfProAttributedString(
-                   text: "\(likeCount)",
-                   style: .body_md_13_026,
-                   color: .gray8
-               )
-               likeButton.setAttributedTitle(attributedLikeTitle, for: .normal)
-               chatAndLikeHStackView.addArrangedSubview(likeButton)
-           }
+            let attributedChatTitle = UIFont.sfProAttributedString(
+                text: "\(chatCount)",
+                style: .body_md_13_026,
+                color: .gray8
+            )
+            chatButton.setAttributedTitle(attributedChatTitle, for: .normal)
+            chatAndLikeHStackView.addArrangedSubview(chatButton)
+        }
+        
+        if let likeCount = likeCount, likeCount > 0 {
+            let attributedLikeTitle = UIFont.sfProAttributedString(
+                text: "\(likeCount)",
+                style: .body_md_13_026,
+                color: .gray8
+            )
+            likeButton.setAttributedTitle(attributedLikeTitle, for: .normal)
+            chatAndLikeHStackView.addArrangedSubview(likeButton)
+        }
     }
     
     private func createSeparator() -> UIImageView {

@@ -16,7 +16,7 @@ final class HomeViewController: UIViewController {
     
     var categorys: [CategoryResponseDTO] = []
     let tags: [HomeTag] = Array(HomeTag.allCases)
-    let products: [Product] = ProductResponseDTO.sampleProducts
+    var products: [Product] = []
     
     // MARK: - UI Components
     
@@ -25,19 +25,19 @@ final class HomeViewController: UIViewController {
     private let resetButton = UIButton()
     private let writeButton = UIButton()
     
-    private lazy var tagCollectionView: IntrinsicCollectionView = {
+    private var tagCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
     
-    private lazy var categoryCollectionView: IntrinsicCollectionView = {
+    private var categoryCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
     
-    private lazy var productCollectionView: IntrinsicCollectionView = {
+    private var productCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
@@ -54,11 +54,13 @@ final class HomeViewController: UIViewController {
         setLayout()
         setDelegate()
         registerCells()
+        fetchProducts()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        fetchProducts()
     }
     
     // MARK: - Layout
@@ -162,7 +164,7 @@ final class HomeViewController: UIViewController {
         }
         
         updateCategoryLayout()
-
+        
     }
     
     // MARK: - Actions
@@ -223,6 +225,37 @@ final class HomeViewController: UIViewController {
             }
         }
         view.layoutIfNeeded()
+    }
+}
+
+//MARK: API
+
+extension HomeViewController {
+    private func fetchProducts() {
+        let categoryList = categorys.map { $0.name }
+        DaangnService.shared.getProductList(categoryList: categoryList) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let data):
+                guard let response = data as? BaseResponseModel<ProductResponseDTO>,
+                      let productList = response.result?.products else {
+                    print("⛔️ 데이터 형식이 맞지 않습니다.")
+                    return
+                }
+                self.products = productList
+                self.productCollectionView.reloadData()
+            case .requestErr:
+                print("⛔️ 요청 에러 발생 (400-499)")
+            case .serverErr:
+                print("⛔️ 서버 에러 발생 (500)")
+            case .networkFail:
+                print("⛔️ 네트워크 실패")
+            case .pathErr:
+                print("⛔️ 경로 에러 또는 디코딩 실패")
+            default:
+                print("⛔️ 알 수 없는 에러")
+            }
+        }
     }
 }
 
@@ -343,6 +376,7 @@ extension HomeViewController: DetailFilterViewControllerDelegate {
 extension HomeViewController: CategoryCollectionViewCellDelegate {
     func deleteButtonDidTap(for category: String) {
         categorys.removeAll { $0.name == category }
+        fetchProducts()
         categoryCollectionView.reloadData()
         updateCategoryLayout()
     }
