@@ -64,7 +64,7 @@ final class DaangnNavigationBar: UIView {
             $0.contentMode = .scaleAspectFit
         }
     
-    private lazy var backButton = UIButton()
+    lazy var backButton = UIButton()
         .then {
             $0.setImage(
                 self.type == .product ? .icDirectionLeftWhite : .icDirectionLeftBlack,
