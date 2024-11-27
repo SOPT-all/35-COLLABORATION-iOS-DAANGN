@@ -111,8 +111,8 @@ class PurchaseBottomView: UIView {
         }
         
         likeButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(23)
-            $0.leading.equalToSuperview().offset(14)
+            $0.top.equalToSuperview().inset(23)
+            $0.leading.equalToSuperview().inset(14)
             $0.size.equalTo(28)
         }
         
@@ -124,7 +124,7 @@ class PurchaseBottomView: UIView {
         }
         
         priceLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(14)
+            $0.top.equalToSuperview().inset(14)
             $0.leading.equalTo(likeButton.snp.trailing).offset(32)
         }
         
@@ -136,7 +136,7 @@ class PurchaseBottomView: UIView {
         }
         
         carrotPayImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(10)
+            $0.top.equalToSuperview().inset(10)
             $0.leading.equalTo(secondVerticalDivider.snp.trailing).offset(5)
             $0.width.equalTo(50)
             $0.height.equalTo(29)
@@ -148,8 +148,8 @@ class PurchaseBottomView: UIView {
         }
         
         chatButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(15)
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.top.equalToSuperview().inset(15)
+            $0.trailing.equalToSuperview().inset(16)
         }
     }
 }
