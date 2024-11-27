@@ -22,8 +22,11 @@ final class SecondHandTradingView: UIView {
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: setSectionLayout())
     private let getKeywordNotificationButton = UIButton()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    private var searchKeyword: String
+    
+    init(searchKeyword: String) {
+        self.searchKeyword = searchKeyword
+        super.init(frame: .zero)
         
         setStyle()
         setHierarchy()
@@ -49,7 +52,7 @@ final class SecondHandTradingView: UIView {
             config.imagePadding = 4
             config.attributedTitle = AttributedString(
                 UIFont.sfProAttributedString(
-                    text: I18N.Search.getNotification,
+                    text: searchKeyword + I18N.Search.getNotification,
                     style: .body_md_13_026,
                     color: .white,
                     letterSpacing: -0.26
@@ -74,7 +77,7 @@ final class SecondHandTradingView: UIView {
         
         getKeywordNotificationButton.snp.makeConstraints {
             $0.height.equalTo(36)
-            $0.bottom.equalTo(collectionView.contentLayoutGuide.snp.bottom).inset(68)
+            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(68 - 34)
             $0.centerX.equalToSuperview()
         }
     }

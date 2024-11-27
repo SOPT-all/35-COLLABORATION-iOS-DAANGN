@@ -11,7 +11,7 @@ final class SecondHandTradingViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let rootView = SecondHandTradingView()
+    private lazy var rootView = SecondHandTradingView(searchKeyword: searchKeyword)
     private lazy var collectionView = rootView.collectionView
     
     // MARK: - Properties
