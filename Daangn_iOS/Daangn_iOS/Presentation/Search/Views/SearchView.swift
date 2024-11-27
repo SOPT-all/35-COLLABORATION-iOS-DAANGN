@@ -14,7 +14,7 @@ final class SearchView: UIView {
     
     // MARK: - UI Components
     
-    private let navigationBar = DaangnNavigationBar(type: .search)
+    let navigationBar = DaangnNavigationBar(type: .search)
     lazy var tabbar = TopTabbar(type: .search)
     
     // MARK: - View Life Cycle

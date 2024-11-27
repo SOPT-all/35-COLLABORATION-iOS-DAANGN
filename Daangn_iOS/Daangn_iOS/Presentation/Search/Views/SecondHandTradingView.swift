@@ -77,7 +77,7 @@ final class SecondHandTradingView: UIView {
         
         getKeywordNotificationButton.snp.makeConstraints {
             $0.height.equalTo(36)
-            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(68 - 34)
+            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(50 - 34)
             $0.centerX.equalToSuperview()
         }
     }
