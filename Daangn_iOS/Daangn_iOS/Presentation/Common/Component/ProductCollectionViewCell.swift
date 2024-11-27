@@ -9,6 +9,7 @@ import UIKit
 
 import SnapKit
 import Then
+import Kingfisher
 
 final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
     
@@ -219,15 +220,27 @@ extension ProductCollectionViewCell {
     }
     
     func configureUI(product: Product) {
-        thumnailImageView.image = UIImage(named: product.thumbnailImageName)
+        if let imageUrl = URL(string: product.productImage) {
+            thumnailImageView.kf.setImage(
+                with: imageUrl,
+                placeholder: UIImage(named: "placeholder"),
+                options: [
+                    .transition(.fade(0.3)),
+                    .cacheOriginalImage
+                ]
+            )
+        } else {
+            thumnailImageView.image = UIImage(named: "placeholder")
+        }
+        
         titleLabel.text = product.title
         priceLabel.text = product.price
         titleLabel.setAttributedText(lineHeight: 22)
-        setupInfoStackView(distance: product.distance,
-                           location: product.location,
-                           time: product.time)
-        configureChatAndLikeButtons(chatCount: product.chatCount,
-                                    likeCount: product.likeCount)
+        
+        setupInfoStackView(distance: nil,
+                           location: product.address,
+                           time: 10.description)
+        configureChatAndLikeButtons(chatCount: 0, likeCount: product.view)
     }
     
     private func setupInfoStackView(distance: String? = nil, location: String, time: String) {
