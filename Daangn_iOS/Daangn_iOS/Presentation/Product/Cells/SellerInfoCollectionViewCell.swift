@@ -92,7 +92,7 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
         }
         
         degreeImageView.do {
-            $0.image = .image482
+            $0.image = .imgSmile
             $0.contentMode = .scaleAspectFill
         }
         

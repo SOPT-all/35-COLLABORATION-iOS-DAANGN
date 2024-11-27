@@ -24,12 +24,13 @@ final class HeaderCollectionReusableView: UICollectionReusableView {
         .then {
             addSubview($0)
             $0.snp.makeConstraints {
-                $0.trailing.equalToSuperview().inset(16)
                 switch type {
                 case .product:
+                    $0.trailing.equalToSuperview()
                     $0.size.equalTo(28)
-                    $0.centerY.equalTo(titleLabel).offset(-1)
+                    $0.centerY.equalTo(titleLabel)
                 case .profile:
+                    $0.trailing.equalToSuperview().inset(16)
                     $0.size.equalTo(18)
                     $0.centerY.equalTo(titleLabel).offset(-2)
                 }
@@ -67,9 +68,16 @@ final class HeaderCollectionReusableView: UICollectionReusableView {
     }
     
     private func setLayout() {
-        titleLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(16)
-            $0.centerY.equalToSuperview()
+        switch type {
+        case .product:
+            titleLabel.snp.makeConstraints {
+                $0.leading.centerY.equalToSuperview()
+            }
+        case .profile:
+            titleLabel.snp.makeConstraints {
+                $0.leading.equalToSuperview().inset(16)
+                $0.centerY.equalToSuperview()
+            }
         }
     }
 }

@@ -16,7 +16,9 @@ class ProductDetailView: UIView {
     
     private let layout = ProductDetailCompositionalLayout()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout.createLayout())
+    let purchaseBottomView = PurchaseBottomView()
     private let productDetailViewController: ProductDetailViewController
+    private let navigationBar = DaangnNavigationBar(type: .product)
     
     // MARK: - View Life Cycle
     init(viewController: ProductDetailViewController) {
@@ -38,22 +40,42 @@ class ProductDetailView: UIView {
     private func setDelegate() {
         layout.connectDelegate = productDetailViewController
     }
-    
+        
     private func setStyle() {
         backgroundColor = .white
         
+        navigationBar.do {
+            $0.backgroundColor = .clear
+        }
+        
         collectionView.do {
             $0.backgroundColor = .clear
+            $0.contentInsetAdjustmentBehavior = .never
         }
     }
     
     private func setUI() {
-        addSubview(collectionView)
+        addSubviews(collectionView, purchaseBottomView, navigationBar)
     }
     
     private func setLayout() {
+        
+        navigationBar.snp.makeConstraints {
+            $0.top.equalTo(safeAreaLayoutGuide)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(50)
+        }
+        
         collectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+        }
+        
+        purchaseBottomView.snp.makeConstraints {
+            $0.top.equalTo(collectionView.snp.bottom)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(106)
         }
     }
 }
