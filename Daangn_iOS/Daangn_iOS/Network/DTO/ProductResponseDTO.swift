@@ -1,5 +1,5 @@
 //
-//  ProductResponseDOT.swift
+//  ProductResponseDTO.swift
 //  Daangn_iOS
 //
 //  Created by 정정욱 on 11/19/24.
@@ -7,8 +7,11 @@
 
 import Foundation
 
-struct ProductResponseDTO: Hashable {
-    let id: UUID = UUID()
+struct ProductResponseDTO: Codable {
+    let productList: [Product]
+}
+
+struct Product: Codable {
     let thumbnailImageName: String
     let title: String
     let distance: String?
@@ -17,9 +20,12 @@ struct ProductResponseDTO: Hashable {
     let price: String
     let chatCount: Int?
     let likeCount: Int
+}
 
-    static let sampleProducts: [ProductResponseDTO] = [
-        ProductResponseDTO(
+extension ProductResponseDTO {
+  
+    static let sampleProducts: [Product] = [
+        Product(
             thumbnailImageName: "img_list_home_1",
             title: "콜나고 프리마베라 로드자전거 판매합니다",
             distance: "1.5km",
@@ -29,7 +35,7 @@ struct ProductResponseDTO: Hashable {
             chatCount: 1,
             likeCount: 10
         ),
-        ProductResponseDTO(
+        Product(
             thumbnailImageName: "img_list_home_2",
             title: "자이언트 프로펠 어드밴스 2",
             distance: "3.1km",
@@ -39,7 +45,7 @@ struct ProductResponseDTO: Hashable {
             chatCount: nil,
             likeCount: 15
         ),
-        ProductResponseDTO(
+        Product(
             thumbnailImageName: "img_list_home_3",
             title: "세터 데님자켓 새상품",
             distance: nil,
@@ -49,7 +55,7 @@ struct ProductResponseDTO: Hashable {
             chatCount: nil,
             likeCount: 8
         ),
-        ProductResponseDTO(
+        Product(
             thumbnailImageName: "img_list_home_4",
             title: "삼천리 로드 자전거",
             distance: "2.3km",
@@ -59,7 +65,7 @@ struct ProductResponseDTO: Hashable {
             chatCount: 3,
             likeCount: 7
         ),
-        ProductResponseDTO(
+        Product(
             thumbnailImageName: "img_list_home_5",
             title: "아이폰 13 프로 판매",
             distance: "0.9km",
@@ -69,7 +75,7 @@ struct ProductResponseDTO: Hashable {
             chatCount: 4,
             likeCount: 20
         ),
-        ProductResponseDTO(
+        Product(
             thumbnailImageName: "img_list_home_6",
             title: "캠핑용 의자",
             distance: "4.2km",
@@ -79,7 +85,7 @@ struct ProductResponseDTO: Hashable {
             chatCount: 1,
             likeCount: 5
         ),
-        ProductResponseDTO(
+        Product(
             thumbnailImageName: "img_list_home_7",
             title: "맥북 에어 M1",
             distance: "2.8km",
@@ -89,7 +95,7 @@ struct ProductResponseDTO: Hashable {
             chatCount: 2,
             likeCount: 12
         ),
-        ProductResponseDTO(
+        Product(
             thumbnailImageName: "img_list_home_8",
             title: "전자레인지",
             distance: "3.5km",
@@ -99,7 +105,7 @@ struct ProductResponseDTO: Hashable {
             chatCount: 0,
             likeCount: 2
         ),
-        ProductResponseDTO(
+        Product(
             thumbnailImageName: "img_list_home_9",
             title: "책상 팝니다",
             distance: "2.0km",
@@ -109,7 +115,7 @@ struct ProductResponseDTO: Hashable {
             chatCount: 1,
             likeCount: 8
         ),
-        ProductResponseDTO(
+        Product(
             thumbnailImageName: "img_list_home_10",
             title: "헬스 용품 세트",
             distance: "5.0km",
@@ -120,5 +126,4 @@ struct ProductResponseDTO: Hashable {
             likeCount: 10
         )        
     ]
-
 }

@@ -184,7 +184,7 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
 }
 
 extension ProductCollectionViewCell {
-    func configureUI(product: ProductResponseDTO) {
+    func configureUI(product: Product) {
         thumnailImageView.image = UIImage(named: product.thumbnailImageName)
         titleLabel.text = product.title
         priceLabel.text = product.price

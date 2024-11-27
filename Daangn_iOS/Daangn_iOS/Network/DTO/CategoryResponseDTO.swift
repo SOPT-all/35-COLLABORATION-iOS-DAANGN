@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct CategoryResponseDTO: Codable, Hashable {
-    let id: UUID = UUID()
+struct CategoryResponseDTO: Codable {
     let name: String
 
     static let sampleCategories: [CategoryResponseDTO] = [
