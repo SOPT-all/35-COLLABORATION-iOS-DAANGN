@@ -1,5 +1,5 @@
 //
-//  DetaileFilterView.swift
+//  DetailFilterView.swift
 //  Daangn_iOS
 //
 //  Created by 정정욱 on 11/24/24.
@@ -10,16 +10,16 @@ import UIKit
 import SnapKit
 import Then
 
-protocol DetaileFilterViewDelegate {
+protocol DetailFilterViewDelegate {
     func resetButtonDidTap()
     func applyButtonDidTap(selectedCells: [IndexPath])
 }
 
-final class DetaileFilterView: UIView {
+final class DetailFilterView: UIView {
     
     // MARK: - Properties
     
-    var delegate: DetaileFilterViewDelegate?
+    var delegate: DetailFilterViewDelegate?
     var selectedCells: Set<IndexPath> = []
     
     // MARK: - UI Components

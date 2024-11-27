@@ -116,7 +116,7 @@ extension CategoryListViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension CategoryListViewController: FilterListViewCellDelegate {
+extension CategoryListViewController: CategoryListViewCellDelegate {
     func didToggleSelection(for cell: CategoryListViewCell, isSelected: Bool) {
         guard let indexPath = filterCollectionView.indexPath(for: cell) else { return }
         

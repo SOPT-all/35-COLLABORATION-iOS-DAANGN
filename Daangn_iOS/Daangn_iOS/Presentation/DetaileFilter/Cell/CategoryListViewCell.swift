@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol FilterListViewCellDelegate: AnyObject {
+protocol CategoryListViewCellDelegate: AnyObject {
     func didToggleSelection(for cell: CategoryListViewCell, isSelected: Bool)
 }
 
@@ -15,7 +15,7 @@ final class CategoryListViewCell: UICollectionViewCell, ClassNameProtocol {
     
     // MARK: - Properties
     
-    weak var delegate: FilterListViewCellDelegate?
+    weak var delegate: CategoryListViewCellDelegate?
     
     private var isButtonSelected: Bool = false {
         didSet {

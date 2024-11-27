@@ -1,5 +1,5 @@
 //
-//  DetaileFilterViewController.swift
+//  DetailFilterViewController.swift
 //  Daangn_iOS
 //
 //  Created by 정정욱 on 11/24/24.
@@ -18,7 +18,7 @@ class DetailFilterViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private let rootView = DetaileFilterView()
+    private let rootView = DetailFilterView()
     private lazy var tabbarCollectionView = rootView.tabbar.tabbarCollectionView
     private lazy var pageViewController = rootView.tabbar.pageViewController
     
@@ -103,7 +103,7 @@ class DetailFilterViewController: UIViewController {
 }
 
 // rootView에서 버튼들을 눌렀을때 상태를 Cell과 HomeView로 전달
-extension DetailFilterViewController: DetaileFilterViewDelegate {
+extension DetailFilterViewController: DetailFilterViewDelegate {
     func resetButtonDidTap() {
         if let categoryVC = viewControllers[2] as? CategoryListViewController {
             categoryVC.resetSelections()
