@@ -20,7 +20,6 @@ struct Product: Codable {
     let address: String
     let view: Int
 
-    // JSON 키와 매핑하기 위한 CodingKeys
     enum CodingKeys: String, CodingKey {
         case id
         case userId = "user_id"
@@ -28,4 +27,3 @@ struct Product: Codable {
         case title, price, address, view
     }
 }
-

@@ -45,6 +45,29 @@ extension DaangnService {
             }
         }
     }
+    
+    func getCategoryList(completion: @escaping (NetworkResult<Any>) -> Void)
+    {
+        homeProvider.request(
+            .getCategoryList
+        ) { result in
+            switch result {
+            case .success(let response):
+                let statusCode = response.statusCode
+                let data = response.data
+                
+                let networkResult = self.judgeStatus(
+                    by: statusCode,
+                    data,
+                    BaseResponseModel<CategoryResponseDTO>.self
+                )
+                completion(networkResult)
+                
+            case .failure:
+                completion(.networkFail)
+            }
+        }
+    }
 }
 
 // MARK: - Extensions

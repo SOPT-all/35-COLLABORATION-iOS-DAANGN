@@ -232,7 +232,7 @@ final class HomeViewController: UIViewController {
 
 extension HomeViewController {
     private func fetchProducts() {
-        let categoryList = categorys.map { $0.name }
+        let categoryList = categorys.flatMap { $0.categories }
         DaangnService.shared.getProductList(categoryList: categoryList) { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -312,10 +312,11 @@ extension HomeViewController: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.className, for: indexPath) as? CategoryCollectionViewCell else {
                 return UICollectionViewCell()
             }
-            let category = categorys[indexPath.item]
-            cell.delegate = self
-            cell.configureUI(category: category.name)
-            return cell
+             let allCategories = categorys.flatMap { $0.categories }
+             let category = allCategories[indexPath.item]
+             cell.delegate = self
+             cell.configureUI(category: category)
+             return cell
         }
         return UICollectionViewCell()
     }
@@ -333,8 +334,9 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: collectionView.frame.width, height: 162)
         }
         else if collectionView == categoryCollectionView {
-            let categoryTitle = categorys[indexPath.item]
-            let textSize = categoryTitle.name.getLabelContentSize(withFont: .sfPro(.body_md_12))
+            let allCategories = categorys.flatMap { $0.categories }
+            let categoryTitle = allCategories[indexPath.item]
+            let textSize = categoryTitle.getLabelContentSize(withFont: .sfPro(.body_md_12))
             let padding: CGFloat = 45
             return CGSize(width: textSize.width + padding, height: 34)
         }
@@ -375,9 +377,14 @@ extension HomeViewController: DetailFilterViewControllerDelegate {
 
 extension HomeViewController: CategoryCollectionViewCellDelegate {
     func deleteButtonDidTap(for category: String) {
-        categorys.removeAll { $0.name == category }
-        fetchProducts()
-        categoryCollectionView.reloadData()
-        updateCategoryLayout()
+        // categorys를 안전하게 업데이트
+        categorys = categorys.compactMap { categoryResponse in
+            let updatedCategories = categoryResponse.categories.filter { $0 != category }
+            return updatedCategories.isEmpty ? nil : CategoryResponseDTO(categories: updatedCategories)
+        }
+        
+        self.categoryCollectionView.reloadData()
+        self.updateCategoryLayout()
+        self.fetchProducts()
     }
 }
