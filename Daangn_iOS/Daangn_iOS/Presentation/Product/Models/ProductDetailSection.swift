@@ -7,13 +7,13 @@
 
 import Foundation
 
-enum ProductDetailSection: Int, CaseIterable {
-    case productImage = 0
+enum ProductDetailSection: String, CaseIterable {
+    case productImage
     case sellerInfo
     case productDetailInfo
-    case sellerProduct
+    case sellerProduct = "헿헿님의 판매 물품"
     case keywordNotify
-    case relatedArticle
+    case relatedArticle = "이 글과 함께 봤어요"
     
     var numberOfItemsInSection: Int {
         switch self {

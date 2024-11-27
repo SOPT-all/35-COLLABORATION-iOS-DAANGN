@@ -14,8 +14,7 @@ class ProductDetailCompositionalLayout {
     func createLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout { (sectionNumber, _) -> NSCollectionLayoutSection? in
             
-            guard let section = ProductDetailSection(rawValue: sectionNumber)
-            else { fatalError() }
+            let section = ProductDetailSection.allCases[sectionNumber]
             
             switch section {
             case .productImage:
@@ -177,7 +176,7 @@ extension ProductDetailCompositionalLayout {
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: .init(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .absolute(83)
+                heightDimension: .estimated(83)
             ),
             subitems: [item]
         )
@@ -210,7 +209,7 @@ extension ProductDetailCompositionalLayout {
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: 16,
-            bottom: 0,
+            bottom: 23,
             trailing: 16
         )
         section.interGroupSpacing = 24

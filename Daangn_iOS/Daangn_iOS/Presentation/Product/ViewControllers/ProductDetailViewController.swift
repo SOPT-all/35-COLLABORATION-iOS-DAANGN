@@ -34,7 +34,8 @@ class ProductDetailViewController: UIViewController {
         
         setDelegate()
         setRegister()
-        
+        fetchData()
+        setNavigationBar()
     }
     
     private func setDelegate() {
@@ -70,9 +71,9 @@ class ProductDetailViewController: UIViewController {
         )
         
         rootView.collectionView.register(
-            ProductRelatedHeaderReusableView.self,
+            HeaderCollectionReusableView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: ProductRelatedHeaderReusableView.className
+            withReuseIdentifier: HeaderCollectionReusableView.className
         )
         
         rootView.collectionView.register(
@@ -80,6 +81,15 @@ class ProductDetailViewController: UIViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
             withReuseIdentifier: ProductImageFooterReusableView.className
         )
+    }
+    
+    private func fetchData() {
+        let model = sampleProductInfo
+        rootView.purchaseBottomView.configure(with: model)
+    }
+    
+    private func setNavigationBar() {
+        navigationController?.navigationBar.isHidden = true
     }
 }
 
@@ -90,10 +100,8 @@ extension ProductDetailViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        guard let section = ProductDetailSection(rawValue: section)
-        else { return 0 }
         
-        return section.numberOfItemsInSection
+        return ProductDetailSection.allCases[section].numberOfItemsInSection
     }
     
     func collectionView(
@@ -101,8 +109,7 @@ extension ProductDetailViewController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         
-        guard let section = ProductDetailSection(rawValue: indexPath.section)
-        else { fatalError() }
+        let section = ProductDetailSection.allCases[indexPath.section]
         
         switch section {
         case .productImage:
@@ -176,20 +183,24 @@ extension ProductDetailViewController: UICollectionViewDataSource {
         
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            guard let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: ProductRelatedHeaderReusableView.className,
-                for: indexPath) as? ProductRelatedHeaderReusableView,
-                  let section = ProductDetailSection(rawValue: indexPath.section)
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderCollectionReusableView.className, for: indexPath) as? HeaderCollectionReusableView
             else { return UICollectionReusableView() }
             
-            switch section {
+            let sectionType = ProductDetailSection.allCases[indexPath.section]
+            switch sectionType {
             case .sellerProduct:
-                header.configure(title: "헿헿님의 판매 물품")
+                header.configure(
+                    title: ProductDetailSection.allCases[indexPath.section].rawValue,
+                    type: .product
+                )
             case .relatedArticle:
-                header.configure(title: "이 글과 함께 봤어요")
+                header.configure(
+                    title: ProductDetailSection.allCases[indexPath.section].rawValue,
+                    type: .product,
+                    isMoreButtonIncluded: false
+                )
             default:
-                header.configure(title: "")
+                break
             }
             
             return header
@@ -197,12 +208,11 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             guard let footer = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
                 withReuseIdentifier: ProductImageFooterReusableView.className,
-                for: indexPath) as? ProductImageFooterReusableView,
-                  let section = ProductDetailSection(rawValue: indexPath.section)
+                for: indexPath) as? ProductImageFooterReusableView
             else { return UICollectionReusableView() }
             
             self.delegate = footer
-            footer.configure(pageNumber: section.numberOfItemsInSection)
+            footer.configure(pageNumber: ProductDetailSection.allCases[indexPath.section].numberOfItemsInSection)
             return footer
         default:
             return UICollectionReusableView()

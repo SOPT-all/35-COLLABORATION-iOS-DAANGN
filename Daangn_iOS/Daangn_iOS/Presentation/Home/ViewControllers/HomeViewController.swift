@@ -27,18 +27,15 @@ final class HomeViewController: UIViewController {
     
     private var tagCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 5
         layout.scrollDirection = .horizontal
         return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
     
     private var categoryCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
-    }()
-    
-    private var productCollectionView: IntrinsicCollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
         layout.scrollDirection = .vertical
         return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
@@ -154,6 +151,12 @@ final class HomeViewController: UIViewController {
             $0.leading.equalTo(resetButton.snp.trailing).offset(5)
             $0.trailing.equalToSuperview().inset(16)
             $0.height.equalTo(34)
+        }
+        
+        productCollectionView.snp.makeConstraints {
+            $0.top.equalTo(tagCollectionView.snp.bottom).offset(2)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
         
         writeButton.snp.makeConstraints {

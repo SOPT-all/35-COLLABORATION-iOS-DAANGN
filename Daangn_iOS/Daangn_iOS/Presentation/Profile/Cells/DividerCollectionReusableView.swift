@@ -43,4 +43,9 @@ final class DividerCollectionReusableView: UICollectionReusableView {
     }
 }
 
-extension DividerCollectionReusableView: ClassNameProtocol {}
+extension DividerCollectionReusableView: ClassNameProtocol {
+    
+    func configure(color: UIColor) {
+        divider.backgroundColor = color
+    }
+}
