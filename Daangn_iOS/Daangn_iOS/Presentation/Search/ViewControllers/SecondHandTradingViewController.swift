@@ -11,7 +11,7 @@ final class SecondHandTradingViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private lazy var rootView = SecondHandTradingView(searchKeyword: searchKeyword)
+    private lazy var rootView = SecondHandTradingView()
     private lazy var collectionView = rootView.collectionView
     
     // MARK: - Properties
@@ -152,5 +152,6 @@ extension SecondHandTradingViewController: SearchResultDelegate {
         self.resultProductList = products
         self.similarProductList = similarProducts
         collectionView.reloadData()
+        rootView.searchKeyword = keyword
     }
 }
