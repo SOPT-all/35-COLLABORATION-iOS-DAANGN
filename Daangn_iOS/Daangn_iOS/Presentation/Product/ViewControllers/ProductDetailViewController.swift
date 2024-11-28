@@ -13,7 +13,7 @@ class ProductDetailViewController: UIViewController {
     
     private var relatedProducts = UserSellingProductResponseDTO.sampleRelatedArticle
     private var userId: Int = 1
-    private var productId: Int = 4
+    private var productId: Int = 7
     
     private var userInfo: UserInfoResponseDTO? {
         didSet {
@@ -195,6 +195,10 @@ extension ProductDetailViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as? KeywordNotifyCollectionViewCell
             else { return UICollectionViewCell() }
+            
+            if let model = self.productInfo {
+                cell.configure(with: model)
+            }
             
             return cell
         case .relatedArticle:
