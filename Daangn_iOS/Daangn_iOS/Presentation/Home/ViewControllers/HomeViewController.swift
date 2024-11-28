@@ -14,7 +14,7 @@ final class HomeViewController: UIViewController {
     
     // MARK: - Mock Data
     
-    var categorys: [CategoryResponseDTO] = []
+    var categorys: [catogoriesResponseDTO] = []
     let tags: [HomeTag] = Array(HomeTag.allCases)
     let products: [Product] = ProductResponseDTO.sampleProducts
     
@@ -25,23 +25,20 @@ final class HomeViewController: UIViewController {
     private let resetButton = UIButton()
     private let writeButton = UIButton()
     
-    private lazy var tagCollectionView: IntrinsicCollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
-    }()
+    private lazy var tagCollectionView = IntrinsicCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    )
     
-    private lazy var categoryCollectionView: IntrinsicCollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
-    }()
+    private lazy var categoryCollectionView = IntrinsicCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    )
     
-    private lazy var productCollectionView: IntrinsicCollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
-    }()
+    private lazy var productCollectionView = IntrinsicCollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    )
     
     private let navigationBar = DaangnNavigationBar(type: .home)
     
@@ -94,16 +91,25 @@ final class HomeViewController: UIViewController {
         }
         
         tagCollectionView.do {
+            if let layout = tagCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                layout.scrollDirection = .horizontal
+            }
             $0.showsHorizontalScrollIndicator = false
             $0.backgroundColor = .clear
         }
         
         categoryCollectionView.do {
+            if let layout = categoryCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                layout.scrollDirection = .horizontal
+            }
             $0.showsHorizontalScrollIndicator = false
             $0.backgroundColor = .gray3
         }
         
         productCollectionView.do {
+            if let layout = productCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                layout.scrollDirection = .vertical
+            }
             $0.showsVerticalScrollIndicator = false
             $0.backgroundColor = .clear
             $0.isScrollEnabled = false
@@ -154,6 +160,18 @@ final class HomeViewController: UIViewController {
             $0.height.equalTo(34)
         }
         
+        categoryCollectionView.snp.makeConstraints {
+            $0.top.equalTo(resetButton.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(54)
+        }
+        
+        productCollectionView.snp.remakeConstraints {
+            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        
         writeButton.snp.makeConstraints {
             $0.trailing.equalTo(scrollView.frameLayoutGuide.snp.trailing).offset(-13)
             $0.bottom.equalTo(scrollView.frameLayoutGuide.snp.bottom).offset(-102)
@@ -161,8 +179,8 @@ final class HomeViewController: UIViewController {
             $0.width.equalTo(98)
         }
         
-        updateCategoryLayout()
-
+        updateCategoryCollectionViewHeight()
+        
     }
     
     // MARK: - Actions
@@ -201,28 +219,12 @@ final class HomeViewController: UIViewController {
         view.layoutIfNeeded()
     }
     
-    func updateCategoryLayout() {
-        if categorys.isEmpty {
-            categoryCollectionView.isHidden = true
-            productCollectionView.snp.remakeConstraints {
-                $0.top.equalTo(tagCollectionView.snp.bottom).offset(12)
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalToSuperview()
-            }
-        } else {
-            categoryCollectionView.isHidden = false
-            categoryCollectionView.snp.makeConstraints {
-                $0.top.equalTo(resetButton.snp.bottom).offset(12)
-                $0.leading.trailing.equalToSuperview()
-                $0.height.equalTo(54)
-            }
-            productCollectionView.snp.remakeConstraints {
-                $0.top.equalTo(categoryCollectionView.snp.bottom).offset(12)
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalToSuperview()
-            }
+    func updateCategoryCollectionViewHeight() {
+        let height: CGFloat = categorys.count > 0 ? 54 : 0
+        categoryCollectionView.snp.updateConstraints {
+            $0.height.equalTo(height)
         }
-        view.layoutIfNeeded()
+        self.view.layoutIfNeeded()
     }
 }
 
@@ -302,7 +304,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         else if collectionView == categoryCollectionView {
             let categoryTitle = categorys[indexPath.item]
             let textSize = categoryTitle.name.getLabelContentSize(withFont: .sfPro(.body_md_12))
-            let padding: CGFloat = 45
+            let padding: CGFloat = 50
             return CGSize(width: textSize.width + padding, height: 34)
         }
         return CGSize.zero
@@ -333,10 +335,10 @@ private extension HomeViewController {
 }
 
 extension HomeViewController: DetailFilterViewControllerDelegate {
-    func filtersApplyHomeView(selectedCategories: [CategoryResponseDTO]) {
+    func applyFiltersToHomeView(selectedCategories: [catogoriesResponseDTO]) {
         categorys = selectedCategories
         categoryCollectionView.reloadData()
-        updateCategoryLayout()
+        updateCategoryCollectionViewHeight()
     }
 }
 
@@ -344,6 +346,6 @@ extension HomeViewController: CategoryCollectionViewCellDelegate {
     func deleteButtonDidTap(for category: String) {
         categorys.removeAll { $0.name == category }
         categoryCollectionView.reloadData()
-        updateCategoryLayout()
+        updateCategoryCollectionViewHeight()
     }
 }

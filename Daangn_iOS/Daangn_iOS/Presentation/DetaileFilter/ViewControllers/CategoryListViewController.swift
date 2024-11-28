@@ -9,7 +9,7 @@ import UIKit
 
 protocol CategoryListDelegate {
     func categoryCellDidSelect(at indexPath: IndexPath)
-    func CategoryCellDidDeselect(at indexPath: IndexPath)
+    func categoryCellDidDeselect(at indexPath: IndexPath)
 }
 
 class CategoryListViewController: UIViewController {
@@ -17,7 +17,7 @@ class CategoryListViewController: UIViewController {
     // MARK: - Properties
     
     var delegate: CategoryListDelegate?
-    let categorys: [CategoryResponseDTO] = CategoryResponseDTO.sampleCategories
+    let categorys: [catogoriesResponseDTO] = catogoriesResponseDTO.sampleCategories
     
     // MARK: - UI Components
     
@@ -123,7 +123,7 @@ extension CategoryListViewController: CategoryListViewCellDelegate {
         if isSelected {
             delegate?.categoryCellDidSelect(at: indexPath)
         } else {
-            delegate?.CategoryCellDidDeselect(at: indexPath)
+            delegate?.categoryCellDidDeselect(at: indexPath)
         }
     }
 }

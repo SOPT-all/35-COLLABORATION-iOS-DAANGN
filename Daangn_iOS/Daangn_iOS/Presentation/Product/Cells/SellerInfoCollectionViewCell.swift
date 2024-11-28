@@ -36,7 +36,7 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
         setHierarchy()
         setLayout()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -92,7 +92,7 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
         }
         
         degreeImageView.do {
-            $0.image = .image482
+            //$0.image = .image482
             $0.contentMode = .scaleAspectFill
         }
         

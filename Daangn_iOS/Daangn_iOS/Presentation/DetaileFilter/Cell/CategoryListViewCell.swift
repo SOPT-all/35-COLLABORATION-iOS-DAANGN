@@ -100,7 +100,7 @@ final class CategoryListViewCell: UICollectionViewCell, ClassNameProtocol {
 }
 
 extension CategoryListViewCell {
-    func configureUI(category: CategoryResponseDTO) {
+    func configureUI(category: catogoriesResponseDTO) {
         titleLabel.text = category.name
         titleLabel.setAttributedText(lineHeight: 22)
     }

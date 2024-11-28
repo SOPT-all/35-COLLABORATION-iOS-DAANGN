@@ -87,6 +87,5 @@ final class CategoryCollectionViewCell: UICollectionViewCell, ClassNameProtocol 
 extension CategoryCollectionViewCell {
     func configureUI(category: String) {
         titleLabel.text = category
-        titleLabel.setAttributedText(lineHeight: 12)
     }
 }
