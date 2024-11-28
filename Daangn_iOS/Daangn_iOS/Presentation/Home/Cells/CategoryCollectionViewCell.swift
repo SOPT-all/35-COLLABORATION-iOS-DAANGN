@@ -1,23 +1,32 @@
 //
-//  TagCollectionViewCell.swift
+//  CategoryCollectionViewCell.swift
 //  Daangn_iOS
 //
-//  Created by 정정욱 on 11/20/24.
+//  Created by 정정욱 on 11/27/24.
 //
 
 import UIKit
 
-final class TagCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
+protocol CategoryCollectionViewCellDelegate {
+    func deleteButtonDidTap(for category: String)
+}
+
+final class CategoryCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
+    
+    // MARK: - Properties
+    
+    var delegate: CategoryCollectionViewCellDelegate?
     
     // MARK: - UI Components
     
     private let titleLabel = UILabel()
-    private let dropdownImageView = UIImageView()
+    private let deleteButton = UIButton()
+    
+    // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setStyle()
-        setUI()
         setLayout()
     }
     
@@ -25,7 +34,7 @@ final class TagCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - UI Setup
+    // MARK: - Style
     
     private func setStyle() {
         contentView.do {
@@ -38,38 +47,45 @@ final class TagCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
         
         titleLabel.do {
             $0.font = .sfPro(.body_md_12)
-            $0.textColor = .black
+            $0.textColor = .orange1
             $0.textAlignment = .center
         }
         
-        dropdownImageView.do {
-            $0.image = .icDirectionDown
+        deleteButton.do {
+            $0.setImage(UIImage(resource: .icDeleteOrange), for: .normal)
+            $0.tintColor = .gray
             $0.contentMode = .scaleAspectFit
+            $0.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         }
     }
     
-    private func setUI() {
-        contentView.addSubviews(titleLabel, dropdownImageView)
-    }
+    // MARK: - Layout
     
     private func setLayout() {
+        contentView.addSubviews(titleLabel, deleteButton)
+        
         titleLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(12)
         }
         
-        dropdownImageView.snp.makeConstraints {
+        deleteButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.leading.equalTo(titleLabel.snp.trailing).offset(6)
+            $0.leading.equalTo(titleLabel.snp.trailing).offset(4)
             $0.trailing.equalToSuperview().inset(12)
             $0.width.height.equalTo(18)
         }
     }
+    
+    // MARK: - Actions
+    
+    @objc private func deleteButtonTapped() {
+        delegate?.deleteButtonDidTap(for: titleLabel.text ?? "")
+    }
 }
 
-extension TagCollectionViewCell {
-    func configureUI(tagTitle: String) {
-        titleLabel.text = tagTitle
-        titleLabel.setAttributedText(lineHeight: 12)
+extension CategoryCollectionViewCell {
+    func configureUI(category: String) {
+        titleLabel.text = category
     }
 }

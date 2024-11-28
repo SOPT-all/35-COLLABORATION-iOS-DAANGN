@@ -1,5 +1,5 @@
 //
-//  DetaileFilterView.swift
+//  DetailFilterView.swift
 //  Daangn_iOS
 //
 //  Created by 정정욱 on 11/24/24.
@@ -10,11 +10,21 @@ import UIKit
 import SnapKit
 import Then
 
-final class DetaileFilterView: UIView {
+protocol DetailFilterButtonTapDelegate: NSObject {
+    func resetButtonDidTap()
+    func applyButtonDidTap(selectedCells: [IndexPath])
+}
+
+final class DetailFilterView: UIView {
+    
+    // MARK: - Properties
+    
+    weak var delegate: DetailFilterButtonTapDelegate?
+    var selectedCells: Set<IndexPath> = []
     
     // MARK: - UI Components
     
-    private let navigationBar = DaangnNavigationBar(type: .normal)
+    let navigationBar = DaangnNavigationBar(type: .normal)
     private let titleLabel = UILabel()
     lazy var tabbar = TopTabbar(type: .filter)
     private let bottomButtonView = UIView()
@@ -25,7 +35,6 @@ final class DetaileFilterView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setStyle()
         setHierarchy()
         setLayout()
@@ -35,7 +44,7 @@ final class DetaileFilterView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Methods
+    // MARK: - Style
     
     private func setStyle() {
         backgroundColor = .white
@@ -63,11 +72,12 @@ final class DetaileFilterView: UIView {
             )
             $0.layer.cornerRadius = 8
             $0.layer.masksToBounds = true
+            $0.addTarget(self, action: #selector(didTapResetButton), for: .touchUpInside)
         }
         
         applyButton.do {
             $0.configuration = UIButton.Configuration.filled()
-            $0.configuration?.baseBackgroundColor = .orange1
+            $0.configuration?.baseBackgroundColor = .gray5
             $0.configuration?.attributedTitle = AttributedString(
                 "적용하기",
                 attributes: AttributeContainer([
@@ -77,6 +87,7 @@ final class DetaileFilterView: UIView {
             )
             $0.layer.cornerRadius = 8
             $0.layer.masksToBounds = true
+            $0.addTarget(self, action: #selector(didTapApplyButton), for: .touchUpInside)
         }
     }
     
@@ -122,5 +133,23 @@ final class DetaileFilterView: UIView {
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(53)
         }
+    }
+    
+    // MARK: - Methods
+    
+    func configureButtonStates() {
+        self.applyButton.isEnabled = !self.selectedCells.isEmpty
+        self.applyButton.configuration?.baseBackgroundColor = self.applyButton.isEnabled ? .orange1 : .gray5
+        
+    }
+    
+    @objc private func didTapResetButton() {
+        selectedCells.removeAll()
+        configureButtonStates()
+        delegate?.resetButtonDidTap()
+    }
+    
+    @objc private func didTapApplyButton() {
+        delegate?.applyButtonDidTap(selectedCells: Array(selectedCells))
     }
 }

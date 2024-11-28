@@ -7,20 +7,27 @@
 
 import UIKit
 
-final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
+protocol CategoryCellSelectionToCategoryListDelegate: AnyObject {
+    func didToggleSelection(for cell: CategoryListViewCell, isSelected: Bool)
+}
+
+final class CategoryListViewCell: UICollectionViewCell, ClassNameProtocol {
+    
+    // MARK: - Properties
+    
+    weak var delegate: CategoryCellSelectionToCategoryListDelegate?
+    
+    private var isButtonSelected: Bool = false {
+        didSet {
+            updateButtonImage()
+            delegate?.didToggleSelection(for: self, isSelected: isButtonSelected)
+        }
+    }
     
     // MARK: - UI Components
     
     private let selectButton = UIButton()
     private let titleLabel = UILabel()
-    
-    // MARK: - Properties
-    
-    private var isButtonSelected: Bool = false {
-        didSet {
-            updateButtonImage()
-        }
-    }
     
     // MARK: - Initializer
     
@@ -73,11 +80,11 @@ final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
         
     }
     
+    // MARK: - Actions
+    
     private func setActions() {
         selectButton.addTarget(self, action: #selector(toggleButtonState), for: .touchUpInside)
     }
-    
-    // MARK: - Actions
     
     @objc private func toggleButtonState() {
         isButtonSelected.toggle()
@@ -86,12 +93,14 @@ final class FilterListViewCell: UICollectionViewCell, ClassNameProtocol {
     private func updateButtonImage() {
         selectButton.setImage( isButtonSelected ? .icCheckboxSelected : .icCheckboxNormal, for: .normal )
     }
+    
+    func resetSelection() {
+        isButtonSelected = false
+    }
 }
 
-// MARK: - Extension for Configuration
-
-extension FilterListViewCell {
-    func configureUI(category: CategoryResponseDTO) {
+extension CategoryListViewCell {
+    func configureUI(category: CatogoriesResponseDTO) {
         titleLabel.text = category.name
         titleLabel.setAttributedText(lineHeight: 22)
     }
