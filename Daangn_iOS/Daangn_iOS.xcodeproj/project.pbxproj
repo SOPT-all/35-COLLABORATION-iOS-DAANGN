@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02381F442CF891AF00DEB1D2 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 02381F432CF891AE00DEB1D2 /* Config.xcconfig */; };
 		95C49C492CE9E292007F8160 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 95C49C482CE9E292007F8160 /* Then */; };
 		95C49C4C2CE9E2D6007F8160 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 95C49C4B2CE9E2D6007F8160 /* Moya */; };
 		95C49C4F2CE9E2E7007F8160 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 95C49C4E2CE9E2E7007F8160 /* SnapKit */; };
@@ -15,7 +14,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		02381F432CF891AE00DEB1D2 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		95C49C142CE868F8007F8160 /* Daangn_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daangn_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -60,7 +58,6 @@
 			children = (
 				95C49C162CE868F8007F8160 /* Daangn_iOS */,
 				95C49C152CE868F8007F8160 /* Products */,
-				02381F432CF891AE00DEB1D2 /* Config.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -147,7 +144,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02381F442CF891AF00DEB1D2 /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,7 +162,6 @@
 /* Begin XCBuildConfiguration section */
 		95C49C282CE868F9007F8160 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 02381F432CF891AE00DEB1D2 /* Config.xcconfig */;
 			baseConfigurationReferenceAnchor = 95C49C162CE868F8007F8160 /* Daangn_iOS */;
 			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {

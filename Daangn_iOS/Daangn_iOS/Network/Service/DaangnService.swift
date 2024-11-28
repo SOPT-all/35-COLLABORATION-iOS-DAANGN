@@ -71,7 +71,6 @@ extension DaangnService {
         }
     }
                 
-                
     func getSearchProducts(
         keyword: String,
         completion: @escaping (NetworkResult<Any>) -> Void
@@ -137,7 +136,7 @@ extension DaangnService {
                 let networkResult = self.judgeStatus(
                     by: statusCode,
                     data,
-                    BaseResponseModel<UserProfileResponseDTO>.self
+                    BaseResponseModel<UserSellingProductResponseDTO>.self
                 )
                 completion(networkResult)
                 
