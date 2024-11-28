@@ -17,7 +17,15 @@ final class SearchViewController: UIViewController {
     
     // MARK: - Properties
     
+    private weak var delegate: SearchResultDelegate?
+    private var searchKeyword = "" {
+        didSet {
+            fetchData()
+        }
+    }
     private let tabbarData = TopTabbarModel.searchTopTabbarData()
+    
+    /// 상단탭바 UI 관련 프로퍼티
     private var viewControllers: [UIViewController] = []
     private let tabbarCellHorizontalPadding: CGFloat = 13 * 2
     private var currentTabbarIndex: Int = 1 {
@@ -42,9 +50,11 @@ final class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        fetchData()
         setDelegate()
         setRegister()
         setPageViewController()
+        setButtonAction()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,11 +71,41 @@ final class SearchViewController: UIViewController {
     
     // MARK: - Methods
     
+    private func fetchData() {
+        DaangnService.shared.getSearchProducts(keyword: searchKeyword) { [weak self] response in
+            guard let self  = self else { return }
+            
+            switch response {
+            case .success(let data):
+                guard let data = data as? BaseResponseModel<SearchResponseDTO>,
+                      let result = data.result
+                else { return }
+                
+                delegate?.bindSearchResult(
+                    keyword: searchKeyword,
+                    products: result.products,
+                    similarProducts: result.similar_products
+                )
+            case .requestErr:
+                print("요청 오류 입니다")
+            case .decodedErr:
+                print("디코딩 오류 입니다")
+            case .pathErr:
+                print("경로 오류 입니다")
+            case .serverErr:
+                print("서버 오류입니다")
+            case .networkFail:
+                print("네트워크 오류입니다")
+            }
+        }
+    }
+    
     private func setDelegate() {
         tabbarCollectionView.delegate = self
         tabbarCollectionView.dataSource = self
         pageViewController.delegate = self
         pageViewController.dataSource = self
+        rootView.navigationBar.searchTextField.delegate = self
     }
 
     private func setRegister() {
@@ -78,8 +118,16 @@ final class SearchViewController: UIViewController {
         pageViewController.setViewControllers([secondVC], direction: .forward, animated: true)
     }
     
+    private func setButtonAction() {
+        rootView.navigationBar.backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
+    }
+    
     private func setNavigationBar() {
         navigationController?.navigationBar.isHidden = true
+    }
+    
+    @objc private func backButtonDidTap() {
+        navigationController?.popViewController(animated: true)
     }
 }
 
@@ -88,9 +136,15 @@ final class SearchViewController: UIViewController {
 private extension SearchViewController {
     
     func addViewControllersData() {
-        for _ in 0 ..< tabbarData.count {
-            let vc = UIViewController()
-            vc.view.backgroundColor = .gray1
+        for index in 0 ..< tabbarData.count {
+            let vc: UIViewController
+            if index == 1 {
+                vc = SecondHandTradingViewController()
+                self.delegate = vc as? any SearchResultDelegate
+            } else {
+                vc = UIViewController()
+                vc.view.backgroundColor = .gray1
+            }
             viewControllers.append(vc)
         }
     }
@@ -129,6 +183,16 @@ private extension SearchViewController {
     
     func checkIfBarAndPageAreInSameIndex(for currentIndex: Int) -> Bool {
         return currentTabbarIndex == currentIndex
+    }
+}
+
+extension SearchViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        guard let keyword = textField.text else { return false }
+        self.searchKeyword = keyword
+        return true
     }
 }
 

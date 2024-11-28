@@ -16,7 +16,7 @@ final class ProfileViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var profileData = ProfileModel.mockData()
+    private var profileData: UserInfoResponseDTO?
     private var mannerRatingData = MannerRatingModel.mockData()
     private var tradeReviewData = TradeReviewModel.mockData()
     
@@ -31,12 +31,39 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        fetchData()
         setDelegate()
         setRegister()
         setNavigationBar()
     }
     
     // MARK: - Methods
+    
+    private func fetchData() {
+        DaangnService.shared.getUserProfile(userId: 1) { [weak self] response in
+            guard let self  = self else { return }
+            
+            switch response {
+            case .success(let data):
+                guard let data = data as? BaseResponseModel<UserInfoResponseDTO>,
+                      let result = data.result
+                else { return }
+                
+                profileData = result
+                collectionView.reloadSections([0, 2])
+            case .requestErr:
+                print("요청 오류 입니다")
+            case .decodedErr:
+                print("디코딩 오류 입니다")
+            case .pathErr:
+                print("경로 오류 입니다")
+            case .serverErr:
+                print("서버 오류입니다")
+            case .networkFail:
+                print("네트워크 오류입니다")
+            }
+        }
+    }
     
     private func setDelegate() {
         collectionView.delegate = self
@@ -86,7 +113,13 @@ extension ProfileViewController: UICollectionViewDataSource {
         case .profile:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileCollectionViewCell.className, for: indexPath) as? ProfileCollectionViewCell
             else { return UICollectionViewCell() }
-            cell.configure(with: profileData)
+            
+            if let profileData = profileData {
+                cell.configure(
+                    profileImage: profileData.profile_image,
+                    nickname: profileData.nickname
+                )
+            }
             return cell
         case .mannerTemperature:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MannerTemperatureCollectionViewCell.className, for: indexPath) as? MannerTemperatureCollectionViewCell
@@ -95,6 +128,10 @@ extension ProfileViewController: UICollectionViewDataSource {
         case .verificationInfo:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: VerificationInfoCollectionViewCell.className, for: indexPath) as? VerificationInfoCollectionViewCell
             else { return UICollectionViewCell() }
+            
+            if let profileData = profileData {
+                cell.configure(address: profileData.address)
+            }
             return cell
         case .badge:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BadgeCollectionViewCell.className, for: indexPath) as? BadgeCollectionViewCell

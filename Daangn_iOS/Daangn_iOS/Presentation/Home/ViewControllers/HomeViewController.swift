@@ -25,20 +25,30 @@ final class HomeViewController: UIViewController {
     private let resetButton = UIButton()
     private let writeButton = UIButton()
     
-    private lazy var tagCollectionView = IntrinsicCollectionView(
-        frame: .zero,
-        collectionViewLayout: UICollectionViewFlowLayout()
-    )
+    private lazy var tagCollectionView: IntrinsicCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumInteritemSpacing = 5
+        let collectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        return collectionView
+    }()
     
-    private lazy var categoryCollectionView = IntrinsicCollectionView(
-        frame: .zero,
-        collectionViewLayout: UICollectionViewFlowLayout()
-    )
-    
-    private lazy var productCollectionView = IntrinsicCollectionView(
-        frame: .zero,
-        collectionViewLayout: UICollectionViewFlowLayout()
-    )
+    private lazy var categoryCollectionView: IntrinsicCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumInteritemSpacing = 5
+        let collectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        return collectionView
+    }()
+
+    private lazy var productCollectionView: IntrinsicCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .vertical
+        flowLayout.minimumInteritemSpacing = 0
+        flowLayout.minimumLineSpacing = 0
+        let collectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        return collectionView
+    }()
     
     private let navigationBar = DaangnNavigationBar(type: .home)
     
@@ -51,6 +61,7 @@ final class HomeViewController: UIViewController {
         setLayout()
         setDelegate()
         registerCells()
+        setButtonAction()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,25 +102,16 @@ final class HomeViewController: UIViewController {
         }
         
         tagCollectionView.do {
-            if let layout = tagCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-                layout.scrollDirection = .horizontal
-            }
             $0.showsHorizontalScrollIndicator = false
             $0.backgroundColor = .clear
         }
         
         categoryCollectionView.do {
-            if let layout = categoryCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-                layout.scrollDirection = .horizontal
-            }
             $0.showsHorizontalScrollIndicator = false
             $0.backgroundColor = .gray3
         }
         
         productCollectionView.do {
-            if let layout = productCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-                layout.scrollDirection = .vertical
-            }
             $0.showsVerticalScrollIndicator = false
             $0.backgroundColor = .clear
             $0.isScrollEnabled = false
@@ -161,13 +163,13 @@ final class HomeViewController: UIViewController {
         }
         
         categoryCollectionView.snp.makeConstraints {
-            $0.top.equalTo(resetButton.snp.bottom).offset(12)
+            $0.top.equalTo(resetButton.snp.bottom).offset(2)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(54)
         }
         
-        productCollectionView.snp.remakeConstraints {
-            $0.top.equalTo(categoryCollectionView.snp.bottom).offset(12)
+        productCollectionView.snp.makeConstraints {
+            $0.top.equalTo(categoryCollectionView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
@@ -222,6 +224,9 @@ final class HomeViewController: UIViewController {
     func updateCategoryCollectionViewHeight() {
         let height: CGFloat = categorys.count > 0 ? 54 : 0
         categoryCollectionView.snp.updateConstraints {
+            $0.top.equalTo(resetButton.snp.bottom).offset(
+                categorys.count > 0 ? 12 : 2
+            )
             $0.height.equalTo(height)
         }
         self.view.layoutIfNeeded()
@@ -243,6 +248,16 @@ private extension HomeViewController {
         tagCollectionView.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: TagCollectionViewCell.className)
         productCollectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: ProductCollectionViewCell.className)
         categoryCollectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.className)
+    }
+    
+    func setButtonAction() {
+        navigationBar.searchButton.addTarget(self, action: #selector(searchButtonDidTap), for: .touchUpInside)
+    }
+    
+    @objc func searchButtonDidTap() {
+        let searchViewController = SearchViewController()
+        searchViewController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(searchViewController, animated: true)
     }
 }
 
@@ -312,7 +327,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if collectionView == categoryCollectionView {
-            return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+            return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         }
         return UIEdgeInsets.zero
     }
@@ -328,9 +343,10 @@ extension HomeViewController: UICollectionViewDelegate {
 
 private extension HomeViewController {
     func navigateToDetailFilterViewController() {
-        let detaileFilterController = DetailFilterViewController()
-        detaileFilterController.delegate = self
-        navigationController?.pushViewController(detaileFilterController, animated: true)
+        let detailFilterController = DetailFilterViewController()
+        detailFilterController.delegate = self
+        detailFilterController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(detailFilterController, animated: true)
     }
 }
 

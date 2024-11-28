@@ -200,26 +200,27 @@ private extension ProfileView {
     }
     
     func profileSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
-       let header = NSCollectionLayoutBoundarySupplementaryItem(
-           layoutSize: NSCollectionLayoutSize(
-               widthDimension: .fractionalWidth(1),
-               heightDimension: .estimated(62)
-           ),
-           elementKind: UICollectionView.elementKindSectionHeader,
-           alignment: .top
-       )
-       return header
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .estimated(62)
+            ),
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        header.contentInsets = .init(top: 0, leading: 16, bottom: 0, trailing: 0)
+        return header
     }
     
     func profileSectionFooter() -> NSCollectionLayoutBoundarySupplementaryItem {
-       let footer = NSCollectionLayoutBoundarySupplementaryItem(
-           layoutSize: NSCollectionLayoutSize(
-               widthDimension: .fractionalWidth(1),
-               heightDimension: .absolute(1)
-           ),
-           elementKind: UICollectionView.elementKindSectionFooter,
-           alignment: .bottom
-       )
-       return footer
+        let footer = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .absolute(1)
+            ),
+            elementKind: UICollectionView.elementKindSectionFooter,
+            alignment: .bottom
+        )
+        return footer
     }
 }

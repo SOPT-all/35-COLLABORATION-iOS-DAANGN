@@ -14,18 +14,17 @@ class ProductDetailCompositionalLayout {
     func createLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout { (sectionNumber, _) -> NSCollectionLayoutSection? in
             
-            guard let section = ProductDetailSection(rawValue: sectionNumber)
-            else { fatalError() }
+            let section = ProductDetailSection.allCases[sectionNumber]
             
             switch section {
             case .productImage:
                 return self.productImageSectionLayout()
-            case .sellerInfo:
-                return self.sellerInfoSectionLayout()
+            case .userInfo:
+                return self.userInfoSectionLayout()
             case .productDetailInfo:
                 return self.productDetailInfoSectionLayout()
-            case .sellerProduct:
-                return self.sellerProductSectionLayout()
+            case .sellingProduct:
+                return self.sellingProductSectionLayout()
             case .keywordNotify:
                 return self.keywordNotifySectionLayout()
             case .relatedArticle:
@@ -79,7 +78,7 @@ extension ProductDetailCompositionalLayout {
         return section
     }
     
-    private func sellerInfoSectionLayout() -> NSCollectionLayoutSection {
+    private func userInfoSectionLayout() -> NSCollectionLayoutSection {
         
         let item = NSCollectionLayoutItem(
             layoutSize: .init(
@@ -106,7 +105,7 @@ extension ProductDetailCompositionalLayout {
         let item = NSCollectionLayoutItem(
             layoutSize: .init(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .fractionalHeight(1)
+                heightDimension: .estimated(364)
             )
         )
         
@@ -123,7 +122,7 @@ extension ProductDetailCompositionalLayout {
         return section
     }
     
-    private func sellerProductSectionLayout() -> NSCollectionLayoutSection {
+    private func sellingProductSectionLayout() -> NSCollectionLayoutSection {
         
         let item = NSCollectionLayoutItem(
             layoutSize: .init(
@@ -177,7 +176,7 @@ extension ProductDetailCompositionalLayout {
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: .init(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .absolute(83)
+                heightDimension: .estimated(83)
             ),
             subitems: [item]
         )
@@ -210,7 +209,7 @@ extension ProductDetailCompositionalLayout {
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: 16,
-            bottom: 0,
+            bottom: 23,
             trailing: 16
         )
         section.interGroupSpacing = 24
