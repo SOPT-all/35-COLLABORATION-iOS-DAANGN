@@ -61,7 +61,7 @@ extension DaangnService {
                 let networkResult = self.judgeStatus(
                     by: statusCode,
                     data,
-                    BaseResponseModel<SellerInfoResponseDTO>.self
+                    BaseResponseModel<UserInfoResponseDTO>.self
                 )
                 completion(networkResult)
                 

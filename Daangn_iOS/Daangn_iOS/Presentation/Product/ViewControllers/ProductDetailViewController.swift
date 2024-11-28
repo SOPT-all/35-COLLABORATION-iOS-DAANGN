@@ -13,9 +13,9 @@ class ProductDetailViewController: UIViewController {
     
     private var sellerProducts = RelatedProduct.sampleSellerProducts
     private var relatedProducts = RelatedProduct.sampleRelatedArticle
-    private var sampleSellerInfo = SellerInfoResponseDTO.sampleSellerInfo
+    private var sampleUserInfo = UserInfoResponseDTO.sampleUserInfo
     private var sampleProductInfo = ProductInfo.productInfo
-    var sellerInfo: SellerInfoResponseDTO? {
+    var userInfo: UserInfoResponseDTO? {
         didSet {
             DispatchQueue.main.async { [weak self] in
                 self?.rootView.collectionView.reloadData()
@@ -60,8 +60,8 @@ class ProductDetailViewController: UIViewController {
         )
         
         rootView.collectionView.register(
-            SellerInfoCollectionViewCell.self,
-            forCellWithReuseIdentifier: SellerInfoCollectionViewCell.className
+            UserInfoCollectionViewCell.self,
+            forCellWithReuseIdentifier: UserInfoCollectionViewCell.className
         )
         
         rootView.collectionView.register(
@@ -103,11 +103,11 @@ class ProductDetailViewController: UIViewController {
             
             switch response {
             case .success(let data):
-                guard let data = data as? BaseResponseModel<SellerInfoResponseDTO>,
+                guard let data = data as? BaseResponseModel<UserInfoResponseDTO>,
                       let result = data.result
                 else { return }
                 
-                self.sellerInfo = result
+                self.userInfo = result
                 
             case .requestErr:
                 print("요청 오류 입니다")
@@ -158,17 +158,17 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             else { return UICollectionViewCell() }
             
             return cell
-        case .sellerInfo:
+        case .userInfo:
             guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: SellerInfoCollectionViewCell.className,
+                withReuseIdentifier: UserInfoCollectionViewCell.className,
                 for: indexPath
-            ) as? SellerInfoCollectionViewCell
+            ) as? UserInfoCollectionViewCell
             else { return UICollectionViewCell() }
             
-            if let sellerInfo = self.sellerInfo {
-                cell.configure(with: sellerInfo)
+            if let userInfo = self.userInfo {
+                cell.configure(with: userInfo)
             } else {
-                cell.configure(with: sampleSellerInfo)
+                cell.configure(with: sampleUserInfo)
             }
             
             return cell

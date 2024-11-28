@@ -1,5 +1,5 @@
 //
-//  SellerInfoCollectionViewCell.swift
+//  UserInfoCollectionViewCell.swift
 //  Daangn_iOS
 //
 //  Created by 최유빈 on 11/21/24.
@@ -11,7 +11,7 @@ import Kingfisher
 import SnapKit
 import Then
 
-class SellerInfoCollectionViewCell: UICollectionViewCell {
+class UserInfoCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Component
     
@@ -191,12 +191,12 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
 
 // MARK: - ClassNameProtocol
 
-extension SellerInfoCollectionViewCell: ClassNameProtocol { }
+extension UserInfoCollectionViewCell: ClassNameProtocol { }
 
 // MARK: - configure
 
-extension SellerInfoCollectionViewCell {
-    func configure(with seller: SellerInfoResponseDTO) {
+extension UserInfoCollectionViewCell {
+    func configure(with seller: UserInfoResponseDTO) {
         if let profile_image = seller.profile_image {
             if profile_image == "img_user_sm" {
                 profileImageView.image = UIImage(named: profile_image)

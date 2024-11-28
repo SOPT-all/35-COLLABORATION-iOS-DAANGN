@@ -9,7 +9,7 @@ import Foundation
 
 enum ProductDetailSection: String, CaseIterable {
     case productImage
-    case sellerInfo
+    case userInfo
     case productDetailInfo
     case sellerProduct = "헿헿님의 판매 물품"
     case keywordNotify

@@ -19,8 +19,8 @@ class ProductDetailCompositionalLayout {
             switch section {
             case .productImage:
                 return self.productImageSectionLayout()
-            case .sellerInfo:
-                return self.sellerInfoSectionLayout()
+            case .userInfo:
+                return self.userInfoSectionLayout()
             case .productDetailInfo:
                 return self.productDetailInfoSectionLayout()
             case .sellerProduct:
@@ -78,7 +78,7 @@ extension ProductDetailCompositionalLayout {
         return section
     }
     
-    private func sellerInfoSectionLayout() -> NSCollectionLayoutSection {
+    private func userInfoSectionLayout() -> NSCollectionLayoutSection {
         
         let item = NSCollectionLayoutItem(
             layoutSize: .init(
