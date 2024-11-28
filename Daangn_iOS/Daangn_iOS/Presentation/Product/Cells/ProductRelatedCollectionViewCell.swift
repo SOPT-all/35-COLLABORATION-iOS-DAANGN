@@ -77,8 +77,8 @@ class ProductRelatedCollectionViewCell: UICollectionViewCell {
 
 extension ProductRelatedCollectionViewCell {
     
-    func configure(with product: RelatedProduct) {
-        relatedSalesImageView.image = UIImage(named: product.detailImage)
+    func configure(with product: SellingProduct) {
+        relatedSalesImageView.kf.setImage(with: URL(string: product.product_image))
         relatedSalesTitleLabel.text = product.title
         relatedSalesPriceLabel.text = "\(product.price)원"
     }

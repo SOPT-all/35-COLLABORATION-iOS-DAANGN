@@ -198,12 +198,7 @@ extension UserInfoCollectionViewCell: ClassNameProtocol { }
 extension UserInfoCollectionViewCell {
     func configure(with seller: UserInfoResponseDTO) {
         if let profile_image = seller.profile_image {
-            if profile_image == "img_user_sm" {
-                profileImageView.image = UIImage(named: profile_image)
-            }
-            else {
-                profileImageView.kf.setImage(with: URL(string: profile_image))
-            }
+            profileImageView.kf.setImage(with: URL(string: profile_image))
         }
         else {
             profileImageView.image = .imgUserSm

@@ -11,13 +11,19 @@ class ProductDetailViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var sellingProducts = RelatedProduct.sampleSellingProducts
-    private var relatedProducts = RelatedProduct.sampleRelatedArticle
-    private var sampleUserInfo = UserInfoResponseDTO.sampleUserInfo
+    private var relatedProducts = UserSellingProductResponseDTO.sampleRelatedArticle
     private var sampleProductInfo = ProductInfo.productInfo
     private var userId: Int = 1
     
     private var userInfo: UserInfoResponseDTO? {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.rootView.collectionView.reloadData()
+            }
+        }
+    }
+    
+    private var userSellingProduct: UserSellingProductResponseDTO? {
         didSet {
             DispatchQueue.main.async { [weak self] in
                 self?.rootView.collectionView.reloadData()
@@ -47,6 +53,7 @@ class ProductDetailViewController: UIViewController {
         fetchData()
         setNavigationBar()
         fetchUserInfo()
+        fetchSellingProduct()
     }
     
     private func setDelegate() {
@@ -141,8 +148,6 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             
             if let userInfo = self.userInfo {
                 cell.configure(with: userInfo)
-            } else {
-                cell.configure(with: sampleUserInfo)
             }
             
             return cell
@@ -164,8 +169,9 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             ) as? ProductRelatedCollectionViewCell
             else { return UICollectionViewCell() }
             
-            let model = sellingProducts[indexPath.row]
-            cell.configure(with: model)
+            if let model = self.userSellingProduct?.products[indexPath.row] {
+                cell.configure(with: model)
+            }
             
             return cell
         case .keywordNotify:
@@ -251,7 +257,7 @@ extension ProductDetailViewController: FooterConnectDelegate {
     }
 }
 
-// MARK: - fetchUserInfo
+// MARK: - Network
 
 extension ProductDetailViewController {
     private func fetchUserInfo() {
@@ -279,4 +285,32 @@ extension ProductDetailViewController {
             }
         }
     }
+    
+    private func fetchSellingProduct() {
+        DaangnService.shared.getUserItemList(userId: userId) { [weak self] response in
+            guard let self = self else { return }
+            
+            switch response {
+            case .success(let data):
+                guard let data = data as? BaseResponseModel<UserSellingProductResponseDTO>,
+                      let result = data.result
+                else { return }
+                
+                self.userSellingProduct = result
+                
+            case .requestErr:
+                print("요청 오류 입니다")
+            case .decodedErr:
+                print("디코딩 오류 입니다")
+            case .pathErr:
+                print("경로 오류 입니다")
+            case .serverErr:
+                print("서버 오류입니다")
+            case .networkFail:
+                print("네트워크 오류입니다")
+            }
+        }
+    }
 }
+
+

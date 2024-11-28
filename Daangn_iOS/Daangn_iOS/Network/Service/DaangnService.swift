@@ -70,6 +70,31 @@ extension DaangnService {
             }
         }
     }
+    
+    func getUserItemList(
+        userId: Int,
+        completion: @escaping (NetworkResult<Any>) -> Void)
+    {
+        productProvider.request(
+            .getUserItemList(userId: userId)
+        ) { result in
+            switch result {
+            case .success(let response):
+                let statusCode = response.statusCode
+                let data = response.data
+                
+                let networkResult = self.judgeStatus(
+                    by: statusCode,
+                    data,
+                    BaseResponseModel<UserSellingProductResponseDTO>.self
+                )
+                completion(networkResult)
+                
+            case .failure:
+                completion(.networkFail)
+            }
+        }
+    }
 }
 
 // MARK: - Extensions
