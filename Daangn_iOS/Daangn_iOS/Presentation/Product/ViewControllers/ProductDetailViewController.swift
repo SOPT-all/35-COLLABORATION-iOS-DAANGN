@@ -226,7 +226,7 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             switch sectionType {
             case .sellingProduct:
                 header.configure(
-                    title: ProductDetailSection.allCases[indexPath.section].rawValue,
+                    title: "\(self.userInfo?.nickname ?? "유저")님의 판매 물품",
                     type: .product
                 )
             case .relatedArticle:
