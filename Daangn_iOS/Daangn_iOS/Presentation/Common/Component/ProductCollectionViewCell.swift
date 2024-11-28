@@ -11,7 +11,17 @@ import Kingfisher
 import SnapKit
 import Then
 
+protocol ProductCellTapDelegate: AnyObject {
+    func productCellDidTap(userId: Int, productId: Int)
+}
+
 final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
+    
+    // MARK: - Properties
+    
+    private var userId: Int?
+    private var productId: Int?
+    weak var delegate: ProductCellTapDelegate?
     
     // MARK: - UI Components
     
@@ -21,7 +31,6 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
     private let chatAndLikeHStackView = UIStackView()
     private let menuIconImageView = UIImageView()
     private let separatorView = UIView()
-    
     private let infoHStackView = UIStackView()
     
     private lazy var distanceImageView = UIImageView().then {
@@ -69,6 +78,15 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
                 $0.height.equalTo(18)
             }
         }
+    
+    override var isSelected: Bool {
+        didSet {
+            guard let userId = userId,
+                  let productId = productId
+            else { return }
+            delegate?.productCellDidTap(userId: userId, productId: productId)
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -183,6 +201,8 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
 extension ProductCollectionViewCell {
     
     func configureForSearchResult(product: SearchProduct) {
+        self.userId = product.user_id
+        self.productId = product.id
         thumnailImageView.kf.setImage(with: URL(string: product.product_image))
         titleLabel.text = product.title
         priceLabel.text = product.price

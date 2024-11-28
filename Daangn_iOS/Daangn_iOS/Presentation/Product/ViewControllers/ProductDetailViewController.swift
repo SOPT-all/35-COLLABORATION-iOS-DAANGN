@@ -11,19 +11,20 @@ class ProductDetailViewController: UIViewController {
     
     // MARK: - Properties
     
+    weak var delegate: FooterScrollDelegate?
+    private var userId: Int
+    private let productId: Int
     private var relatedProducts = UserSellingProductResponseDTO.sampleRelatedArticle
-    private var userId: Int = 1
-    private var productId: Int = 7
     
     private var userInfo: UserInfoResponseDTO? {
         didSet {
-            reloadCollectionView(sections: IndexSet([1, 3]))
+            reloadCollectionView(sections: [1, 3])
         }
     }
     
     private var userSellingProduct: UserSellingProductResponseDTO? {
         didSet {
-            reloadCollectionView(sections: IndexSet(integer: 3))
+            reloadCollectionView(sections: [3])
         }
     }
     
@@ -33,13 +34,22 @@ class ProductDetailViewController: UIViewController {
         }
     }
     
-    weak var delegate: FooterScrollDelegate?
     
     // MARK: - UI Component
     
     private lazy var rootView = ProductDetailView(viewController: self)
     
     // MARK: - View Life Cycle
+    
+    init(userId: Int, productId: Int) {
+        self.userId = userId
+        self.productId = productId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         super.loadView()

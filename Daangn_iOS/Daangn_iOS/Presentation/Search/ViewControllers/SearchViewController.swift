@@ -186,6 +186,14 @@ private extension SearchViewController {
     }
 }
 
+extension SearchViewController: ProductCellTapDelegate {
+    
+    func productCellDidTap(userId: Int, productId: Int) {
+        let productDetailViewController = ProductDetailViewController(userId: userId, productId: productId)
+        navigationController?.pushViewController(productDetailViewController, animated: true)
+    }
+}
+
 extension SearchViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
