@@ -25,6 +25,14 @@ final class HomeViewController: UIViewController {
     private let resetButton = UIButton()
     private let writeButton = UIButton()
     
+    private var productCollectionView: IntrinsicCollectionView = {
+          let layout = UICollectionViewFlowLayout()
+          layout.minimumInteritemSpacing = 0
+          layout.minimumLineSpacing = 0
+          layout.scrollDirection = .vertical
+          return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
+      }()
+    
     private var tagCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 5

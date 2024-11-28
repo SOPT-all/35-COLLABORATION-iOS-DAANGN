@@ -10,7 +10,7 @@ import Foundation
 struct ProductResponseDTO: Codable {
     let products: [Product]
     
-    static let sampleProducts: ProductResponseDTO = ProductResponseDTO(products: [
+    static let sampleProducts: [Product] = [
          Product(
              id: 1,
              userId: 101,
@@ -101,7 +101,7 @@ struct ProductResponseDTO: Codable {
              address: "강남구",
              view: 85
          )
-     ])
+     ]
 }
 
 struct Product: Codable {

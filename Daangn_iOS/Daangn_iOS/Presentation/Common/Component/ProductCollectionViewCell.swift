@@ -183,14 +183,14 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
 extension ProductCollectionViewCell {
     
     func configureForSearchResult(product: Product) {
-        thumnailImageView.image = UIImage(named: product.thumbnailImageName)
+        thumnailImageView.image = UIImage(named: product.productImage)
         titleLabel.text = product.title
         priceLabel.text = product.price
         titleLabel.setAttributedText(lineHeight: 22)
         
         setupInfoStackView(
-            location: product.location,
-            time: product.time
+            location: product.address,
+            time: product.
         )
         configureChatAndLikeButtons(
             chatCount: product.chatCount,
