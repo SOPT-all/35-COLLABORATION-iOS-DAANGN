@@ -17,7 +17,7 @@ class ProductDetailViewController: UIViewController {
     private var sampleProductInfo = ProductInfo.productInfo
     private var userId: Int = 1
     
-    var userInfo: UserInfoResponseDTO? {
+    private var userInfo: UserInfoResponseDTO? {
         didSet {
             DispatchQueue.main.async { [weak self] in
                 self?.rootView.collectionView.reloadData()
@@ -42,11 +42,11 @@ class ProductDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        fetchUserData()
         setDelegate()
         setRegister()
         fetchData()
         setNavigationBar()
+        fetchUserInfo()
     }
     
     private func setDelegate() {
@@ -98,34 +98,6 @@ class ProductDetailViewController: UIViewController {
         let model = sampleProductInfo
         rootView.purchaseBottomView.configure(with: model)
     }
-    
-    private func fetchUserData() {
-        DaangnService.shared.getUserProfile(userId: userId) { [weak self] response in
-            guard let self = self else { return }
-            
-            switch response {
-            case .success(let data):
-                guard let data = data as? BaseResponseModel<UserInfoResponseDTO>,
-                      let result = data.result
-                else { return }
-                
-                self.userInfo = result
-                
-            case .requestErr:
-                print("요청 오류 입니다")
-            case .decodedErr:
-                print("디코딩 오류 입니다")
-            case .pathErr:
-                print("경로 오류 입니다")
-            case .serverErr:
-                print("서버 오류입니다")
-            case .networkFail:
-                print("네트워크 오류입니다")
-            }
-        }
-        
-    }
-
     
     private func setNavigationBar() {
         navigationController?.navigationBar.isHidden = true
@@ -276,5 +248,35 @@ extension ProductDetailViewController: UICollectionViewDelegate { }
 extension ProductDetailViewController: FooterConnectDelegate {
     func connect(page: Int) {
         delegate?.didScrollTo(page: page)
+    }
+}
+
+// MARK: - fetchUserInfo
+
+extension ProductDetailViewController {
+    private func fetchUserInfo() {
+        DaangnService.shared.getUserProfile(userId: userId) { [weak self] response in
+            guard let self = self else { return }
+            
+            switch response {
+            case .success(let data):
+                guard let data = data as? BaseResponseModel<UserInfoResponseDTO>,
+                      let result = data.result
+                else { return }
+                
+                self.userInfo = result
+                
+            case .requestErr:
+                print("요청 오류 입니다")
+            case .decodedErr:
+                print("디코딩 오류 입니다")
+            case .pathErr:
+                print("경로 오류 입니다")
+            case .serverErr:
+                print("서버 오류입니다")
+            case .networkFail:
+                print("네트워크 오류입니다")
+            }
+        }
     }
 }
