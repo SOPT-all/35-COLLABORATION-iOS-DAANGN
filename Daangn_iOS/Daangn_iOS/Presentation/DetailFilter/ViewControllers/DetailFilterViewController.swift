@@ -10,7 +10,7 @@ import UIKit
 import Then
 import SnapKit
 
-protocol ApplyFiltersToHomeDelegate {
+protocol ApplyFiltersToHomeDelegate: NSObject {
     func applyFiltersToHomeView(selectedCategories: [CatogoriesResponseDTO])
 }
 
@@ -40,7 +40,7 @@ class DetailFilterViewController: UIViewController {
         }
     }
     
-    var delegate: ApplyFiltersToHomeDelegate?
+    weak var delegate: ApplyFiltersToHomeDelegate?
     
     // MARK: - Lifecycle
     
@@ -103,7 +103,7 @@ class DetailFilterViewController: UIViewController {
 }
 
 // rootView에서 버튼들을 눌렀을때 상태를 Cell과 HomeView로 전달
-extension DetailFilterViewController: DetailFilterViewDelegate {
+extension DetailFilterViewController: DetailFilterButtonTapDelegate {
     func resetButtonDidTap() {
         if let categoryVC = viewControllers[2] as? CategoryListViewController {
             categoryVC.resetSelections()

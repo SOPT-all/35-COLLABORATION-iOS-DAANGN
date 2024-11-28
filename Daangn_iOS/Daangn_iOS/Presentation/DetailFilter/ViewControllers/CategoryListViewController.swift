@@ -1,5 +1,5 @@
 //
-//  FilterListViewController.swift
+//  CategoryListViewController.swift
 //  Daangn_iOS
 //
 //  Created by 정정욱 on 11/24/24.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol CategoryCellSelectionToDetailFilterDelegate {
+protocol CategoryCellSelectionToDetailFilterDelegate: NSObject {
     func categoryCellDidSelect(at indexPath: IndexPath)
     func categoryCellDidDeselect(at indexPath: IndexPath)
 }
@@ -16,7 +16,7 @@ class CategoryListViewController: UIViewController {
     
     // MARK: - Properties
     
-    var delegate: CategoryCellSelectionToDetailFilterDelegate?
+    weak var delegate: CategoryCellSelectionToDetailFilterDelegate?
     let categorys: [CatogoriesResponseDTO] = CatogoriesResponseDTO.sampleCategories
     
     // MARK: - UI Components
