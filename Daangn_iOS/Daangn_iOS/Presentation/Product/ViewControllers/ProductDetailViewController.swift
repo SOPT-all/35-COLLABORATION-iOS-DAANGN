@@ -15,6 +15,8 @@ class ProductDetailViewController: UIViewController {
     private var relatedProducts = RelatedProduct.sampleRelatedArticle
     private var sampleUserInfo = UserInfoResponseDTO.sampleUserInfo
     private var sampleProductInfo = ProductInfo.productInfo
+    private var userId: Int = 1
+    
     var userInfo: UserInfoResponseDTO? {
         didSet {
             DispatchQueue.main.async { [weak self] in
@@ -98,7 +100,7 @@ class ProductDetailViewController: UIViewController {
     }
     
     private func fetchUserData() {
-        DaangnService.shared.getUserProfile(userId: 1) { [weak self] response in
+        DaangnService.shared.getUserProfile(userId: userId) { [weak self] response in
             guard let self = self else { return }
             
             switch response {
