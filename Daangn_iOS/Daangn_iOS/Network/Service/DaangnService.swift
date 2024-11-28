@@ -71,6 +71,31 @@ extension DaangnService {
         }
     }
     
+    func getPostDetails(
+        productId: Int,
+        completion: @escaping (NetworkResult<Any>) -> Void)
+    {
+        productProvider.request(
+            .getPostDetails(productId: productId)
+        ) { result in
+            switch result {
+            case .success(let response):
+                let statusCode = response.statusCode
+                let data = response.data
+                
+                let networkResult = self.judgeStatus(
+                    by: statusCode,
+                    data,
+                    BaseResponseModel<ProductDetailResponseDTO>.self
+                )
+                completion(networkResult)
+                
+            case .failure:
+                completion(.networkFail)
+            }
+        }
+    }
+    
     func getUserItemList(
         userId: Int,
         completion: @escaping (NetworkResult<Any>) -> Void)

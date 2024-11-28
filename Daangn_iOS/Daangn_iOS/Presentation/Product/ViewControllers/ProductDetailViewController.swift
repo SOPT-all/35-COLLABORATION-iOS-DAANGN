@@ -12,8 +12,8 @@ class ProductDetailViewController: UIViewController {
     // MARK: - Properties
     
     private var relatedProducts = UserSellingProductResponseDTO.sampleRelatedArticle
-    private var sampleProductInfo = ProductInfo.productInfo
     private var userId: Int = 1
+    private var productId: Int = 4
     
     private var userInfo: UserInfoResponseDTO? {
         didSet {
@@ -24,6 +24,14 @@ class ProductDetailViewController: UIViewController {
     }
     
     private var userSellingProduct: UserSellingProductResponseDTO? {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.rootView.collectionView.reloadData()
+            }
+        }
+    }
+    
+    private var productInfo: ProductDetailResponseDTO? {
         didSet {
             DispatchQueue.main.async { [weak self] in
                 self?.rootView.collectionView.reloadData()
@@ -50,10 +58,11 @@ class ProductDetailViewController: UIViewController {
         
         setDelegate()
         setRegister()
-        fetchData()
         setNavigationBar()
         fetchUserInfo()
+        fetchProductInfo()
         fetchSellingProduct()
+        updateBottomView()
     }
     
     private func setDelegate() {
@@ -101,9 +110,10 @@ class ProductDetailViewController: UIViewController {
         )
     }
     
-    private func fetchData() {
-        let model = sampleProductInfo
-        rootView.purchaseBottomView.configure(with: model)
+    private func updateBottomView() {
+        if let model = self.productInfo {
+            rootView.purchaseBottomView.configure(with: model)
+        }
     }
     
     private func setNavigationBar() {
@@ -138,6 +148,10 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             ) as? ProductImageCollectionViewCell
             else { return UICollectionViewCell() }
             
+            if let model = self.productInfo {
+                cell.configure(with: model)
+            }
+            
             return cell
         case .userInfo:
             guard let cell = collectionView.dequeueReusableCell(
@@ -146,8 +160,8 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             ) as? UserInfoCollectionViewCell
             else { return UICollectionViewCell() }
             
-            if let userInfo = self.userInfo {
-                cell.configure(with: userInfo)
+            if let model = self.userInfo {
+                cell.configure(with: model)
             }
             
             return cell
@@ -158,8 +172,9 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             ) as? ProductDetailInfoCollectionViewCell
             else { return UICollectionViewCell() }
             
-            let model = sampleProductInfo
-            cell.configure(with: model)
+            if let model = self.productInfo {
+                cell.configure(with: model)
+            }
             
             return cell
         case .sellingProduct:
@@ -271,6 +286,33 @@ extension ProductDetailViewController {
                 else { return }
                 
                 self.userInfo = result
+                
+            case .requestErr:
+                print("요청 오류 입니다")
+            case .decodedErr:
+                print("디코딩 오류 입니다")
+            case .pathErr:
+                print("경로 오류 입니다")
+            case .serverErr:
+                print("서버 오류입니다")
+            case .networkFail:
+                print("네트워크 오류입니다")
+            }
+        }
+    }
+    
+    private func fetchProductInfo() {
+        DaangnService.shared.getPostDetails(productId: productId) { [weak self] response in
+            guard let self = self else { return }
+            
+            switch response {
+            case .success(let data):
+                guard let data = data as? BaseResponseModel<ProductDetailResponseDTO>,
+                      let result = data.result
+                else { return }
+                
+                self.productInfo = result
+                self.rootView.purchaseBottomView.configure(with: result)
                 
             case .requestErr:
                 print("요청 오류 입니다")

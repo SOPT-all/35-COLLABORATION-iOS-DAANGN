@@ -11,8 +11,3 @@ struct UserInfoResponseDTO: Codable {
     let profile_image: String?
     let address: String
 }
-
-extension UserInfoResponseDTO {
-    
-    static let sampleUserInfo: UserInfoResponseDTO = UserInfoResponseDTO(user_id: 1, nickname: "헿헿", profile_image: "img_user_sm", address: "송파구 삼전동")
-}
