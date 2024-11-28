@@ -13,10 +13,18 @@ class ProductDetailViewController: UIViewController {
     
     private var sellerProducts = RelatedProduct.sampleSellerProducts
     private var relatedProducts = RelatedProduct.sampleRelatedArticle
-    private var sampleSellerInfo = SellerInfo.sellerInfo
+    private var sampleSellerInfo = SellerInfoResponseDTO.sampleSellerInfo
     private var sampleProductInfo = ProductInfo.productInfo
+    var sellerInfo: SellerInfoResponseDTO? {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.rootView.collectionView.reloadData()
+            }
+        }
+    }
+    
     weak var delegate: FooterScrollDelegate?
-
+    
     // MARK: - UI Component
     
     private lazy var rootView = ProductDetailView(viewController: self)
@@ -32,6 +40,7 @@ class ProductDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        fetchUserData()
         setDelegate()
         setRegister()
         fetchData()
@@ -88,9 +97,38 @@ class ProductDetailViewController: UIViewController {
         rootView.purchaseBottomView.configure(with: model)
     }
     
+    private func fetchUserData() {
+        DaangnService.shared.getUserProfile(userId: 1) { [weak self] response in
+            guard let self = self else { return }
+            
+            switch response {
+            case .success(let data):
+                guard let data = data as? BaseResponseModel<SellerInfoResponseDTO>,
+                      let result = data.result
+                else { return }
+                
+                self.sellerInfo = result
+                
+            case .requestErr:
+                print("요청 오류 입니다")
+            case .decodedErr:
+                print("디코딩 오류 입니다")
+            case .pathErr:
+                print("경로 오류 입니다")
+            case .serverErr:
+                print("서버 오류입니다")
+            case .networkFail:
+                print("네트워크 오류입니다")
+            }
+        }
+        
+    }
+
+    
     private func setNavigationBar() {
         navigationController?.navigationBar.isHidden = true
     }
+    
 }
 
 // MARK: - UICollectionViewDataSource
@@ -127,8 +165,11 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             ) as? SellerInfoCollectionViewCell
             else { return UICollectionViewCell() }
             
-            let model = sampleSellerInfo
-            cell.configure(with: model)
+            if let sellerInfo = self.sellerInfo {
+                cell.configure(with: sellerInfo)
+            } else {
+                cell.configure(with: sampleSellerInfo)
+            }
             
             return cell
         case .productDetailInfo:

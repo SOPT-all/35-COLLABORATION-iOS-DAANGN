@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Kingfisher
 import SnapKit
 import Then
 
@@ -195,8 +196,18 @@ extension SellerInfoCollectionViewCell: ClassNameProtocol { }
 // MARK: - configure
 
 extension SellerInfoCollectionViewCell {
-    func configure(with seller: SellerInfo) {
-        profileImageView.image = UIImage(named: seller.profileImage)
+    func configure(with seller: SellerInfoResponseDTO) {
+        if let profile_image = seller.profile_image {
+            if profile_image == "img_user_sm" {
+                profileImageView.image = UIImage(named: profile_image)
+            }
+            else {
+                profileImageView.kf.setImage(with: URL(string: profile_image))
+            }
+        }
+        else {
+            profileImageView.image = .imgUserSm
+        }
         nicknameLabel.text = seller.nickname
         addressLabel.text = seller.address
     }
