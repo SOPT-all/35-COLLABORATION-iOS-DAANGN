@@ -54,6 +54,7 @@ final class SearchViewController: UIViewController {
         setDelegate()
         setRegister()
         setPageViewController()
+        setButtonAction()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -117,8 +118,16 @@ final class SearchViewController: UIViewController {
         pageViewController.setViewControllers([secondVC], direction: .forward, animated: true)
     }
     
+    private func setButtonAction() {
+        rootView.navigationBar.backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
+    }
+    
     private func setNavigationBar() {
         navigationController?.navigationBar.isHidden = true
+    }
+    
+    @objc private func backButtonDidTap() {
+        navigationController?.popViewController(animated: true)
     }
 }
 

@@ -16,7 +16,7 @@ final class ProfileViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var profileData: UserProfileResponseDTO?
+    private var profileData: UserInfoResponseDTO?
     private var mannerRatingData = MannerRatingModel.mockData()
     private var tradeReviewData = TradeReviewModel.mockData()
     
@@ -45,17 +45,12 @@ final class ProfileViewController: UIViewController {
             
             switch response {
             case .success(let data):
-                guard let data = data as? BaseResponseModel<UserProfileResponseDTO>,
+                guard let data = data as? BaseResponseModel<UserInfoResponseDTO>,
                       let result = data.result
                 else { return }
                 
                 profileData = result
-                collectionView.reloadItems(
-                    at: [
-                        IndexPath(item: 0, section: 0),
-                        IndexPath(item: 0, section: 2)
-                    ]
-                )
+                collectionView.reloadSections([0, 2])
             case .requestErr:
                 print("요청 오류 입니다")
             case .decodedErr:

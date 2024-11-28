@@ -49,6 +49,7 @@ final class HomeViewController: UIViewController {
         setLayout()
         setDelegate()
         registerCells()
+        setButtonAction()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -203,6 +204,16 @@ private extension HomeViewController {
         tagCollectionView.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: TagCollectionViewCell.className)
         productCollectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: ProductCollectionViewCell.className)
     }
+    
+    func setButtonAction() {
+        navigationBar.searchButton.addTarget(self, action: #selector(searchButtonDidTap), for: .touchUpInside)
+    }
+    
+    @objc func searchButtonDidTap() {
+        let searchViewController = SearchViewController()
+        searchViewController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(searchViewController, animated: true)
+    }
 }
 
 extension HomeViewController: UICollectionViewDataSource {
@@ -265,6 +276,7 @@ extension HomeViewController: UICollectionViewDelegate {
 private extension HomeViewController {
     func navigateToDetailFilterViewController(with tag: HomeTag) {
         let detaileFilterController = DetailFilterViewController()
+        detaileFilterController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(detaileFilterController, animated: true)
     }
 }
