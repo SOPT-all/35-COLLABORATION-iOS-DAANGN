@@ -17,25 +17,19 @@ class ProductDetailViewController: UIViewController {
     
     private var userInfo: UserInfoResponseDTO? {
         didSet {
-            DispatchQueue.main.async { [weak self] in
-                self?.rootView.collectionView.reloadData()
-            }
+            reloadCollectionView()
         }
     }
     
     private var userSellingProduct: UserSellingProductResponseDTO? {
         didSet {
-            DispatchQueue.main.async { [weak self] in
-                self?.rootView.collectionView.reloadData()
-            }
+            reloadCollectionView()
         }
     }
     
     private var productInfo: ProductDetailResponseDTO? {
         didSet {
-            DispatchQueue.main.async { [weak self] in
-                self?.rootView.collectionView.reloadData()
-            }
+            reloadCollectionView()
         }
     }
     
@@ -62,7 +56,6 @@ class ProductDetailViewController: UIViewController {
         fetchUserInfo()
         fetchProductInfo()
         fetchSellingProduct()
-        updateBottomView()
     }
     
     private func setDelegate() {
@@ -110,14 +103,16 @@ class ProductDetailViewController: UIViewController {
         )
     }
     
-    private func updateBottomView() {
-        if let model = self.productInfo {
-            rootView.purchaseBottomView.configure(with: model)
-        }
-    }
-    
     private func setNavigationBar() {
         navigationController?.navigationBar.isHidden = true
+    }
+    
+    // MARK: - colletionView reload
+    
+    private func reloadCollectionView() {
+        DispatchQueue.main.async { [weak self] in
+            self?.rootView.collectionView.reloadData()
+        }
     }
     
 }
