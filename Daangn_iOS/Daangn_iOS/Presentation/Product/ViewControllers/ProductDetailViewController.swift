@@ -222,12 +222,15 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             else { return UICollectionReusableView() }
             
             let sectionType = ProductDetailSection.allCases[indexPath.section]
+            
             switch sectionType {
             case .sellingProduct:
-                header.configure(
-                    title: "\(self.userInfo?.nickname ?? "유저")님의 판매 물품",
-                    type: .product
-                )
+                if let model = self.userInfo {
+                    header.configure(
+                        title: "\(model.nickname)님의 판매 물품",
+                        type: .product
+                    )
+                }
             case .relatedArticle:
                 header.configure(
                     title: ProductDetailSection.allCases[indexPath.section].rawValue,
