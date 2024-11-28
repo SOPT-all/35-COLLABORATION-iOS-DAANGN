@@ -37,7 +37,6 @@ class ProductImageCollectionViewCell: UICollectionViewCell {
         
         detailImageView.do {
             $0.contentMode = .scaleAspectFill
-            $0.image = .imgDetails
         }
     }
     
@@ -55,3 +54,11 @@ class ProductImageCollectionViewCell: UICollectionViewCell {
 // MARK: - ClassNameProtocol
 
 extension ProductImageCollectionViewCell: ClassNameProtocol { }
+
+// MARK: - configure
+
+extension ProductImageCollectionViewCell {
+    func configure(with product: ProductDetailResponseDTO) {
+        detailImageView.kf.setImage(with: URL(string: product.product_image))
+    }
+}

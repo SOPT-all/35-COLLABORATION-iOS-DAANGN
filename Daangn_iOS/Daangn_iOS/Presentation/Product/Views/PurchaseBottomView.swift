@@ -14,7 +14,7 @@ class PurchaseBottomView: UIView {
     
     // MARK: - Property
     
-    private var sampleProductInfo = ProductInfo.productInfo
+    private var sampleProductInfo: ProductDetailResponseDTO?
     
     // MARK: - UI Component
     
@@ -157,7 +157,7 @@ class PurchaseBottomView: UIView {
 // MARK: - configure
 
 extension PurchaseBottomView {
-    func configure(with product: ProductInfo) {
+    func configure(with product: ProductDetailResponseDTO) {
         priceLabel.text = "\(product.price)원"
         priceLabel.setAttributedText(lineHeight: 23.2)
     }
