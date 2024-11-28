@@ -11,7 +11,7 @@ import Then
 import SnapKit
 
 protocol ApplyFiltersToHomeDelegate: NSObject {
-    func applyFiltersToHomeView(selectedCategories: [CatogoriesResponseDTO])
+    func applyFiltersToHomeView(selectedCategories: [String])
 }
 
 class DetailFilterViewController: UIViewController {
@@ -113,7 +113,7 @@ extension DetailFilterViewController: DetailFilterButtonTapDelegate {
     func applyButtonDidTap(selectedCells: [IndexPath]) {
         print("didTapApplyButton \(selectedCells)")
         if let categoryVC = viewControllers[2] as? CategoryListViewController {
-            let selectedCategories = selectedCells.map { categoryVC.categorys[$0.item] }
+            let selectedCategories = selectedCells.map { categoryVC.categories[$0.item] }
             delegate?.applyFiltersToHomeView(selectedCategories: selectedCategories)
             navigationController?.popViewController(animated: true)
         }
