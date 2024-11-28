@@ -14,7 +14,7 @@ final class HomeViewController: UIViewController {
     
     // MARK: - Mock Data
     
-    var categorys: [catogoriesResponseDTO] = []
+    var categorys: [CatogoriesResponseDTO] = []
     let tags: [HomeTag] = Array(HomeTag.allCases)
     let products: [Product] = ProductResponseDTO.sampleProducts
     
@@ -334,8 +334,8 @@ private extension HomeViewController {
     }
 }
 
-extension HomeViewController: DetailFilterViewControllerDelegate {
-    func applyFiltersToHomeView(selectedCategories: [catogoriesResponseDTO]) {
+extension HomeViewController: ApplyFiltersToHomeDelegate {
+    func applyFiltersToHomeView(selectedCategories: [CatogoriesResponseDTO]) {
         categorys = selectedCategories
         categoryCollectionView.reloadData()
         updateCategoryCollectionViewHeight()

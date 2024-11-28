@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol CategoryListDelegate {
+protocol CategoryCellSelectionToDetailFilterDelegate {
     func categoryCellDidSelect(at indexPath: IndexPath)
     func categoryCellDidDeselect(at indexPath: IndexPath)
 }
@@ -16,8 +16,8 @@ class CategoryListViewController: UIViewController {
     
     // MARK: - Properties
     
-    var delegate: CategoryListDelegate?
-    let categorys: [catogoriesResponseDTO] = catogoriesResponseDTO.sampleCategories
+    var delegate: CategoryCellSelectionToDetailFilterDelegate?
+    let categorys: [CatogoriesResponseDTO] = CatogoriesResponseDTO.sampleCategories
     
     // MARK: - UI Components
     
@@ -116,7 +116,7 @@ extension CategoryListViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension CategoryListViewController: CategoryListViewCellDelegate {
+extension CategoryListViewController: CategoryCellSelectionToCategoryListDelegate {
     func didToggleSelection(for cell: CategoryListViewCell, isSelected: Bool) {
         guard let indexPath = filterCollectionView.indexPath(for: cell) else { return }
         

@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol CategoryListViewCellDelegate: AnyObject {
+protocol CategoryCellSelectionToCategoryListDelegate: AnyObject {
     func didToggleSelection(for cell: CategoryListViewCell, isSelected: Bool)
 }
 
@@ -15,7 +15,7 @@ final class CategoryListViewCell: UICollectionViewCell, ClassNameProtocol {
     
     // MARK: - Properties
     
-    weak var delegate: CategoryListViewCellDelegate?
+    weak var delegate: CategoryCellSelectionToCategoryListDelegate?
     
     private var isButtonSelected: Bool = false {
         didSet {
@@ -100,7 +100,7 @@ final class CategoryListViewCell: UICollectionViewCell, ClassNameProtocol {
 }
 
 extension CategoryListViewCell {
-    func configureUI(category: catogoriesResponseDTO) {
+    func configureUI(category: CatogoriesResponseDTO) {
         titleLabel.text = category.name
         titleLabel.setAttributedText(lineHeight: 22)
     }
