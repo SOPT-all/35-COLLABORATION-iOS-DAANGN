@@ -17,19 +17,19 @@ class ProductDetailViewController: UIViewController {
     
     private var userInfo: UserInfoResponseDTO? {
         didSet {
-            reloadCollectionView()
+            reloadCollectionView(sections: IndexSet([1, 3]))
         }
     }
     
     private var userSellingProduct: UserSellingProductResponseDTO? {
         didSet {
-            reloadCollectionView()
+            reloadCollectionView(sections: IndexSet(integer: 3))
         }
     }
     
     private var productInfo: ProductDetailResponseDTO? {
         didSet {
-            reloadCollectionView()
+            reloadCollectionView(sections: [0, 2, 4])
         }
     }
     
@@ -109,9 +109,9 @@ class ProductDetailViewController: UIViewController {
     
     // MARK: - colletionView reload
     
-    private func reloadCollectionView() {
+    private func reloadCollectionView(sections: IndexSet) {
         DispatchQueue.main.async { [weak self] in
-            self?.rootView.collectionView.reloadData()
+            self?.rootView.collectionView.reloadSections(sections)
         }
     }
     
