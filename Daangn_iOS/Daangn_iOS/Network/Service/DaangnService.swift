@@ -23,8 +23,8 @@ extension DaangnService {
     
     func getProductList(
         categoryList: [String],
-        completion: @escaping (NetworkResult<Any>) -> Void)
-    {
+        completion: @escaping (NetworkResult<Any>) -> Void
+    ) {
         homeProvider.request(
             .getProductList(categoryList: categoryList)
         ) { result in
@@ -53,6 +53,32 @@ extension DaangnService {
         productProvider.request(
             .getUserProfile(userId: userId)
         ) { result in
+          switch result {
+          case .success(let response):
+              let statusCode = response.statusCode
+              let data = response.data
+
+              let networkResult = self.judgeStatus(
+                  by: statusCode,
+                  data,
+                  BaseResponseModel<UserInfoResponseDTO>.self
+              )
+              completion(networkResult)
+                
+            case .failure:
+                completion(.networkFail)
+            }
+        }
+    }
+                
+                
+    func getSearchProducts(
+        keyword: String,
+        completion: @escaping (NetworkResult<Any>) -> Void
+    ) {
+        searchProvider.request(
+            .searchProduct(keyword: keyword)
+        ) { result in
             switch result {
             case .success(let response):
                 let statusCode = response.statusCode
@@ -61,7 +87,7 @@ extension DaangnService {
                 let networkResult = self.judgeStatus(
                     by: statusCode,
                     data,
-                    BaseResponseModel<UserInfoResponseDTO>.self
+                    BaseResponseModel<SearchResponseDTO>.self
                 )
                 completion(networkResult)
                 
@@ -111,7 +137,7 @@ extension DaangnService {
                 let networkResult = self.judgeStatus(
                     by: statusCode,
                     data,
-                    BaseResponseModel<UserSellingProductResponseDTO>.self
+                    BaseResponseModel<UserProfileResponseDTO>.self
                 )
                 completion(networkResult)
                 

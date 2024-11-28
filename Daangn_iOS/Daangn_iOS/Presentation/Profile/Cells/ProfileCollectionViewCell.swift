@@ -149,8 +149,10 @@ final class ProfileCollectionViewCell: UICollectionViewCell {
 
 extension ProfileCollectionViewCell: ClassNameProtocol {
     
-    func configure(with data: ProfileModel) {
-        self.profileImageView.image = UIImage(named: data.image)
-        self.nicknameLabel.text = data.nickname
+    func configure(profileImage: String?, nickname: String) {
+        if let profileImage = profileImage {
+            self.profileImageView.kf.setImage(with: URL(string: profileImage))
+        }
+        self.nicknameLabel.text = nickname
     }
 }
