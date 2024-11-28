@@ -50,12 +50,7 @@ final class ProfileViewController: UIViewController {
                 else { return }
                 
                 profileData = result
-                collectionView.reloadItems(
-                    at: [
-                        IndexPath(item: 0, section: 0),
-                        IndexPath(item: 0, section: 2)
-                    ]
-                )
+                collectionView.reloadSections([0, 2])
             case .requestErr:
                 print("요청 오류 입니다")
             case .decodedErr:
