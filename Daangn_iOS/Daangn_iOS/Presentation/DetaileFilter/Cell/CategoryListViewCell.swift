@@ -19,7 +19,10 @@ final class CategoryListViewCell: UICollectionViewCell, ClassNameProtocol {
     
     private var isButtonSelected: Bool = false {
         didSet {
-            updateButtonImage()
+            selectButton.setImage(
+                isButtonSelected ? .icCheckboxSelected : .icCheckboxNormal,
+                for: .normal
+            )
             delegate?.didToggleSelection(for: self, isSelected: isButtonSelected)
         }
     }
@@ -81,11 +84,6 @@ final class CategoryListViewCell: UICollectionViewCell, ClassNameProtocol {
     
     func setSelectionState(_ isSelected: Bool) {
         isButtonSelected = isSelected
-    }
-    
-    private func updateButtonImage() {
-        let imageName = isButtonSelected ? "ic_checkbox_selected" : "ic_checkbox_normal"
-        selectButton.setImage(UIImage(named: imageName), for: .normal)
     }
     
     func resetSelection() {

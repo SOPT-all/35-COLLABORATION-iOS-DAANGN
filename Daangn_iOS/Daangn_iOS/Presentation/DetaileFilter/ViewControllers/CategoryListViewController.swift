@@ -17,7 +17,7 @@ class CategoryListViewController: UIViewController {
     // MARK: - Properties
     
     var delegate: CategoryListDelegate?
-    var categorys: [CategoryResponseDTO] = []
+    var categories: [String] = []
     var selectedCategories: [Bool] = []
     
     // MARK: - UI Components
@@ -63,7 +63,7 @@ class CategoryListViewController: UIViewController {
     }
     
     func resetSelections() {
-        for item in 0..<categorys.count {
+        for item in 0..<categories.count {
             let indexPath = IndexPath(item: item, section: 0)
             if let cell = categoryCollectionView.cellForItem(at: indexPath) as? CategoryListViewCell {
                 cell.resetSelection()
@@ -81,14 +81,15 @@ extension CategoryListViewController {
             switch result {
             case .success(let data):
                 guard let response = data as? BaseResponseModel<CategoryResponseDTO>,
-                      let categories = response.result?.categories else {
+                      let categories = response.result?.categories
+                else {
                     print("⛔️ 데이터 형식이 맞지 않습니다.")
                     return
                 }
-                self.categorys = categories.map { CategoryResponseDTO(categories: [$0]) }
+                self.categories = categories
                 
                 // 선택 상태 배열 초기화
-                self.selectedCategories = Array(repeating: false, count: self.categorys.count)
+                self.selectedCategories = Array(repeating: false, count: self.categories.count)
                 
                 self.categoryCollectionView.reloadData()
             case .requestErr:
@@ -125,7 +126,7 @@ extension CategoryListViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categorys.count
+        return categories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -135,7 +136,7 @@ extension CategoryListViewController: UICollectionViewDataSource {
         ) as? CategoryListViewCell else {
             return UICollectionViewCell()
         }
-        let category = categorys[indexPath.item].categories.first ?? "Unknown"
+        let category = categories[indexPath.item]
         cell.configureUI(category: category)
         cell.delegate = self
         

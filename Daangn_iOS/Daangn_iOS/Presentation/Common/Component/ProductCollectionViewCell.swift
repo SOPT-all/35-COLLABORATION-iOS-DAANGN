@@ -190,11 +190,11 @@ extension ProductCollectionViewCell {
         
         setupInfoStackView(
             location: product.address,
-            time: product.
+            time: ""
         )
         configureChatAndLikeButtons(
-            chatCount: product.chatCount,
-            likeCount: product.likeCount
+            chatCount: nil,
+            likeCount: nil
         )
         
         infoHStackView.spacing = 3
@@ -220,18 +220,7 @@ extension ProductCollectionViewCell {
     }
     
     func configureUI(product: Product) {
-        if let imageUrl = URL(string: product.productImage) {
-            thumnailImageView.kf.setImage(
-                with: imageUrl,
-                placeholder: UIImage(named: "placeholder"),
-                options: [
-                    .transition(.fade(0.3)),
-                    .cacheOriginalImage
-                ]
-            )
-        } else {
-            thumnailImageView.image = UIImage(named: "placeholder")
-        }
+        thumnailImageView.kf.setImage(with: URL(string: product.productImage))
         
         titleLabel.text = product.title
         priceLabel.text = product.price
@@ -239,7 +228,7 @@ extension ProductCollectionViewCell {
         
         setupInfoStackView(distance: nil,
                            location: product.address,
-                           time: 10.description)
+                           time: "3시간 전")
         configureChatAndLikeButtons(chatCount: 0, likeCount: product.view)
     }
     

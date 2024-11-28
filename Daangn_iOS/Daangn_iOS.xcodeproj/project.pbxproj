@@ -163,7 +163,7 @@
 		95C49C282CE868F9007F8160 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 95C49C162CE868F8007F8160 /* Daangn_iOS */;
-			baseConfigurationReferenceRelativePath = Global/Resources/Config.xcconfig;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -228,7 +228,7 @@
 		95C49C2A2CE868F9007F8160 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 95C49C162CE868F8007F8160 /* Daangn_iOS */;
-			baseConfigurationReferenceRelativePath = Global/Resources/Config.xcconfig;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
