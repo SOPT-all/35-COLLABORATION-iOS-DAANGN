@@ -11,15 +11,16 @@ final class SecondHandTradingViewController: UIViewController {
     
     // MARK: - UI Components
     
-    private lazy var rootView = SecondHandTradingView(searchKeyword: searchKeyword)
+    private lazy var rootView = SecondHandTradingView()
     private lazy var collectionView = rootView.collectionView
     
     // MARK: - Properties
     
-    private var searchKeyword: String = "렉토"
+    private var searchKeyword: String = ""
     private let relatedSearchWordsData = RelatedSearchWordModel.mockData()
     private let filterData = HomeTag.allCases
-    private let resultItems = ProductResponseDTO.sampleProducts
+    private var similarProductList: [SearchProduct] = []
+    private var resultProductList: [SearchProduct] = []
     
     // MARK: - View Life Cycle
     
@@ -71,8 +72,10 @@ extension SecondHandTradingViewController: UICollectionViewDataSource {
             return relatedSearchWordsData.count
         case .filter:
             return filterData.count
-        case .resultItems, .similarItems:
-            return resultItems.count
+        case .resultItems:
+            return resultProductList.count
+        case .similarItems:
+            return similarProductList.count
         }
     }
     
@@ -95,13 +98,15 @@ extension SecondHandTradingViewController: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionViewCell.className, for: indexPath) as? ProductCollectionViewCell
             else { return UICollectionViewCell() }
             
-            cell.configureForSearchResult(product: resultItems[indexPath.item])
+            let data = resultProductList[indexPath.item]
+            cell.configureForSearchResult(product: data)
             return cell
         case .similarItems:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionViewCell.className, for: indexPath) as? ProductCollectionViewCell
             else { return UICollectionViewCell() }
             
-            cell.configureForSearchResult(product: resultItems[indexPath.item])
+            let data = similarProductList[indexPath.item]
+            cell.configureForSearchResult(product: data)
             return cell
         }
     }
@@ -133,5 +138,20 @@ extension SecondHandTradingViewController: UICollectionViewDataSource {
         default:
             return UICollectionReusableView()
         }
+    }
+}
+
+extension SecondHandTradingViewController: SearchResultDelegate {
+    
+    func bindSearchResult(
+        keyword: String,
+        products: [SearchProduct],
+        similarProducts: [SearchProduct]
+    ) {
+        self.searchKeyword = keyword
+        self.resultProductList = products
+        self.similarProductList = similarProducts
+        collectionView.reloadData()
+        rootView.searchKeyword = keyword
     }
 }

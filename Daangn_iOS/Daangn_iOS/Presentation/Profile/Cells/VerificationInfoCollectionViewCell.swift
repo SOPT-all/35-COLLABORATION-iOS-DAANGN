@@ -31,10 +31,9 @@ final class VerificationInfoCollectionViewCell: UICollectionViewCell {
         backgroundColor = .gray2
         
         addressVerificationLabel.do {
-            $0.text = "•  송파구 삼전동 23회  인증, 서울특별시 강동구 1회 인증 (최근 30일)"
             $0.textColor = .gray8
             $0.font = .sfPro(.body_md_13_052)
-            $0.setAttributedText(letterSpacing: -0.52)
+            $0.numberOfLines = 0
         }
         
         recentActivityLabel.do {
@@ -63,4 +62,10 @@ final class VerificationInfoCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension VerificationInfoCollectionViewCell: ClassNameProtocol {}
+extension VerificationInfoCollectionViewCell: ClassNameProtocol {
+    
+    func configure(address: String) {
+        addressVerificationLabel.text = "•  " + address + " 23회  인증, 서울특별시 강동구 1회 인증 (최근 30일)"
+        addressVerificationLabel.setAttributedText(letterSpacing: -0.52)
+    }
+}

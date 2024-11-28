@@ -1,5 +1,5 @@
 //
-//  SellerInfoCollectionViewCell.swift
+//  UserInfoCollectionViewCell.swift
 //  Daangn_iOS
 //
 //  Created by 최유빈 on 11/21/24.
@@ -7,10 +7,11 @@
 
 import UIKit
 
+import Kingfisher
 import SnapKit
 import Then
 
-class SellerInfoCollectionViewCell: UICollectionViewCell {
+class UserInfoCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Component
     
@@ -36,7 +37,7 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
         setHierarchy()
         setLayout()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -190,13 +191,18 @@ class SellerInfoCollectionViewCell: UICollectionViewCell {
 
 // MARK: - ClassNameProtocol
 
-extension SellerInfoCollectionViewCell: ClassNameProtocol { }
+extension UserInfoCollectionViewCell: ClassNameProtocol { }
 
 // MARK: - configure
 
-extension SellerInfoCollectionViewCell {
-    func configure(with seller: SellerInfo) {
-        profileImageView.image = UIImage(named: seller.profileImage)
+extension UserInfoCollectionViewCell {
+    func configure(with seller: UserInfoResponseDTO) {
+        if let profile_image = seller.profile_image {
+            profileImageView.kf.setImage(with: URL(string: profile_image))
+        }
+        else {
+            profileImageView.image = .imgUserSm
+        }
         nicknameLabel.text = seller.nickname
         addressLabel.text = seller.address
     }

@@ -1,5 +1,5 @@
 //
-//  FilterListViewController.swift
+//  CategoryListViewController.swift
 //  Daangn_iOS
 //
 //  Created by 정정욱 on 11/24/24.
@@ -7,16 +7,16 @@
 
 import UIKit
 
-protocol CategoryListDelegate {
+protocol CategoryCellSelectionToDetailFilterDelegate: NSObject {
     func categoryCellDidSelect(at indexPath: IndexPath)
-    func CategoryCellDidDeselect(at indexPath: IndexPath)
+    func categoryCellDidDeselect(at indexPath: IndexPath)
 }
 
 class CategoryListViewController: UIViewController {
     
     // MARK: - Properties
     
-    var delegate: CategoryListDelegate?
+    weak var delegate: CategoryCellSelectionToDetailFilterDelegate?
     var categories: [String] = []
     var selectedCategories: [Bool] = []
     
@@ -155,7 +155,7 @@ extension CategoryListViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension CategoryListViewController: CategoryListViewCellDelegate {
+extension CategoryListViewController: CategoryCellSelectionToCategoryListDelegate {
     func didToggleSelection(for cell: CategoryListViewCell, isSelected: Bool) {
         guard let indexPath = categoryCollectionView.indexPath(for: cell) else { return }
         
@@ -164,7 +164,7 @@ extension CategoryListViewController: CategoryListViewCellDelegate {
         if isSelected {
             delegate?.categoryCellDidSelect(at: indexPath)
         } else {
-            delegate?.CategoryCellDidDeselect(at: indexPath)
+            delegate?.categoryCellDidDeselect(at: indexPath)
         }
     }
 }

@@ -43,11 +43,9 @@ class KeywordNotifyCollectionViewCell: UICollectionViewCell {
         }
         
         notifyLabel.do {
-            $0.text = "이웃들이 렉토 맨투맨 게시글을\n올리면 바로 알려드릴까요?"
             $0.numberOfLines = 2
             $0.font = .sfPro(.body_md_13)
             $0.textColor = .gray9
-            $0.setAttributedText(lineHeight: 22)
         }
         
         keywordNotifyButton.do {
@@ -110,3 +108,12 @@ class KeywordNotifyCollectionViewCell: UICollectionViewCell {
 // MARK: - ClassNameProtocol
 
 extension KeywordNotifyCollectionViewCell: ClassNameProtocol { }
+
+// MARK: - configure
+
+extension KeywordNotifyCollectionViewCell {
+    func configure(with product: ProductDetailResponseDTO) {
+        notifyLabel.text = "이웃들이 \(product.title) 게시글을\n올리면 바로 알려드릴까요?"
+        notifyLabel.setAttributedText(lineHeight: 22)
+    }
+}

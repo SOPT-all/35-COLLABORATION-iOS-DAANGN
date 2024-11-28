@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-protocol DetailFilterViewDelegate {
+protocol DetailFilterButtonTapDelegate: NSObject {
     func resetButtonDidTap()
     func applyButtonDidTap(selectedCells: [IndexPath])
 }
@@ -19,7 +19,7 @@ final class DetailFilterView: UIView {
     
     // MARK: - Properties
     
-    var delegate: DetailFilterViewDelegate?
+    weak var delegate: DetailFilterButtonTapDelegate?
     var selectedCells: Set<IndexPath> = []
     
     // MARK: - UI Components

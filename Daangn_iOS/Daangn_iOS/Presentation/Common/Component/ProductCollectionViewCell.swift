@@ -7,9 +7,9 @@
 
 import UIKit
 
+import Kingfisher
 import SnapKit
 import Then
-import Kingfisher
 
 final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
     
@@ -182,19 +182,19 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
 
 extension ProductCollectionViewCell {
     
-    func configureForSearchResult(product: Product) {
-        thumnailImageView.image = UIImage(named: product.productImage)
+    func configureForSearchResult(product: SearchProduct) {
+        thumnailImageView.kf.setImage(with: URL(string: product.product_image))
         titleLabel.text = product.title
         priceLabel.text = product.price
         titleLabel.setAttributedText(lineHeight: 22)
         
         setupInfoStackView(
             location: product.address,
-            time: ""
+            time: "끌올 2시간 전"
         )
         configureChatAndLikeButtons(
-            chatCount: nil,
-            likeCount: nil
+            chatCount: 0,
+            likeCount: 6
         )
         
         infoHStackView.spacing = 3
@@ -204,7 +204,7 @@ extension ProductCollectionViewCell {
         
         menuIconImageView.removeFromSuperview()
         thumnailImageView.snp.remakeConstraints {
-            $0.width.equalTo(108)
+            $0.size.equalTo(108)
             $0.top.equalToSuperview().inset(18)
             $0.leading.equalToSuperview().inset(16)
         }

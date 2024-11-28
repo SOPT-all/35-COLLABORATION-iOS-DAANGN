@@ -10,8 +10,8 @@ import UIKit
 import Then
 import SnapKit
 
-protocol DetailFilterViewControllerDelegate {
-    func filtersApplyHomeView(selectedCategories: [CategoryResponseDTO])
+protocol ApplyFiltersToHomeDelegate: NSObject {
+    func applyFiltersToHomeView(selectedCategories: [CatogoriesResponseDTO])
 }
 
 class DetailFilterViewController: UIViewController {
@@ -40,7 +40,7 @@ class DetailFilterViewController: UIViewController {
         }
     }
     
-    var delegate: DetailFilterViewControllerDelegate?
+    weak var delegate: ApplyFiltersToHomeDelegate?
     
     // MARK: - Lifecycle
     
@@ -103,7 +103,7 @@ class DetailFilterViewController: UIViewController {
 }
 
 // rootView에서 버튼들을 눌렀을때 상태를 Cell과 HomeView로 전달
-extension DetailFilterViewController: DetailFilterViewDelegate {
+extension DetailFilterViewController: DetailFilterButtonTapDelegate {
     func resetButtonDidTap() {
         if let categoryVC = viewControllers[2] as? CategoryListViewController {
             categoryVC.resetSelections()
@@ -114,20 +114,20 @@ extension DetailFilterViewController: DetailFilterViewDelegate {
         print("didTapApplyButton \(selectedCells)")
         if let categoryVC = viewControllers[2] as? CategoryListViewController {
             let selectedCategories = selectedCells.map { categoryVC.categorys[$0.item] }
-            delegate?.filtersApplyHomeView(selectedCategories: selectedCategories)
+            delegate?.applyFiltersToHomeView(selectedCategories: selectedCategories)
             navigationController?.popViewController(animated: true)
         }
     }
 }
 
 // Cell을 눌렀을때 상태를 rootView 까지 전달
-extension DetailFilterViewController: CategoryListDelegate {
+extension DetailFilterViewController: CategoryCellSelectionToDetailFilterDelegate {
     func categoryCellDidSelect(at indexPath: IndexPath) {
         rootView.selectedCells.insert(indexPath)
         rootView.configureButtonStates()
     }
     
-    func CategoryCellDidDeselect(at indexPath: IndexPath) {
+    func categoryCellDidDeselect(at indexPath: IndexPath) {
         rootView.selectedCells.remove(indexPath)
         rootView.configureButtonStates()
     }

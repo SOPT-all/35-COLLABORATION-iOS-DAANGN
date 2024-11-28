@@ -80,8 +80,8 @@ class ProductDetailInfoCollectionViewCell: UICollectionViewCell {
     
     private func setLayout() {
         titleLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(9)
-            $0.leading.equalToSuperview().offset(16)
+            $0.top.equalToSuperview().inset(9)
+            $0.leading.equalToSuperview().inset(16)
         }
         
         categoryTimeLabel.snp.makeConstraints {
@@ -91,7 +91,7 @@ class ProductDetailInfoCollectionViewCell: UICollectionViewCell {
         
         contentLabel.snp.makeConstraints {
             $0.top.equalTo(categoryTimeLabel.snp.bottom).offset(36)
-            $0.leading.equalTo(titleLabel)
+            $0.horizontalEdges.equalToSuperview().inset(16)
         }
         
         interestViewLabel.snp.makeConstraints {
@@ -120,14 +120,14 @@ extension ProductDetailInfoCollectionViewCell: ClassNameProtocol { }
 // MARK: - configure
 
 extension ProductDetailInfoCollectionViewCell {
-    func configure(with product: ProductInfo) {
+    func configure(with product: ProductDetailResponseDTO) {
         titleLabel.text = product.title
         titleLabel.setAttributedText(letterSpacing: -0.38)
         categoryTimeLabel.text = "\(product.category) · 끌올 18시간 전"
         categoryTimeLabel.setAttributedText(letterSpacing: -0.26)
         contentLabel.text = product.content
         contentLabel.setAttributedText(lineHeight: 22)
-        interestViewLabel.text = "관심 9 · \(product.view)"
+        interestViewLabel.text = "관심 9 · 조회 \(product.view)"
         interestViewLabel.setAttributedText(letterSpacing: -0.26)
     }
 }

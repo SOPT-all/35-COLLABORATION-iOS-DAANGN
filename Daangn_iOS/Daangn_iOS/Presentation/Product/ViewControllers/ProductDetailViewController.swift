@@ -11,12 +11,30 @@ class ProductDetailViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var sellerProducts = RelatedProduct.sampleSellerProducts
-    private var relatedProducts = RelatedProduct.sampleRelatedArticle
-    private var sampleSellerInfo = SellerInfo.sellerInfo
-    private var sampleProductInfo = ProductInfo.productInfo
+    private var relatedProducts = UserSellingProductResponseDTO.sampleRelatedArticle
+    private var userId: Int = 1
+    private var productId: Int = 7
+    
+    private var userInfo: UserInfoResponseDTO? {
+        didSet {
+            reloadCollectionView(sections: IndexSet([1, 3]))
+        }
+    }
+    
+    private var userSellingProduct: UserSellingProductResponseDTO? {
+        didSet {
+            reloadCollectionView(sections: IndexSet(integer: 3))
+        }
+    }
+    
+    private var productInfo: ProductDetailResponseDTO? {
+        didSet {
+            reloadCollectionView(sections: [0, 2, 4])
+        }
+    }
+    
     weak var delegate: FooterScrollDelegate?
-
+    
     // MARK: - UI Component
     
     private lazy var rootView = ProductDetailView(viewController: self)
@@ -34,8 +52,10 @@ class ProductDetailViewController: UIViewController {
         
         setDelegate()
         setRegister()
-        fetchData()
         setNavigationBar()
+        fetchUserInfo()
+        fetchProductInfo()
+        fetchSellingProduct()
     }
     
     private func setDelegate() {
@@ -51,8 +71,8 @@ class ProductDetailViewController: UIViewController {
         )
         
         rootView.collectionView.register(
-            SellerInfoCollectionViewCell.self,
-            forCellWithReuseIdentifier: SellerInfoCollectionViewCell.className
+            UserInfoCollectionViewCell.self,
+            forCellWithReuseIdentifier: UserInfoCollectionViewCell.className
         )
         
         rootView.collectionView.register(
@@ -83,14 +103,18 @@ class ProductDetailViewController: UIViewController {
         )
     }
     
-    private func fetchData() {
-        let model = sampleProductInfo
-        rootView.purchaseBottomView.configure(with: model)
-    }
-    
     private func setNavigationBar() {
         navigationController?.navigationBar.isHidden = true
     }
+    
+    // MARK: - colletionView reload
+    
+    private func reloadCollectionView(sections: IndexSet) {
+        DispatchQueue.main.async { [weak self] in
+            self?.rootView.collectionView.reloadSections(sections)
+        }
+    }
+    
 }
 
 // MARK: - UICollectionViewDataSource
@@ -119,16 +143,21 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             ) as? ProductImageCollectionViewCell
             else { return UICollectionViewCell() }
             
+            if let model = self.productInfo {
+                cell.configure(with: model)
+            }
+            
             return cell
-        case .sellerInfo:
+        case .userInfo:
             guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: SellerInfoCollectionViewCell.className,
+                withReuseIdentifier: UserInfoCollectionViewCell.className,
                 for: indexPath
-            ) as? SellerInfoCollectionViewCell
+            ) as? UserInfoCollectionViewCell
             else { return UICollectionViewCell() }
             
-            let model = sampleSellerInfo
-            cell.configure(with: model)
+            if let model = self.userInfo {
+                cell.configure(with: model)
+            }
             
             return cell
         case .productDetailInfo:
@@ -138,19 +167,21 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             ) as? ProductDetailInfoCollectionViewCell
             else { return UICollectionViewCell() }
             
-            let model = sampleProductInfo
-            cell.configure(with: model)
+            if let model = self.productInfo {
+                cell.configure(with: model)
+            }
             
             return cell
-        case .sellerProduct:
+        case .sellingProduct:
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ProductRelatedCollectionViewCell.className,
                 for: indexPath
             ) as? ProductRelatedCollectionViewCell
             else { return UICollectionViewCell() }
             
-            let model = sellerProducts[indexPath.row]
-            cell.configure(with: model)
+            if let model = self.userSellingProduct?.products[indexPath.row] {
+                cell.configure(with: model)
+            }
             
             return cell
         case .keywordNotify:
@@ -159,6 +190,10 @@ extension ProductDetailViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as? KeywordNotifyCollectionViewCell
             else { return UICollectionViewCell() }
+            
+            if let model = self.productInfo {
+                cell.configure(with: model)
+            }
             
             return cell
         case .relatedArticle:
@@ -187,12 +222,15 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             else { return UICollectionReusableView() }
             
             let sectionType = ProductDetailSection.allCases[indexPath.section]
+            
             switch sectionType {
-            case .sellerProduct:
-                header.configure(
-                    title: ProductDetailSection.allCases[indexPath.section].rawValue,
-                    type: .product
-                )
+            case .sellingProduct:
+                if let model = self.userInfo {
+                    header.configure(
+                        title: "\(model.nickname)님의 판매 물품",
+                        type: .product
+                    )
+                }
             case .relatedArticle:
                 header.configure(
                     title: ProductDetailSection.allCases[indexPath.section].rawValue,
@@ -235,3 +273,88 @@ extension ProductDetailViewController: FooterConnectDelegate {
         delegate?.didScrollTo(page: page)
     }
 }
+
+// MARK: - Network
+
+extension ProductDetailViewController {
+    private func fetchUserInfo() {
+        DaangnService.shared.getUserProfile(userId: userId) { [weak self] response in
+            guard let self = self else { return }
+            
+            switch response {
+            case .success(let data):
+                guard let data = data as? BaseResponseModel<UserInfoResponseDTO>,
+                      let result = data.result
+                else { return }
+                
+                self.userInfo = result
+                
+            case .requestErr:
+                print("요청 오류 입니다")
+            case .decodedErr:
+                print("디코딩 오류 입니다")
+            case .pathErr:
+                print("경로 오류 입니다")
+            case .serverErr:
+                print("서버 오류입니다")
+            case .networkFail:
+                print("네트워크 오류입니다")
+            }
+        }
+    }
+    
+    private func fetchProductInfo() {
+        DaangnService.shared.getPostDetails(productId: productId) { [weak self] response in
+            guard let self = self else { return }
+            
+            switch response {
+            case .success(let data):
+                guard let data = data as? BaseResponseModel<ProductDetailResponseDTO>,
+                      let result = data.result
+                else { return }
+                
+                self.productInfo = result
+                self.rootView.purchaseBottomView.configure(with: result)
+                
+            case .requestErr:
+                print("요청 오류 입니다")
+            case .decodedErr:
+                print("디코딩 오류 입니다")
+            case .pathErr:
+                print("경로 오류 입니다")
+            case .serverErr:
+                print("서버 오류입니다")
+            case .networkFail:
+                print("네트워크 오류입니다")
+            }
+        }
+    }
+    
+    private func fetchSellingProduct() {
+        DaangnService.shared.getUserItemList(userId: userId) { [weak self] response in
+            guard let self = self else { return }
+            
+            switch response {
+            case .success(let data):
+                guard let data = data as? BaseResponseModel<UserSellingProductResponseDTO>,
+                      let result = data.result
+                else { return }
+                
+                self.userSellingProduct = result
+                
+            case .requestErr:
+                print("요청 오류 입니다")
+            case .decodedErr:
+                print("디코딩 오류 입니다")
+            case .pathErr:
+                print("경로 오류 입니다")
+            case .serverErr:
+                print("서버 오류입니다")
+            case .networkFail:
+                print("네트워크 오류입니다")
+            }
+        }
+    }
+}
+
+

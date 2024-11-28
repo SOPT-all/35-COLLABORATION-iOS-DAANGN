@@ -23,8 +23,8 @@ extension DaangnService {
     
     func getProductList(
         categoryList: [String],
-        completion: @escaping (NetworkResult<Any>) -> Void)
-    {
+        completion: @escaping (NetworkResult<Any>) -> Void
+    ) {
         homeProvider.request(
             .getProductList(categoryList: categoryList)
         ) { result in
@@ -46,8 +46,7 @@ extension DaangnService {
         }
     }
     
-    func getCategoryList(completion: @escaping (NetworkResult<Any>) -> Void)
-    {
+    func getCategoryList(completion: @escaping (NetworkResult<Any>) -> Void) {
         homeProvider.request(
             .getCategoryList
         ) { result in
@@ -60,6 +59,106 @@ extension DaangnService {
                     by: statusCode,
                     data,
                     BaseResponseModel<CategoryResponseDTO>.self
+                )
+                completion(networkResult)
+                
+            case .failure:
+                completion(.networkFail)
+            }
+        }
+    }
+    
+    func getUserProfile(
+        userId: Int,
+        completion: @escaping (NetworkResult<Any>) -> Void)
+    {
+        productProvider.request(
+            .getUserProfile(userId: userId)
+        ) { result in
+          switch result {
+          case .success(let response):
+              let statusCode = response.statusCode
+              let data = response.data
+
+              let networkResult = self.judgeStatus(
+                  by: statusCode,
+                  data,
+                  BaseResponseModel<UserInfoResponseDTO>.self
+              )
+              completion(networkResult)
+                
+            case .failure:
+                completion(.networkFail)
+            }
+        }
+    }
+                
+    func getSearchProducts(
+        keyword: String,
+        completion: @escaping (NetworkResult<Any>) -> Void
+    ) {
+        searchProvider.request(
+            .searchProduct(keyword: keyword)
+        ) { result in
+            switch result {
+            case .success(let response):
+                let statusCode = response.statusCode
+                let data = response.data
+                
+                let networkResult = self.judgeStatus(
+                    by: statusCode,
+                    data,
+                    BaseResponseModel<SearchResponseDTO>.self
+                )
+                completion(networkResult)
+                
+            case .failure:
+                completion(.networkFail)
+            }
+        }
+    }
+    
+    func getPostDetails(
+        productId: Int,
+        completion: @escaping (NetworkResult<Any>) -> Void)
+    {
+        productProvider.request(
+            .getPostDetails(productId: productId)
+        ) { result in
+            switch result {
+            case .success(let response):
+                let statusCode = response.statusCode
+                let data = response.data
+                
+                let networkResult = self.judgeStatus(
+                    by: statusCode,
+                    data,
+                    BaseResponseModel<ProductDetailResponseDTO>.self
+                )
+                completion(networkResult)
+                
+            case .failure:
+                completion(.networkFail)
+            }
+        }
+    }
+    
+    func getUserItemList(
+        userId: Int,
+        completion: @escaping (NetworkResult<Any>) -> Void)
+    {
+        productProvider.request(
+            .getUserItemList(userId: userId)
+        ) { result in
+            switch result {
+            case .success(let response):
+                let statusCode = response.statusCode
+                let data = response.data
+                
+                let networkResult = self.judgeStatus(
+                    by: statusCode,
+                    data,
+                    BaseResponseModel<UserSellingProductResponseDTO>.self
                 )
                 completion(networkResult)
                 

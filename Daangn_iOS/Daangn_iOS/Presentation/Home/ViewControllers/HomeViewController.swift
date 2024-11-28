@@ -14,9 +14,9 @@ final class HomeViewController: UIViewController {
     
     // MARK: - Mock Data
     
-    var categorys: [CategoryResponseDTO] = []
-    let tags: [HomeTag] = Array(HomeTag.allCases)
-    var products: [Product] = []
+    private var categories: [String] = []
+    private let tags: [HomeTag] = Array(HomeTag.allCases)
+    private var products: [Product] = []
     
     // MARK: - UI Components
     
@@ -24,14 +24,6 @@ final class HomeViewController: UIViewController {
     private let contentView = UIView()
     private let resetButton = UIButton()
     private let writeButton = UIButton()
-    
-    private var productCollectionView: IntrinsicCollectionView = {
-          let layout = UICollectionViewFlowLayout()
-          layout.minimumInteritemSpacing = 0
-          layout.minimumLineSpacing = 0
-          layout.scrollDirection = .vertical
-          return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
-      }()
     
     private var tagCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -41,6 +33,13 @@ final class HomeViewController: UIViewController {
     }()
     
     private var categoryCollectionView: IntrinsicCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 5
+        layout.scrollDirection = .horizontal
+        return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
+    }()
+    
+    private var productCollectionView: IntrinsicCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
@@ -54,16 +53,19 @@ final class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        fetchProducts()
         setStyle()
         setUI()
         setLayout()
         setDelegate()
         registerCells()
-        fetchProducts()
+        setButtonAction()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         navigationController?.setNavigationBarHidden(true, animated: false)
         fetchProducts()
     }
@@ -161,8 +163,15 @@ final class HomeViewController: UIViewController {
             $0.height.equalTo(34)
         }
         
+        categoryCollectionView.snp.makeConstraints {
+            $0.top.equalTo(resetButton.snp.bottom).offset(2)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(54)
+        }
+        
         productCollectionView.snp.makeConstraints {
-            $0.top.equalTo(tagCollectionView.snp.bottom).offset(2)
+            $0.height.equalTo(500).priority(.low)
+            $0.top.equalTo(categoryCollectionView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
@@ -174,8 +183,7 @@ final class HomeViewController: UIViewController {
             $0.width.equalTo(98)
         }
         
-        updateCategoryLayout()
-        
+        updateCategoryCollectionViewHeight()
     }
     
     // MARK: - Actions
@@ -214,36 +222,24 @@ final class HomeViewController: UIViewController {
         view.layoutIfNeeded()
     }
     
-    func updateCategoryLayout() {
-        if categorys.isEmpty {
-            categoryCollectionView.isHidden = true
-            productCollectionView.snp.remakeConstraints {
-                $0.top.equalTo(tagCollectionView.snp.bottom).offset(12)
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalToSuperview()
-            }
-        } else {
-            categoryCollectionView.isHidden = false
-            categoryCollectionView.snp.makeConstraints {
-                $0.top.equalTo(resetButton.snp.bottom).offset(12)
-                $0.leading.trailing.equalToSuperview()
-                $0.height.equalTo(54)
-            }
-            productCollectionView.snp.remakeConstraints {
-                $0.top.equalTo(categoryCollectionView.snp.bottom).offset(12)
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalToSuperview()
-            }
+    func updateCategoryCollectionViewHeight() {
+        let height: CGFloat = categories.count > 0 ? 54 : 0
+        categoryCollectionView.snp.updateConstraints {
+            $0.top.equalTo(resetButton.snp.bottom).offset(
+                categories.count > 0 ? 12 : 2
+            )
+            $0.height.equalTo(height)
         }
-        view.layoutIfNeeded()
+        self.view.layoutIfNeeded()
     }
 }
 
 //MARK: API
 
 extension HomeViewController {
+    
     private func fetchProducts() {
-        let categoryList = categorys.flatMap { $0.categories }
+        let categoryList = categories
         DaangnService.shared.getProductList(categoryList: categoryList) { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -253,8 +249,8 @@ extension HomeViewController {
                     print("⛔️ 데이터 형식이 맞지 않습니다.")
                     return
                 }
-                self.products = productList
-                self.productCollectionView.reloadData()
+                products = productList
+                productCollectionView.reloadData()
             case .requestErr:
                 print("⛔️ 요청 에러 발생 (400-499)")
             case .serverErr:
@@ -286,6 +282,16 @@ private extension HomeViewController {
         productCollectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: ProductCollectionViewCell.className)
         categoryCollectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.className)
     }
+    
+    func setButtonAction() {
+        navigationBar.searchButton.addTarget(self, action: #selector(searchButtonDidTap), for: .touchUpInside)
+    }
+    
+    @objc func searchButtonDidTap() {
+        let searchViewController = SearchViewController()
+        searchViewController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(searchViewController, animated: true)
+    }
 }
 
 extension HomeViewController: UICollectionViewDataSource {
@@ -299,7 +305,7 @@ extension HomeViewController: UICollectionViewDataSource {
         } else if collectionView == productCollectionView {
             return products.count
         } else if collectionView == categoryCollectionView {
-            return categorys.count
+            return categories.count
         }
         return 0
     }
@@ -323,11 +329,11 @@ extension HomeViewController: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.className, for: indexPath) as? CategoryCollectionViewCell else {
                 return UICollectionViewCell()
             }
-             let allCategories = categorys.flatMap { $0.categories }
-             let category = allCategories[indexPath.item]
-             cell.delegate = self
-             cell.configureUI(category: category)
-             return cell
+            
+            let category = categories[indexPath.item]
+            cell.delegate = self
+            cell.configureUI(category: category)
+            return cell
         }
         return UICollectionViewCell()
     }
@@ -345,10 +351,9 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: collectionView.frame.width, height: 162)
         }
         else if collectionView == categoryCollectionView {
-            let allCategories = categorys.flatMap { $0.categories }
-            let categoryTitle = allCategories[indexPath.item]
+            let categoryTitle = categories[indexPath.item]
             let textSize = categoryTitle.getLabelContentSize(withFont: .sfPro(.body_md_12))
-            let padding: CGFloat = 45
+            let padding: CGFloat = 50
             return CGSize(width: textSize.width + padding, height: 34)
         }
         return CGSize.zero
@@ -356,7 +361,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if collectionView == categoryCollectionView {
-            return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+            return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         }
         return UIEdgeInsets.zero
     }
@@ -372,30 +377,28 @@ extension HomeViewController: UICollectionViewDelegate {
 
 private extension HomeViewController {
     func navigateToDetailFilterViewController() {
-        let detaileFilterController = DetailFilterViewController()
-        detaileFilterController.delegate = self
-        navigationController?.pushViewController(detaileFilterController, animated: true)
+        let detailFilterController = DetailFilterViewController()
+        detailFilterController.delegate = self
+        detailFilterController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(detailFilterController, animated: true)
     }
 }
 
-extension HomeViewController: DetailFilterViewControllerDelegate {
-    func filtersApplyHomeView(selectedCategories: [CategoryResponseDTO]) {
-        categorys = selectedCategories
+extension HomeViewController: ApplyFiltersToHomeDelegate {
+    func applyFiltersToHomeView(selectedCategories: [String]) {
+        categories = selectedCategories
         categoryCollectionView.reloadData()
-        updateCategoryLayout()
+        updateCategoryCollectionViewHeight()
     }
 }
 
 extension HomeViewController: CategoryCollectionViewCellDelegate {
+    
     func deleteButtonDidTap(for category: String) {
-        // categorys를 안전하게 업데이트
-        categorys = categorys.compactMap { categoryResponse in
-            let updatedCategories = categoryResponse.categories.filter { $0 != category }
-            return updatedCategories.isEmpty ? nil : CategoryResponseDTO(categories: updatedCategories)
-        }
-        
-        self.categoryCollectionView.reloadData()
-        self.updateCategoryLayout()
-        self.fetchProducts()
+        guard let index = categories.firstIndex(of: category) else { return }
+        categories.remove(at: index)
+        categoryCollectionView.reloadData()
+        updateCategoryCollectionViewHeight()
+        fetchProducts()
     }
 }
