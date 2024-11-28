@@ -105,7 +105,7 @@ extension ProductDetailCompositionalLayout {
         let item = NSCollectionLayoutItem(
             layoutSize: .init(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .fractionalHeight(1)
+                heightDimension: .estimated(364)
             )
         )
         
