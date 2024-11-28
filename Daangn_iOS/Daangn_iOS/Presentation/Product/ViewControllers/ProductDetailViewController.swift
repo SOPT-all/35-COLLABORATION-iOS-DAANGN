@@ -11,7 +11,7 @@ class ProductDetailViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var sellerProducts = RelatedProduct.sampleSellerProducts
+    private var sellingProducts = RelatedProduct.sampleSellingProducts
     private var relatedProducts = RelatedProduct.sampleRelatedArticle
     private var sampleUserInfo = UserInfoResponseDTO.sampleUserInfo
     private var sampleProductInfo = ProductInfo.productInfo
@@ -157,14 +157,14 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             cell.configure(with: model)
             
             return cell
-        case .sellerProduct:
+        case .sellingProduct:
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ProductRelatedCollectionViewCell.className,
                 for: indexPath
             ) as? ProductRelatedCollectionViewCell
             else { return UICollectionViewCell() }
             
-            let model = sellerProducts[indexPath.row]
+            let model = sellingProducts[indexPath.row]
             cell.configure(with: model)
             
             return cell
@@ -203,7 +203,7 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             
             let sectionType = ProductDetailSection.allCases[indexPath.section]
             switch sectionType {
-            case .sellerProduct:
+            case .sellingProduct:
                 header.configure(
                     title: ProductDetailSection.allCases[indexPath.section].rawValue,
                     type: .product

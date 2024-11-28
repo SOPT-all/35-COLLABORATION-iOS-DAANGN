@@ -16,7 +16,7 @@ struct RelatedProduct {
 
 extension RelatedProduct {
     
-    static let sampleSellerProducts: [RelatedProduct] = [
+    static let sampleSellingProducts: [RelatedProduct] = [
         RelatedProduct(id: 1, detailImage: "img_details_sales_1", title: "앤유 하프집업 맨투맨", price: "25,000"),
         RelatedProduct(id: 2, detailImage: "img_details_sales_2", title: "드레스반티아 팬츠 (새상품 미개봉)", price: "25,000"),
         RelatedProduct(id: 3, detailImage: "img_details_sales_3", title: "몽벨 모노 파우치 크로스백 가방", price: "25,000"),

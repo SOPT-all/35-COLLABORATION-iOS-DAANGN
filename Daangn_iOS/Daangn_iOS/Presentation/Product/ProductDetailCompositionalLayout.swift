@@ -23,8 +23,8 @@ class ProductDetailCompositionalLayout {
                 return self.userInfoSectionLayout()
             case .productDetailInfo:
                 return self.productDetailInfoSectionLayout()
-            case .sellerProduct:
-                return self.sellerProductSectionLayout()
+            case .sellingProduct:
+                return self.sellingProductSectionLayout()
             case .keywordNotify:
                 return self.keywordNotifySectionLayout()
             case .relatedArticle:
@@ -122,7 +122,7 @@ extension ProductDetailCompositionalLayout {
         return section
     }
     
-    private func sellerProductSectionLayout() -> NSCollectionLayoutSection {
+    private func sellingProductSectionLayout() -> NSCollectionLayoutSection {
         
         let item = NSCollectionLayoutItem(
             layoutSize: .init(
