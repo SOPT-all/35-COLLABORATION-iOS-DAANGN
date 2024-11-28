@@ -83,11 +83,12 @@ final class DaangnNavigationBar: UIView {
             }
         }
     
-    private lazy var searchTextField = UITextField()
+    lazy var searchTextField = UITextField()
         .then {
             $0.autocapitalizationType = .none
             $0.autocorrectionType = .no
             $0.spellCheckingType = .no
+            $0.returnKeyType = .done
             $0.backgroundColor = .gray2
             $0.font = .sfPro(.body_sb_16)
             $0.textColor = .gray11

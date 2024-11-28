@@ -22,11 +22,21 @@ final class SecondHandTradingView: UIView {
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: setSectionLayout())
     private let getKeywordNotificationButton = UIButton()
     
-    private var searchKeyword: String
+    var searchKeyword: String = "" {
+        didSet {
+            getKeywordNotificationButton.configuration?.attributedTitle = AttributedString(
+                UIFont.sfProAttributedString(
+                    text: searchKeyword + I18N.Search.getNotification,
+                    style: .body_md_13_026,
+                    color: .white,
+                    letterSpacing: -0.26
+                )
+            )
+        }
+    }
     
-    init(searchKeyword: String) {
-        self.searchKeyword = searchKeyword
-        super.init(frame: .zero)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
         setStyle()
         setHierarchy()
@@ -77,7 +87,7 @@ final class SecondHandTradingView: UIView {
         
         getKeywordNotificationButton.snp.makeConstraints {
             $0.height.equalTo(36)
-            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(68 - 34)
+            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(50 - 34)
             $0.centerX.equalToSuperview()
         }
     }
@@ -147,13 +157,13 @@ private extension SecondHandTradingView {
     func itemsSectionLayout(type: SecondHandTradingSection) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(142)
+            heightDimension: .estimated(145)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(142)
+            heightDimension: .estimated(145)
         )
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
         
