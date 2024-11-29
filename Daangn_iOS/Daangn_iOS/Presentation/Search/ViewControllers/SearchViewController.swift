@@ -137,15 +137,16 @@ private extension SearchViewController {
     
     func addViewControllersData() {
         for index in 0 ..< tabbarData.count {
-            let vc: UIViewController
             if index == 1 {
-                vc = SecondHandTradingViewController()
-                self.delegate = vc as? any SearchResultDelegate
+                let vc = SecondHandTradingViewController()
+                vc.delegate = self
+                self.delegate = vc
+                viewControllers.append(vc)
             } else {
-                vc = UIViewController()
+                let vc = UIViewController()
                 vc.view.backgroundColor = .gray1
+                viewControllers.append(vc)
             }
-            viewControllers.append(vc)
         }
     }
     
@@ -183,6 +184,14 @@ private extension SearchViewController {
     
     func checkIfBarAndPageAreInSameIndex(for currentIndex: Int) -> Bool {
         return currentTabbarIndex == currentIndex
+    }
+}
+
+extension SearchViewController: ProductCellTapDelegate {
+    
+    func pushProductDetailViewController(userId: Int, productId: Int) {
+        let productDetailViewController = ProductDetailViewController(userId: userId, productId: productId)
+        navigationController?.pushViewController(productDetailViewController, animated: true)
     }
 }
 

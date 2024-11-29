@@ -14,13 +14,4 @@ enum ProductDetailSection: String, CaseIterable {
     case sellingProduct = "헿헿님의 판매 물품"
     case keywordNotify
     case relatedArticle = "이 글과 함께 봤어요"
-    
-    var numberOfItemsInSection: Int {
-        switch self {
-        case .productImage, .sellingProduct, .relatedArticle:
-            return 4
-        default:
-            return 1
-        }
-    }
 }

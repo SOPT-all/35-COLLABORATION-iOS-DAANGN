@@ -44,6 +44,7 @@ class ProductDetailInfoCollectionViewCell: UICollectionViewCell {
         titleLabel.do {
             $0.font = .sfPro(.title_md_19_038)
             $0.textColor = .black
+            $0.numberOfLines = 0
         }
         
         categoryTimeLabel.do {
@@ -81,7 +82,7 @@ class ProductDetailInfoCollectionViewCell: UICollectionViewCell {
     private func setLayout() {
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(9)
-            $0.leading.equalToSuperview().inset(16)
+            $0.horizontalEdges.equalToSuperview().inset(16)
         }
         
         categoryTimeLabel.snp.makeConstraints {

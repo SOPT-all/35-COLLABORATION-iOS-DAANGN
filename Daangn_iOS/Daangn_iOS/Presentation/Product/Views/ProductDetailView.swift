@@ -18,7 +18,7 @@ class ProductDetailView: UIView {
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout.createLayout())
     let purchaseBottomView = PurchaseBottomView()
     private let productDetailViewController: ProductDetailViewController
-    private let navigationBar = DaangnNavigationBar(type: .product)
+    let navigationBar = DaangnNavigationBar(type: .product)
     
     // MARK: - View Life Cycle
     init(viewController: ProductDetailViewController) {

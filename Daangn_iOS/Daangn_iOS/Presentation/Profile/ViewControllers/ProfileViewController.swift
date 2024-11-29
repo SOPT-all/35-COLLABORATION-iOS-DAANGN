@@ -16,11 +16,21 @@ final class ProfileViewController: UIViewController {
     
     // MARK: - Properties
     
+    private let userId: Int
     private var profileData: UserInfoResponseDTO?
     private var mannerRatingData = MannerRatingModel.mockData()
     private var tradeReviewData = TradeReviewModel.mockData()
     
     // MARK: - Life Cycles
+    
+    init(userId: Int) {
+        self.userId = userId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         super.loadView()
@@ -35,12 +45,13 @@ final class ProfileViewController: UIViewController {
         setDelegate()
         setRegister()
         setNavigationBar()
+        setButtonAction()
     }
     
     // MARK: - Methods
     
     private func fetchData() {
-        DaangnService.shared.getUserProfile(userId: 1) { [weak self] response in
+        DaangnService.shared.getUserProfile(userId: userId) { [weak self] response in
             guard let self  = self else { return }
             
             switch response {
@@ -84,6 +95,14 @@ final class ProfileViewController: UIViewController {
     
     private func setNavigationBar() {
         navigationController?.navigationBar.isHidden = true
+    }
+    
+    private func setButtonAction() {
+        rootView.navigationBar.backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
+    }
+    
+    @objc private func backButtonDidTap() {
+        navigationController?.popViewController(animated: true)
     }
 }
 

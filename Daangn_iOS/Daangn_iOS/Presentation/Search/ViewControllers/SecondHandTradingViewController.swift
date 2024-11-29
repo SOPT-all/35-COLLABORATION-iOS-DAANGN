@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol ProductCellTapDelegate: NSObject {
+    func pushProductDetailViewController(userId: Int, productId: Int)
+}
+
 final class SecondHandTradingViewController: UIViewController {
     
     // MARK: - UI Components
@@ -16,6 +20,7 @@ final class SecondHandTradingViewController: UIViewController {
     
     // MARK: - Properties
     
+    weak var delegate: ProductCellTapDelegate?
     private var searchKeyword: String = ""
     private let relatedSearchWordsData = RelatedSearchWordModel.mockData()
     private let filterData = HomeTag.allCases
@@ -42,6 +47,7 @@ final class SecondHandTradingViewController: UIViewController {
     
     private func setDelegate() {
         collectionView.dataSource = self
+        collectionView.delegate = self
     }
 
     private func setRegister() {
@@ -138,6 +144,17 @@ extension SecondHandTradingViewController: UICollectionViewDataSource {
         default:
             return UICollectionReusableView()
         }
+    }
+}
+
+extension SecondHandTradingViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? ProductCollectionViewCell,
+              let userId = cell.userId,
+              let productId = cell.productId
+        else { return }
+        delegate?.pushProductDetailViewController(userId: userId, productId: productId)
     }
 }
 

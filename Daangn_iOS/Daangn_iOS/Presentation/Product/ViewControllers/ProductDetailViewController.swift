@@ -11,19 +11,20 @@ class ProductDetailViewController: UIViewController {
     
     // MARK: - Properties
     
+    weak var delegate: FooterScrollDelegate?
+    private var userId: Int
+    private let productId: Int
     private var relatedProducts = UserSellingProductResponseDTO.sampleRelatedArticle
-    private var userId: Int = 1
-    private var productId: Int = 7
     
     private var userInfo: UserInfoResponseDTO? {
         didSet {
-            reloadCollectionView(sections: IndexSet([1, 3]))
+            reloadCollectionView(sections: [1, 3])
         }
     }
     
     private var userSellingProduct: UserSellingProductResponseDTO? {
         didSet {
-            reloadCollectionView(sections: IndexSet(integer: 3))
+            reloadCollectionView(sections: [3])
         }
     }
     
@@ -33,13 +34,21 @@ class ProductDetailViewController: UIViewController {
         }
     }
     
-    weak var delegate: FooterScrollDelegate?
-    
     // MARK: - UI Component
     
     private lazy var rootView = ProductDetailView(viewController: self)
     
     // MARK: - View Life Cycle
+    
+    init(userId: Int, productId: Int) {
+        self.userId = userId
+        self.productId = productId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         super.loadView()
@@ -53,6 +62,7 @@ class ProductDetailViewController: UIViewController {
         setDelegate()
         setRegister()
         setNavigationBar()
+        setButtonAction()
         fetchUserInfo()
         fetchProductInfo()
         fetchSellingProduct()
@@ -107,14 +117,22 @@ class ProductDetailViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
     }
     
+    private func setButtonAction() {
+        rootView.navigationBar.backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
+    }
+    
+    @objc private func backButtonDidTap() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     // MARK: - colletionView reload
     
     private func reloadCollectionView(sections: IndexSet) {
         DispatchQueue.main.async { [weak self] in
-            self?.rootView.collectionView.reloadSections(sections)
+            self?.rootView.collectionView.reloadData()
+//            self?.rootView.collectionView.reloadSections(sections)
         }
     }
-    
 }
 
 // MARK: - UICollectionViewDataSource
@@ -124,8 +142,15 @@ extension ProductDetailViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        
-        return ProductDetailSection.allCases[section].numberOfItemsInSection
+        let sectionType = ProductDetailSection.allCases[section]
+        switch sectionType {
+        case .productImage, .relatedArticle:
+            return 4
+        case .sellingProduct:
+            return userSellingProduct?.products.count ?? 0
+        default:
+            return 1
+        }
     }
     
     func collectionView(
@@ -179,7 +204,7 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             ) as? ProductRelatedCollectionViewCell
             else { return UICollectionViewCell() }
             
-            if let model = self.userSellingProduct?.products[indexPath.row] {
+            if let model = self.userSellingProduct?.products[indexPath.item] {
                 cell.configure(with: model)
             }
             
@@ -250,7 +275,7 @@ extension ProductDetailViewController: UICollectionViewDataSource {
             else { return UICollectionReusableView() }
             
             self.delegate = footer
-            footer.configure(pageNumber: ProductDetailSection.allCases[indexPath.section].numberOfItemsInSection)
+            footer.configure(pageNumber: 4)
             return footer
         default:
             return UICollectionReusableView()
@@ -264,7 +289,15 @@ extension ProductDetailViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegate
 
-extension ProductDetailViewController: UICollectionViewDelegate { }
+extension ProductDetailViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if ProductDetailSection.allCases[indexPath.section] == .userInfo {
+            let profileViewController = ProfileViewController(userId: userId)
+            navigationController?.pushViewController(profileViewController, animated: true)
+        }
+    }
+}
 
 // MARK: - FooterConnectDelgate
 

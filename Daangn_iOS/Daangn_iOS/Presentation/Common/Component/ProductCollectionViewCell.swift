@@ -13,6 +13,11 @@ import Then
 
 final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
     
+    // MARK: - Properties
+    
+    private(set) var userId: Int?
+    private(set) var productId: Int?
+    
     // MARK: - UI Components
     
     private let thumnailImageView = UIImageView()
@@ -21,7 +26,6 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
     private let chatAndLikeHStackView = UIStackView()
     private let menuIconImageView = UIImageView()
     private let separatorView = UIView()
-    
     private let infoHStackView = UIStackView()
     
     private lazy var distanceImageView = UIImageView().then {
@@ -183,6 +187,8 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
 extension ProductCollectionViewCell {
     
     func configureForSearchResult(product: SearchProduct) {
+        self.userId = product.user_id
+        self.productId = product.id
         thumnailImageView.kf.setImage(with: URL(string: product.product_image))
         titleLabel.text = product.title
         priceLabel.text = product.price

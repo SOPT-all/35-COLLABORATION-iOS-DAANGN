@@ -43,9 +43,10 @@ class KeywordNotifyCollectionViewCell: UICollectionViewCell {
         }
         
         notifyLabel.do {
-            $0.numberOfLines = 2
             $0.font = .sfPro(.body_md_13)
             $0.textColor = .gray9
+            $0.lineBreakMode = .byWordWrapping
+            $0.numberOfLines = 0
         }
         
         keywordNotifyButton.do {
@@ -87,17 +88,19 @@ class KeywordNotifyCollectionViewCell: UICollectionViewCell {
         }
         
         notifyLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+            $0.top.equalTo(firstHorizontalDivider.snp.bottom).offset(23)
             $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalTo(keywordNotifyButton.snp.leading).offset(-30)
         }
         
         keywordNotifyButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.trailing.equalToSuperview().inset(16)
         }
+        keywordNotifyButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         
         secondHorizontalDivider.snp.makeConstraints {
-            $0.top.equalTo(keywordNotifyButton.snp.bottom).offset(23)
+            $0.top.equalTo(notifyLabel.snp.bottom).offset(23)
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview()
             $0.height.equalTo(1)
@@ -113,7 +116,7 @@ extension KeywordNotifyCollectionViewCell: ClassNameProtocol { }
 
 extension KeywordNotifyCollectionViewCell {
     func configure(with product: ProductDetailResponseDTO) {
-        notifyLabel.text = "이웃들이 \(product.title) 게시글을\n올리면 바로 알려드릴까요?"
+        notifyLabel.text = "이웃들이 \(product.title) 게시글을 올리면 바로 알려드릴까요?"
         notifyLabel.setAttributedText(lineHeight: 22)
     }
 }
