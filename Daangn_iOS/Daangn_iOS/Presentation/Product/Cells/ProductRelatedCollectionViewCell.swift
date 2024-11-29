@@ -37,6 +37,7 @@ class ProductRelatedCollectionViewCell: UICollectionViewCell {
     private func setStyle() {
         relatedSalesImageView.do {
             $0.contentMode = .scaleAspectFill
+            $0.clipsToBounds = true
             $0.makeCornerRound(radius: 6)
         }
         
@@ -58,6 +59,7 @@ class ProductRelatedCollectionViewCell: UICollectionViewCell {
     
     private func setLayout() {
         relatedSalesImageView.snp.makeConstraints {
+            $0.height.equalTo(124)
             $0.top.horizontalEdges.equalToSuperview()
         }
         

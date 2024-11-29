@@ -11,17 +11,12 @@ import Kingfisher
 import SnapKit
 import Then
 
-protocol ProductCellTapDelegate: AnyObject {
-    func productCellDidTap(userId: Int, productId: Int)
-}
-
 final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
     
     // MARK: - Properties
     
-    private var userId: Int?
-    private var productId: Int?
-    weak var delegate: ProductCellTapDelegate?
+    private(set) var userId: Int?
+    private(set) var productId: Int?
     
     // MARK: - UI Components
     
@@ -78,15 +73,6 @@ final class ProductCollectionViewCell: UICollectionViewCell, ClassNameProtocol {
                 $0.height.equalTo(18)
             }
         }
-    
-    override var isSelected: Bool {
-        didSet {
-            guard let userId = userId,
-                  let productId = productId
-            else { return }
-            delegate?.productCellDidTap(userId: userId, productId: productId)
-        }
-    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

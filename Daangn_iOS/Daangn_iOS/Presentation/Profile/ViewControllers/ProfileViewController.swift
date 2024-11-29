@@ -45,6 +45,7 @@ final class ProfileViewController: UIViewController {
         setDelegate()
         setRegister()
         setNavigationBar()
+        setButtonAction()
     }
     
     // MARK: - Methods
@@ -94,6 +95,14 @@ final class ProfileViewController: UIViewController {
     
     private func setNavigationBar() {
         navigationController?.navigationBar.isHidden = true
+    }
+    
+    private func setButtonAction() {
+        rootView.navigationBar.backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
+    }
+    
+    @objc private func backButtonDidTap() {
+        navigationController?.popViewController(animated: true)
     }
 }
 

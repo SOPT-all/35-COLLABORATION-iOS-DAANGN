@@ -22,7 +22,7 @@ enum ProfileSection: String, CaseIterable {
 
 final class ProfileView: UIView {
     
-    private let navigationBar = DaangnNavigationBar(type: .profile)
+    let navigationBar = DaangnNavigationBar(type: .profile)
     private let divider = UIView()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: setSectionLayout())
     
