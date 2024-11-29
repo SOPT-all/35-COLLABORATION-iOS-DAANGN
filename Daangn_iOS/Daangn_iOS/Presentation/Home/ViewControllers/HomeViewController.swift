@@ -170,7 +170,6 @@ final class HomeViewController: UIViewController {
         }
         
         productCollectionView.snp.makeConstraints {
-            $0.height.equalTo(500).priority(.low)
             $0.top.equalTo(categoryCollectionView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
