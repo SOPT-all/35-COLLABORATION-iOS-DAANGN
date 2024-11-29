@@ -19,7 +19,10 @@ final class CategoryListViewCell: UICollectionViewCell, ClassNameProtocol {
     
     private var isButtonSelected: Bool = false {
         didSet {
-            updateButtonImage()
+            selectButton.setImage(
+                isButtonSelected ? .icCheckboxSelected : .icCheckboxNormal,
+                for: .normal
+            )
             delegate?.didToggleSelection(for: self, isSelected: isButtonSelected)
         }
     }
@@ -33,40 +36,30 @@ final class CategoryListViewCell: UICollectionViewCell, ClassNameProtocol {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setStyle()
-        setUI()
-        setLayout()
-        setActions()
+        setupUI()
+        setupLayout()
+        setupActions()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - UI Setup
+    // MARK: - Setup
     
-    private func setStyle() {
-        contentView.do {
-            $0.backgroundColor = .white
-        }
+    private func setupUI() {
+        contentView.backgroundColor = .white
         
-        titleLabel.do {
-            $0.font = .sfPro(.title_bla_15_22)
-            $0.textColor = .black
-        }
+        titleLabel.font = .sfPro(.title_bla_15_22)
+        titleLabel.textColor = .black
         
-        selectButton.do {
-            $0.setImage(UIImage(named: "ic_checkbox_normal"), for: .normal)
-            $0.contentMode = .scaleAspectFit
-        }
-    }
-    
-    private func setUI() {
+        selectButton.setImage(UIImage(named: "ic_checkbox_normal"), for: .normal)
+        selectButton.contentMode = .scaleAspectFit
+        
         contentView.addSubviews(selectButton, titleLabel)
     }
     
-    private func setLayout() {
-        
+    private func setupLayout() {
         selectButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(16)
@@ -77,31 +70,32 @@ final class CategoryListViewCell: UICollectionViewCell, ClassNameProtocol {
             $0.centerY.equalToSuperview()
             $0.leading.equalTo(selectButton.snp.trailing).offset(13)
         }
-        
+    }
+    
+    private func setupActions() {
+        selectButton.addTarget(self, action: #selector(toggleButtonState), for: .touchUpInside)
     }
     
     // MARK: - Actions
     
-    private func setActions() {
-        selectButton.addTarget(self, action: #selector(toggleButtonState), for: .touchUpInside)
-    }
-    
     @objc private func toggleButtonState() {
-        isButtonSelected.toggle()
+        setSelectionState(!isButtonSelected)
     }
     
-    private func updateButtonImage() {
-        selectButton.setImage( isButtonSelected ? .icCheckboxSelected : .icCheckboxNormal, for: .normal )
+    func setSelectionState(_ isSelected: Bool) {
+        isButtonSelected = isSelected
     }
     
     func resetSelection() {
-        isButtonSelected = false
+        setSelectionState(false)
     }
+    
 }
 
 extension CategoryListViewCell {
-    func configureUI(category: CatogoriesResponseDTO) {
-        titleLabel.text = category.name
+    
+    func configureUI(category: String) {
+        titleLabel.text = category
         titleLabel.setAttributedText(lineHeight: 22)
     }
 }

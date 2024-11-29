@@ -14,9 +14,9 @@ final class HomeViewController: UIViewController {
     
     // MARK: - Mock Data
     
-    var categorys: [CatogoriesResponseDTO] = []
-    let tags: [HomeTag] = Array(HomeTag.allCases)
-    let products: [Product] = ProductResponseDTO.sampleProducts
+    private var categories: [String] = []
+    private let tags: [HomeTag] = Array(HomeTag.allCases)
+    private var products: [Product] = []
     
     // MARK: - UI Components
     
@@ -25,29 +25,26 @@ final class HomeViewController: UIViewController {
     private let resetButton = UIButton()
     private let writeButton = UIButton()
     
-    private lazy var tagCollectionView: IntrinsicCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumInteritemSpacing = 5
-        let collectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        return collectionView
+    private var tagCollectionView: IntrinsicCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 5
+        layout.scrollDirection = .horizontal
+        return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
     
-    private lazy var categoryCollectionView: IntrinsicCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumInteritemSpacing = 5
-        let collectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        return collectionView
+    private var categoryCollectionView: IntrinsicCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 5
+        layout.scrollDirection = .horizontal
+        return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
-
-    private lazy var productCollectionView: IntrinsicCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        flowLayout.minimumInteritemSpacing = 0
-        flowLayout.minimumLineSpacing = 0
-        let collectionView = IntrinsicCollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        return collectionView
+    
+    private var productCollectionView: IntrinsicCollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        layout.scrollDirection = .vertical
+        return IntrinsicCollectionView(frame: .zero, collectionViewLayout: layout)
     }()
     
     private let navigationBar = DaangnNavigationBar(type: .home)
@@ -56,6 +53,8 @@ final class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        fetchProducts()
         setStyle()
         setUI()
         setLayout()
@@ -66,7 +65,9 @@ final class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         navigationController?.setNavigationBarHidden(true, animated: false)
+        fetchProducts()
     }
     
     // MARK: - Layout
@@ -182,7 +183,6 @@ final class HomeViewController: UIViewController {
         }
         
         updateCategoryCollectionViewHeight()
-        
     }
     
     // MARK: - Actions
@@ -222,14 +222,46 @@ final class HomeViewController: UIViewController {
     }
     
     func updateCategoryCollectionViewHeight() {
-        let height: CGFloat = categorys.count > 0 ? 54 : 0
+        let height: CGFloat = categories.count > 0 ? 54 : 0
         categoryCollectionView.snp.updateConstraints {
             $0.top.equalTo(resetButton.snp.bottom).offset(
-                categorys.count > 0 ? 12 : 2
+                categories.count > 0 ? 12 : 2
             )
             $0.height.equalTo(height)
         }
         self.view.layoutIfNeeded()
+    }
+}
+
+//MARK: API
+
+extension HomeViewController {
+    
+    private func fetchProducts() {
+        let categoryList = categories
+        DaangnService.shared.getProductList(categoryList: categoryList) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let data):
+                guard let response = data as? BaseResponseModel<ProductResponseDTO>,
+                      let productList = response.result?.products else {
+                    print("⛔️ 데이터 형식이 맞지 않습니다.")
+                    return
+                }
+                products = productList
+                productCollectionView.reloadData()
+            case .requestErr:
+                print("⛔️ 요청 에러 발생 (400-499)")
+            case .serverErr:
+                print("⛔️ 서버 에러 발생 (500)")
+            case .networkFail:
+                print("⛔️ 네트워크 실패")
+            case .pathErr:
+                print("⛔️ 경로 에러 또는 디코딩 실패")
+            default:
+                print("⛔️ 알 수 없는 에러")
+            }
+        }
     }
 }
 
@@ -272,7 +304,7 @@ extension HomeViewController: UICollectionViewDataSource {
         } else if collectionView == productCollectionView {
             return products.count
         } else if collectionView == categoryCollectionView {
-            return categorys.count
+            return categories.count
         }
         return 0
     }
@@ -296,9 +328,10 @@ extension HomeViewController: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCollectionViewCell.className, for: indexPath) as? CategoryCollectionViewCell else {
                 return UICollectionViewCell()
             }
-            let category = categorys[indexPath.item]
+            
+            let category = categories[indexPath.item]
             cell.delegate = self
-            cell.configureUI(category: category.name)
+            cell.configureUI(category: category)
             return cell
         }
         return UICollectionViewCell()
@@ -317,8 +350,8 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
             return CGSize(width: collectionView.frame.width, height: 162)
         }
         else if collectionView == categoryCollectionView {
-            let categoryTitle = categorys[indexPath.item]
-            let textSize = categoryTitle.name.getLabelContentSize(withFont: .sfPro(.body_md_12))
+            let categoryTitle = categories[indexPath.item]
+            let textSize = categoryTitle.getLabelContentSize(withFont: .sfPro(.body_md_12))
             let padding: CGFloat = 50
             return CGSize(width: textSize.width + padding, height: 34)
         }
@@ -351,17 +384,20 @@ private extension HomeViewController {
 }
 
 extension HomeViewController: ApplyFiltersToHomeDelegate {
-    func applyFiltersToHomeView(selectedCategories: [CatogoriesResponseDTO]) {
-        categorys = selectedCategories
+    func applyFiltersToHomeView(selectedCategories: [String]) {
+        categories = selectedCategories
         categoryCollectionView.reloadData()
         updateCategoryCollectionViewHeight()
     }
 }
 
 extension HomeViewController: CategoryCollectionViewCellDelegate {
+    
     func deleteButtonDidTap(for category: String) {
-        categorys.removeAll { $0.name == category }
+        guard let index = categories.firstIndex(of: category) else { return }
+        categories.remove(at: index)
         categoryCollectionView.reloadData()
         updateCategoryCollectionViewHeight()
+        fetchProducts()
     }
 }
