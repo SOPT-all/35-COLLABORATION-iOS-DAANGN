@@ -240,15 +240,16 @@ extension ProductCollectionViewCell {
     }
     
     func configureUI(product: Product) {
-        thumnailImageView.image = UIImage(named: product.thumbnailImageName)
+        thumnailImageView.kf.setImage(with: URL(string: product.productImage))
+        
         titleLabel.text = product.title
         priceLabel.text = product.price
         titleLabel.setAttributedText(lineHeight: 22)
-        setupInfoStackView(distance: product.distance,
-                           location: product.location,
-                           time: product.time)
-        configureChatAndLikeButtons(chatCount: product.chatCount,
-                                    likeCount: product.likeCount)
+        
+        setupInfoStackView(distance: nil,
+                           location: product.address,
+                           time: "3시간 전")
+        configureChatAndLikeButtons(chatCount: 0, likeCount: product.view)
     }
     
     private func setupInfoStackView(distance: String? = nil, location: String, time: String) {
