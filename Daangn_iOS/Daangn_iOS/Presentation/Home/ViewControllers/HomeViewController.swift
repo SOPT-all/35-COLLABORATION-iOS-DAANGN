@@ -63,10 +63,12 @@ final class HomeViewController: UIViewController {
         setButtonAction()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
-        fetchProducts()
+        productCollectionView.invalidateIntrinsicContentSize()
+        scrollView.invalidateIntrinsicContentSize()
+        view.layoutIfNeeded()
     }
     
     // MARK: - Layout
@@ -387,6 +389,7 @@ extension HomeViewController: ApplyFiltersToHomeDelegate {
         categories = selectedCategories
         categoryCollectionView.reloadData()
         updateCategoryCollectionViewHeight()
+        fetchProducts()
     }
 }
 
